@@ -86,7 +86,7 @@ public class LoginController implements Initializable {
             // attach the controller file to the fxml file
             AdminController adminController = (AdminController)adminLoader.getController();
 
-            Scene scene = new Scene(adminRoot );
+            Scene scene = new Scene(adminRoot);
             adminStage.setScene(scene);
             adminStage.setMaximized(true);
             adminStage.setTitle("Admin Dashboard");
@@ -101,14 +101,16 @@ public class LoginController implements Initializable {
     public void userLogin() {
         try {
             Stage userStage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Pane root = (Pane)fxmlLoader.load(getClass().getResource("/users/user.fxml").openStream());
+            FXMLLoader userLoader = new FXMLLoader();
+            // Pane root = (Pane)userLoader.load(getClass().getResource("/users/user.fxml").openStream());
+            Pane userRoot = FXMLLoader.load(getClass().getResource("/users/user.fxml"));
 
             // attach the controller file to the fxml file
-            UsersController usersController = (UsersController)fxmlLoader.getController();
+            UsersController usersController = (UsersController)userLoader.getController();
 
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(userRoot);
             userStage.setScene(scene);
+            userStage.setMaximized(true);
             userStage.setTitle("User Dashboard");
             userStage.setResizable(false);
             userStage.show();

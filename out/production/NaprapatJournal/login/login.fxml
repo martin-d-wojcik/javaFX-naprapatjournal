@@ -13,6 +13,6 @@
       <PasswordField fx:id="password" layoutX="151.0" layoutY="167.0" prefHeight="25.0" prefWidth="192.0" promptText="Password" />
       <ComboBox fx:id="selection" layoutX="151.0" layoutY="206.0" prefHeight="25.0" prefWidth="192.0" promptText="Admin / User" />
       <Button fx:id="loginBtn" layoutX="195.0" layoutY="261.0" mnemonicParsing="false" onAction="#logIn" prefHeight="25.0" prefWidth="105.0" text="Logga in" />
-      <Label fx:id="loginStatus" layoutX="60.0" layoutY="265.0" prefHeight="17.0" prefWidth="76.0" />
+      <Label fx:id="loginStatus" layoutX="151.0" layoutY="308.0" prefHeight="17.0" prefWidth="192.0" />
    </children>
 </AnchorPane>
