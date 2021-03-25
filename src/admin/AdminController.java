@@ -43,11 +43,18 @@ public class AdminController implements Initializable {
     @FXML
     private Label lblAddUser;
 
+    @FXML
+    private TextField txtUserNameSearch;
+
+    @FXML
+    private Label lblSearchUser;
+
     private dbConnection dbConn;
     // private ObservableList<UserData> data;
 
     private String sqlGetAllUsers = "SELECT * FROM login";
     private String sqlAddUser = "INSERT INTO login(user, password, role) VALUES (?,?,?)";
+    private String sqlSearchUser = "SELECT * FROM login WHERE user=?";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -59,7 +66,7 @@ public class AdminController implements Initializable {
         fillTableView();
     }
 
-    private void fillTableView(){
+    private void fillTableView() {
         ObservableList<UserData> data = FXCollections.observableArrayList();
 
         try {
@@ -73,6 +80,30 @@ public class AdminController implements Initializable {
             }
         } catch (SQLException e) {
             System.err.println("Error: " + e);
+        }
+
+        // get the StringProperties from the UserData class
+        this.columnName.setCellValueFactory(new PropertyValueFactory<UserData, String>("userName"));
+        this.columnPassword.setCellValueFactory(new PropertyValueFactory<UserData, String>("userPassword"));
+        this.columnRole.setCellValueFactory(new PropertyValueFactory<UserData, String>("userRole"));
+
+        this.userTable.setItems(null);
+        this.userTable.setItems(data);
+    }
+
+    private void displayQueryResultInTable(ResultSet resultSet) throws SQLException {
+        ObservableList<UserData> data = FXCollections.observableArrayList();
+
+        if (resultSet.getRow() == 0) {
+            lblSearchUser.setText("Inga användare hittades");
+        } else {
+            try {
+                data.add(new UserData(resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3)));
+            } catch (SQLException e) {
+                System.err.println("Error: " + e);
+            }
         }
 
         // get the StringProperties from the UserData class
@@ -105,7 +136,6 @@ public class AdminController implements Initializable {
             prepStmt.executeUpdate();
             prepStmt.close();
 
-            // TODO
             this.lblAddUser.setText("Ny användare tillagd.");
 
             // Update TableView
@@ -114,6 +144,38 @@ public class AdminController implements Initializable {
             // Clean input fields
             txtFirstAndLastName.setText("");
             txtPassword.setText("");
+        }
+    }
+
+    @FXML
+    private void searchUser(ActionEvent event) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            String userName = txtUserNameSearch.getText();
+
+            Connection conn = dbConnection.getConnection();
+
+            assert conn != null;
+            preparedStatement = conn.prepareStatement(sqlSearchUser);
+            preparedStatement.setString(1, userName);
+            resultSet = preparedStatement.executeQuery();
+
+            // while (resultSet.next()) {}
+            while (resultSet.next()) {
+                displayQueryResultInTable(resultSet);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        /* } finally {
+            try{
+                if(resultSet != null) resultSet.close();
+                if(preparedStatement != null) preparedStatement.close();
+        } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }*/
         }
     }
 }
