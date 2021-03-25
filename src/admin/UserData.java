@@ -6,11 +6,24 @@ import javafx.beans.property.StringProperty;
 public class UserData {
     private final StringProperty userName;
     private final StringProperty userPassword;
+    private final StringProperty userRole;
 
-    public UserData(String name, String password) {
+    public UserData(String name, String password, String role) {
         this.userName = new SimpleStringProperty(name);
         this.userPassword = new SimpleStringProperty(password);
+        this.userRole = new SimpleStringProperty(role);
+    }
 
+    public String getUserRole() {
+        return userRole.get();
+    }
+
+    public StringProperty userRoleProperty() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole.set(userRole);
     }
 
     public String getUserName() {
