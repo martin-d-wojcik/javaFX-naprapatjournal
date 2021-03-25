@@ -63,6 +63,7 @@ public class AdminController implements Initializable {
     @FXML
     private void loadUserData(ActionEvent event) {
         fillTableView();
+        lblSearchUser.setText("");
     }
 
     private void fillTableView() {
@@ -114,6 +115,14 @@ public class AdminController implements Initializable {
         this.userTable.setItems(data);
     }
 
+    private void clearTableView() {
+        // Doesn't work! This method clears the title in each column.
+        // TODO: Clear the values in each column
+
+        /* this.columnName.setText("");
+        this.columnPassword.setText("");
+        this.columnRole.setText(""); */
+    }
 
     @FXML
     private void addUser(ActionEvent event) throws SQLException {
@@ -161,8 +170,13 @@ public class AdminController implements Initializable {
             preparedStatement.setString(1, userName);
             resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 displayQueryResultInTable(resultSet);
+                lblSearchUser.setText("");
+                clearTableView();
+            } else {
+                lblSearchUser.setText("Ingen användare hittades");
+                clearTableView();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
