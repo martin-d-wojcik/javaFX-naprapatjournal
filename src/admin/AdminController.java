@@ -10,7 +10,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -126,7 +125,7 @@ public class AdminController implements Initializable {
         if (firstAndLast.trim().isEmpty() || passw.trim().isEmpty()) {
             this.lblAddUser.setText("Användare och/eller lösenord får inte vara tomt.");
         }
-        else{
+        else {
             // Prepare query
             assert conn != null;
             PreparedStatement prepStmt = conn.prepareStatement(sqlAddUser);
@@ -162,20 +161,11 @@ public class AdminController implements Initializable {
             preparedStatement.setString(1, userName);
             resultSet = preparedStatement.executeQuery();
 
-            // while (resultSet.next()) {}
             while (resultSet.next()) {
                 displayQueryResultInTable(resultSet);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        /* } finally {
-            try{
-                if(resultSet != null) resultSet.close();
-                if(preparedStatement != null) preparedStatement.close();
-        } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }*/
         }
     }
 }
