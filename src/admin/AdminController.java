@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -12,19 +13,20 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
     @FXML
-    private TextField name;
+    private TextField txtFirstAndLastName;
 
     @FXML
-    private TextField password;
+    private TextField txtPassword;
 
     @FXML
-    private TextField role;
+    private TextField txtRole;
 
     @FXML
     private TableView<UserData> userTable;
@@ -38,35 +40,36 @@ public class AdminController implements Initializable {
     @FXML
     private TableColumn<UserData, String> columnRole;
 
+    @FXML
+    private Label lblAddUser;
+
     private dbConnection dbConn;
     // private ObservableList<UserData> data;
 
     private String sqlGetAllUsers = "SELECT * FROM login";
-    private String sqlAdduser = "INSERT INTO login(user, password, role) VALUES (?,?,?)";
-    // TODO: use PreparedStatement
+    private String sqlAddUser = "INSERT INTO login(user, password, role) VALUES (?,?,?)";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.dbConn = new dbConnection();
+        fillTableView();
     }
 
-    /* public void initialize(URL url, ResourceBundle rb) {
-        this.dbConn = new dbConnection();
-    } >*/
-
     @FXML
-    private void loadUserData(ActionEvent event) throws SQLException {
+    private void loadUserData(ActionEvent event) {
+        fillTableView();
+    }
+
+    private void fillTableView(){
         ObservableList<UserData> data = FXCollections.observableArrayList();
 
         try {
             Connection conn = dbConnection.getConnection();
-            // ObservableList<UserData> data = FXCollections.observableArrayList();
             assert conn != null;
             ResultSet rs = conn.createStatement().executeQuery(sqlGetAllUsers);
 
             // check if the resultSet, rs has anything in the table
             while (rs.next()) {
-                data.add(new UserData(rs.getString(1), rs.getString(2)));
+                data.add(new UserData(rs.getString(1), rs.getString(2), rs.getString(3)));
             }
         } catch (SQLException e) {
             System.err.println("Error: " + e);
@@ -74,15 +77,43 @@ public class AdminController implements Initializable {
 
         // get the StringProperties from the UserData class
         this.columnName.setCellValueFactory(new PropertyValueFactory<UserData, String>("userName"));
-        this.columnName.setCellValueFactory(new PropertyValueFactory<UserData, String>("userPassword"));
+        this.columnPassword.setCellValueFactory(new PropertyValueFactory<UserData, String>("userPassword"));
+        this.columnRole.setCellValueFactory(new PropertyValueFactory<UserData, String>("userRole"));
 
         this.userTable.setItems(null);
         this.userTable.setItems(data);
     }
 
+
     @FXML
     private void addUser(ActionEvent event) throws SQLException {
         Connection conn = dbConnection.getConnection();
 
+        String firstAndLast = txtFirstAndLastName.getText();
+        String passw = txtPassword.getText();
+
+        if (firstAndLast.trim().isEmpty() || passw.trim().isEmpty()) {
+            this.lblAddUser.setText("Användare och/eller lösenord får inte vara tomt.");
+        }
+        else{
+            // Prepare query
+            assert conn != null;
+            PreparedStatement prepStmt = conn.prepareStatement(sqlAddUser);
+            prepStmt.setString(1, firstAndLast);
+            prepStmt.setString(2, passw);
+            prepStmt.setString(3, "User");
+            prepStmt.executeUpdate();
+            prepStmt.close();
+
+            // TODO
+            this.lblAddUser.setText("Ny användare tillagd.");
+
+            // Update TableView
+            fillTableView();
+
+            // Clean input fields
+            txtFirstAndLastName.setText("");
+            txtPassword.setText("");
+        }
     }
 }
