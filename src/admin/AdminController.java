@@ -173,7 +173,6 @@ public class AdminController implements Initializable {
             if (resultSet.next()) {
                 displayQueryResultInTable(resultSet);
                 lblSearchUser.setText("");
-                clearTableView();
             } else {
                 lblSearchUser.setText("Ingen användare hittades");
                 clearTableView();
