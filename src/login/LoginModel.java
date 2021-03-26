@@ -23,8 +23,8 @@ public class LoginModel {
         return this.connection != null;
     }
 
-    public boolean isLoggedIn(String user, String password, String option) throws Exception {
-        String sqlQuery = "SELECT * FROM login WHERE user='" + user + "' and password='" + password + "' and role='" + option + "'";
+    public boolean isLoggedIn(String user, String password) throws Exception {
+        String sqlQuery = "SELECT * FROM login WHERE user='" + user + "' and password='" + password + "'";
         ResultSet rs = null;
 
         try {

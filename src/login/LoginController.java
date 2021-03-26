@@ -33,40 +33,25 @@ public class LoginController implements Initializable {
     private TextField password;
 
     @FXML
-    private ComboBox<option> selection;    // uses the login.option Enum
-
-    @FXML
     private Button loginBtn;
 
     @FXML
     private Label loginStatus;
 
-    public void initialize(URL url, ResourceBundle rb) {
-        /* if(this.loginModel.isDatabaseConnected()){
-            this.dbstatus.setText("Connected to database");
-        } else {
-            this.dbstatus.setText("Not connected to database");
-        } */
-
-        // populate the combobox with values from the enum option
-        this.selection.setItems(FXCollections.observableArrayList(option.values()));
-    }
+    public void initialize(URL url, ResourceBundle rb) {}
 
     @FXML
     public void logIn(ActionEvent event) {
         try {
             // parse the login credentials from the controls in the fxml
-            if(this.loginModel.isLoggedIn(this.username.getText(), this.password.getText(), this.selection.getValue().toString())) {
+            if(this.loginModel.isLoggedIn(this.username.getText(), this.password.getText())) {
                 Stage stage = (Stage)this.loginBtn.getScene().getWindow();
                 stage.close();
 
-                switch (this.selection.getValue().toString()) {
-                    case "Admin":
-                        adminLogin();
-                        break;
-                    case "User":
-                        userLogin();
-                        break;
+                if(this.username.getText().equals("Admin")) {
+                    adminLogin();
+                } else {
+                    userLogin();
                 }
             }
             else {
