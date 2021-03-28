@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -48,14 +49,17 @@ public class LoginController implements Initializable {
                 Stage stage = (Stage)this.loginBtn.getScene().getWindow();
                 stage.close();
 
-                if(this.username.getText().equals("Admin")) {
+                if(this.loginModel.isAdmin(this.username.getText())) {
                     adminLogin();
                 } else {
                     userLogin();
                 }
             }
             else {
-                this.loginStatus.setText("Wrong login credentials");
+                this.loginStatus.setText("Fel användarnamn eller lösenord");
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Fel användarnamn eller lösenord");
+                alert.setHeaderText("Ett fel har inträffat !");
+                alert.show();
             }
         } catch (Exception localEx) {
             localEx.printStackTrace();

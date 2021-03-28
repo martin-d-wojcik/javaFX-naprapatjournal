@@ -23,41 +23,76 @@ public class LoginModel {
         return this.connection != null;
     }
 
+    /*
+     * This works OK
+     * but without PreparedStatement
+     *
+        public boolean isLoggedIn(String user, String password) throws Exception {
+            String sqlQuery = "SELECT * FROM login WHERE loginName='" + user + "' and password='" + password + "'";
+            ResultSet rs = null;
+
+            try {
+                Connection conn = this.connection;
+                Statement stmt = conn.createStatement();
+                rs = stmt.executeQuery(sqlQuery);
+
+                return rs.next();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            finally {
+                assert rs != null;
+                rs.close();
+            }
+        }
+     */
+    /*
+     * This is the above method
+     * with PreparedStatement
+     */
     public boolean isLoggedIn(String user, String password) throws Exception {
-        String sqlQuery = "SELECT * FROM login WHERE user='" + user + "' and password='" + password + "'";
-        ResultSet rs = null;
-
-        try {
-            Connection conn = this.connection;
-            Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery(sqlQuery);
-
-            return rs.next();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-        finally {
-            assert rs != null;
-            rs.close();
-        }
-
         // execute the query using PreparedStatement
-        /* PreparedStatement pr = null;
+        PreparedStatement pr = null;
         ResultSet rs = null;
-        String sqlQueryPreparedStatement = "SELECT * FROM login where user=? and password=? and role=?";
+        String sqlQueryPreparedStatement = "SELECT * FROM login where loginName=? and password=?";
 
         try {
             pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
             pr.setString(1, user);
             pr.setString(2, password);
-            pr.setString(2, option);
 
             // the result of the query is returned in an tabular format
             rs = pr.executeQuery();
 
             // next() returns true if the resultSet contains more rows
             return rs.next();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+            assert rs != null;
+            rs.close();
+        }
+
+    }
+
+    public boolean isAdmin(String user) throws Exception {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+        String sqlQueryPreparedStatement = "SELECT * FROM login where loginName=? and role='Admin'";
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
+            pr.setString(1, user);
+
+            rs = pr.executeQuery();
+            return rs.next();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -67,6 +102,6 @@ public class LoginModel {
             pr.close();
             assert rs != null;
             rs.close();
-        } */
+        }
     }
 }
