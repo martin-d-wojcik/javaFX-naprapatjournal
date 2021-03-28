@@ -4,14 +4,28 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class UserData {
-    private final StringProperty userName;
+    private final StringProperty userLoginName;
     private final StringProperty userPassword;
     private final StringProperty userRole;
+    private final StringProperty userFirstName;
+    private final StringProperty userLastName;
+    private final StringProperty userPhoneNr;
+    private final StringProperty userEmail;
 
-    public UserData(String name, String password, String role) {
-        this.userName = new SimpleStringProperty(name);
+    /*    public UserData(String name, String password, String role) {
+            this.userName = new SimpleStringProperty(name);
+            this.userPassword = new SimpleStringProperty(password);
+            this.userRole = new SimpleStringProperty(role);
+        }
+    */
+    public UserData(String loginName, String password, String role, String firstname, String lastname, String telnr, String email) {
+        this.userLoginName = new SimpleStringProperty(loginName);
         this.userPassword = new SimpleStringProperty(password);
         this.userRole = new SimpleStringProperty(role);
+        this.userFirstName = new SimpleStringProperty(firstname);
+        this.userLastName = new SimpleStringProperty(lastname);
+        this.userPhoneNr = new SimpleStringProperty(telnr);
+        this.userEmail = new SimpleStringProperty(email);
     }
 
     public String getUserRole() {
@@ -26,16 +40,16 @@ public class UserData {
         this.userRole.set(userRole);
     }
 
-    public String getUserName() {
-        return userName.get();
+    public String getUserLoginName() {
+        return userLoginName.get();
     }
 
-    public StringProperty userNameProperty() {
-        return userName;
+    public StringProperty userLoginNameProperty() {
+        return userLoginName;
     }
 
-    public void setUserName(String userName) {
-        this.userName.set(userName);
+    public void setUserLoginName(String userLoginName) {
+        this.userLoginName.set(userLoginName);
     }
 
     public String getUserPassword() {
@@ -49,4 +63,53 @@ public class UserData {
     public void setUserPassword(String userPassword) {
         this.userPassword.set(userPassword);
     }
+
+    public String getUserFirstName() {
+        return userFirstName.get();
+    }
+
+    public StringProperty userFirstNameProperty() {
+        return userFirstName;
+    }
+
+    public void setFirstUserName(String userFirstName) {
+        this.userFirstName.set(userFirstName);
+    }
+
+    public String getUserLastName() {
+        return userLastName.get();
+    }
+
+    public StringProperty userLastNameProperty() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName.set(userLastName);
+    }
+
+    public String getUserPhoneNr() {
+        return userPhoneNr.get();
+    }
+
+    public StringProperty userPhoneNrProperty() {
+        return userPhoneNr;
+    }
+
+    public void setUserPhoneNr(String userPhoneNr) {
+        this.userPhoneNr.set(userPhoneNr);
+    }
+
+    public String getUserEmail() {
+        return userEmail.get();
+    }
+
+    public StringProperty userEmailProperty() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail.set(userEmail);
+    }
+
 }
