@@ -47,12 +47,8 @@ public class LoginModel {
             }
         }
      */
-    /*
-     * This is the above method
-     * with PreparedStatement
-     */
-    public boolean isLoggedIn(String user, String password) throws Exception {
-        // execute the query using PreparedStatement
+
+    public boolean isUserLoggedIn(String user, String password) throws Exception {
         PreparedStatement pr = null;
         ResultSet rs = null;
         String sqlQueryPreparedStatement = "SELECT * FROM login where loginName=? and password=?";
@@ -78,7 +74,6 @@ public class LoginModel {
             assert rs != null;
             rs.close();
         }
-
     }
 
     public boolean isAdmin(String user) throws Exception {
