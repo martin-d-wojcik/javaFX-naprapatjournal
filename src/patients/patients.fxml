@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
+<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patients.PatientsController">
+   <children>
+      <AnchorPane prefHeight="50.0" prefWidth="1600.0" style="-fx-background-color: #7A7D7B;">
+         <children>
+            <Label fx:id="lblUserLoggedInHeader" layoutX="103.0" layoutY="17.0" text="uuuuu" textFill="#eb7826">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label fx:id="lblTemp" layoutX="361.0" layoutY="340.0" text="Label" />
+   </children>
 </AnchorPane>
