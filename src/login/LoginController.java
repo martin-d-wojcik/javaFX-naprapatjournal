@@ -1,6 +1,5 @@
 package login;
 
-import patientsMain.PatientsMainController;
 import patients.PatientsController;
 import admin.AdminController;
 import javafx.event.ActionEvent;
@@ -47,7 +46,11 @@ public class LoginController implements Initializable {
                 Stage stage = (Stage)this.loginBtn.getScene().getWindow();
                 stage.close();
 
-                if(this.loginModel.isAdmin(this.username.getText())) {
+                String currentUser = this.username.getText();
+                UserHolder.setLoggedInUser(currentUser);
+                // works too: UserHolder.loggedInUser = currentUser;
+
+                if(this.loginModel.isAdmin(currentUser)) {
                     adminLogin();
                 } else {
                     userLogin();
@@ -100,8 +103,8 @@ public class LoginController implements Initializable {
             userStage.setResizable(false);
             userStage.show();
 
-            PatientsController p = new PatientsController();
-            p.setHeader(this.username.getText());
+            // PatientsController p = new PatientsController();
+            // p.setHeader(this.username.getText());
         } catch (IOException e) {
             e.printStackTrace();
         }
