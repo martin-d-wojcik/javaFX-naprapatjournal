@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
 <AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patients.PatientsController">
@@ -17,27 +18,38 @@
                   <Insets left="30.0" />
                </padding>
             </Label>
-            <GridPane layoutX="32.0" layoutY="102.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
-                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
-                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
-                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="NEVER" />
-                  <RowConstraints />
-              </rowConstraints>
-               <children>
-                  <Label fx:id="lblHem" text="Hem" GridPane.rowIndex="1" />
-                  <Label fx:id="lblPatienter" text="Patienter" GridPane.rowIndex="2" />
-                  <Label fx:id="lblJournaler" text="Journaler" GridPane.rowIndex="3" />
-                  <Label fx:id="lblProgram" text="Program" GridPane.rowIndex="4" />
-               </children>
-            </GridPane>
             <Line fx:id="lineLeftMenuTop" endX="132.0" layoutX="132.0" layoutY="71.0" startX="-122.0" stroke="#444545" />
+            <VBox layoutX="32.0" layoutY="100.0" prefHeight="473.0" prefWidth="213.0">
+               <children>
+                  <Button fx:id="btnStart" mnemonicParsing="false" prefHeight="35.0" prefWidth="93.0" text="Start" />
+                  <Button fx:id="btnPatients" mnemonicParsing="false" prefHeight="35.0" prefWidth="93.0" text="Patienter" />
+                  <Button fx:id="btnJournaler" mnemonicParsing="false" prefHeight="35.0" prefWidth="92.0" text="Journaler" />
+                  <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="92.0" text="Program" />
+               </children></VBox>
          </children>
       </AnchorPane>
-      <Label fx:id="lblTemp" layoutX="668.0" layoutY="311.0" text="Label" />
+      <VBox layoutX="277.0" prefHeight="800.0" prefWidth="1322.0">
+         <children>
+            <AnchorPane prefHeight="73.0" prefWidth="1322.0">
+               <children>
+                  <Button fx:id="btnAllPatients" layoutX="72.0" layoutY="24.0" mnemonicParsing="false" onAction="#ListAllPatients" text="Alla" />
+               </children></AnchorPane>
+            <TableView fx:id="tableViewPatients" prefHeight="705.0" prefWidth="1322.0">
+              <columns>
+                <TableColumn fx:id="tableColumnPersonNr" prefWidth="75.0" text="Person nr" />
+                <TableColumn fx:id="tableColumnFirstName" prefWidth="75.0" text="Förnamn" />
+                <TableColumn fx:id="tableColumnLastName" prefWidth="75.0" text="Efternamn" />
+                <TableColumn fx:id="tableColumnStreetAdress" prefWidth="75.0" text="Gatuadress" />
+                <TableColumn fx:id="tableColumnCity" prefWidth="75.0" text="Stad" />
+                <TableColumn fx:id="tableColumnPostalCode" prefWidth="75.0" text="Post nr" />
+                <TableColumn fx:id="tableColumnEmail" prefWidth="75.0" text="E-mail" />
+                <TableColumn fx:id="tableColumnPhoneNr" prefWidth="75.0" text="Tel nr" />
+              </columns>
+               <padding>
+                  <Insets left="20.0" top="20.0" />
+               </padding>
+            </TableView>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
