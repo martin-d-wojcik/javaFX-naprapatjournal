@@ -1,5 +1,6 @@
 package login;
 
+import javafx.scene.layout.AnchorPane;
 import patients.PatientsController;
 import admin.AdminController;
 import javafx.event.ActionEvent;
@@ -92,7 +93,8 @@ public class LoginController implements Initializable {
         try {
             Stage userStage = new Stage();
             FXMLLoader userLoader = new FXMLLoader();
-            Pane userRoot = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
+            // Pane userRoot = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
+            AnchorPane userRoot = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
 
             // attach the controller file to the fxml file
             PatientsController patientsController = (PatientsController)userLoader.getController();
