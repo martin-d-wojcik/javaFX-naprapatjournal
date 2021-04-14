@@ -132,7 +132,6 @@ public class PatientsController implements Initializable {
             System.err.println("Error: " + e);
         }
 
-        // get the StringProperties from the PatientData class
         fillTableWithPatientData(data);
     }
 
