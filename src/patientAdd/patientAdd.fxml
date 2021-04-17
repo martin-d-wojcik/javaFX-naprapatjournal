@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
+<AnchorPane prefHeight="800.0" prefWidth="1323.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patientAdd.PatientAddController">
+   <children>
+      <Pane layoutX="62.0" layoutY="97.0" prefHeight="421.0" prefWidth="1192.0" style="-fx-background-color: #E1E2E2;">
+         <children>
+            <TextField fx:id="textFieldPersonNr" layoutX="135.0" layoutY="61.0" prefHeight="25.0" prefWidth="232.0" promptText="Personnummer" />
+            <TextField fx:id="textFieldFirstName" layoutX="135.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" promptText="Förnamn" />
+            <TextField fx:id="textFieldLastName" layoutX="135.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Efternamn" />
+            <TextField fx:id="textFieldStreetAdress" layoutX="135.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Gatuadress" />
+            <TextField fx:id="textFieldCity" layoutX="430.0" layoutY="61.0" prefHeight="25.0" prefWidth="232.0" promptText="Stad" />
+            <TextField fx:id="textFieldPostalCode" layoutX="430.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" promptText="Postnummer" />
+            <TextField fx:id="textFieldEmail" layoutX="430.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Email" />
+            <TextField fx:id="textFieldPhoneNr" layoutX="430.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Telefonnummer" />
+            <Button fx:id="btnAddNewPatient" layoutX="315.0" layoutY="296.0" mnemonicParsing="false" onAction="#AddPatientData" text="Lägg tll" />
+            <Button fx:id="btnCancel" layoutX="430.0" layoutY="296.0" mnemonicParsing="false" text="Avbryt" />
+            <Label fx:id="lblAddPatientHeader" layoutX="135.0" layoutY="14.0" text="Lägg till ny patient. Fyll uppgifter och klicka Lägg till">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblPersonNrWarning" layoutX="151.0" layoutY="89.0" prefHeight="11.0" prefWidth="215.0" text="Ange Personnummer!" textFill="#f80808" />
+            <Label fx:id="lblFirstNameWarning" layoutX="151.0" layoutY="134.0" prefHeight="17.0" prefWidth="215.0" text="Ange förnamn!" textFill="#f80505" />
+            <Label fx:id="lblLastNameWarning" layoutX="151.0" layoutY="181.0" prefHeight="17.0" prefWidth="215.0" text="Ange efternamn!" textFill="#f80606" />
+            <Label fx:id="lblStreetAdressWarning" layoutX="151.0" layoutY="231.0" text="Ange gatuadress!" textFill="#f80707" />
+            <Label fx:id="lblCityWarning" layoutX="442.0" layoutY="89.0" text="Ange stad!" textFill="#fc0808" />
+            <Label fx:id="lblPostalCodeWarning" layoutX="441.0" layoutY="134.0" prefHeight="17.0" prefWidth="215.0" text="Ange postnummer!" textFill="#f20404" />
+            <Label fx:id="lblEmailWarning" layoutX="441.0" layoutY="181.0" prefHeight="17.0" prefWidth="215.0" text="Ange email!" textFill="#f80606" />
+            <Label fx:id="lblPhoneNrWarning" layoutX="442.0" layoutY="231.0" prefHeight="17.0" prefWidth="215.0" text="Ange telefonnummer!" textFill="#f80303" />
+         </children>
+      </Pane>
+   </children>
 </AnchorPane>
