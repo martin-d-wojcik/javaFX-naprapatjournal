@@ -4,14 +4,21 @@ import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import jdk.jfr.StackTrace;
+import patientAdd.PatientAddController;
 import resources.StylingLeftMenu;
 import resources.StylingMainViewHeader;
-
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,9 +28,11 @@ import java.util.ResourceBundle;
 
 public class PatientsController implements Initializable {
     @FXML
-    private Label lblTemp;
+    private AnchorPane rootPane;
 
     // left menu
+    @FXML
+    private Label lblTemp;
     @FXML
     private Label lblUserLoggedInHeader;
     @FXML
@@ -48,6 +57,8 @@ public class PatientsController implements Initializable {
     private Button btnAllPatients;
     @FXML
     private Button btnSearchPatient;
+    @FXML
+    private Button btnAddPatient;
 
     // table
     @FXML
@@ -80,8 +91,10 @@ public class PatientsController implements Initializable {
         lblUserLoggedInHeader.setStyle("-fx-text-fill: " + StylingLeftMenu.LOGGED_IN_USER_HEADER_TEXT_FILL);
 
         // styling left menu - buttons
-        btnPatients.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+        btnPatients.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
+        btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+                + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
         btnJournaler.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
         btnProgram.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
@@ -92,17 +105,27 @@ public class PatientsController implements Initializable {
         btnProgram.setAlignment(Pos.BASELINE_LEFT);
         btnJournaler.setAlignment(Pos.BASELINE_LEFT);
         btnStart.setAlignment(Pos.BASELINE_LEFT);
+        btnPatients.setPadding(new Insets(0, 0, 0, 20));
+        btnProgram.setPadding(new Insets(0, 0, 0, 20));
+        btnJournaler.setPadding(new Insets(0, 0, 0, 20));
+        btnStart.setPadding(new Insets(0, 0, 0, 20));
 
         // styling table view
         // tableColumnPersonNr.setStyle("-fx-background-color: #366F2B");
 
         // styling search section
-        btnSearchPatient.setStyle("-fx-background-color:  " + StylingMainViewHeader.BUTTON_SEARCH_BACKGROUND_COLOR
-                + "; -fx-text-fill: " + StylingMainViewHeader.BUTTON_SEARCH_TEXT_FILL
+        btnSearchPatient.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
-        btnAllPatients.setStyle("-fx-background-color: " + StylingMainViewHeader.BUTTON_SEARCH_BACKGROUND_COLOR
-                + "; -fx-text-fill: " + StylingMainViewHeader.BUTTON_SEARCH_TEXT_FILL
+        btnAllPatients.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
+        btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+                + "; -fx-font-weight: bold");
+        // txtFieldPersonNr.setStyle("-fx-font-weight: italic");
+        // txtFieldFirstName.setStyle("-fx-font-weight: italic");
+        // txtFieldLastName.setStyle("-fx-font-weight: italic");
 
         setHeader(login.UserHolder.getLoggedInUser());
         fillTableView();
@@ -151,6 +174,15 @@ public class PatientsController implements Initializable {
 
     public void ListAllPatients(javafx.event.ActionEvent event) {
         fillTableView();
+    }
+
+    public void ShowAddPatient(javafx.event.ActionEvent event) {
+        try {
+            AnchorPane paneAddPatient = FXMLLoader.load(getClass().getResource("/patientAdd/patientAdd.fxml"));
+            rootPane.getChildren().setAll(paneAddPatient);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void SearchPatient(javafx.event.ActionEvent event) {

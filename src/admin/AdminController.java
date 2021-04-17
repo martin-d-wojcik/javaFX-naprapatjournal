@@ -209,22 +209,7 @@ public class AdminController implements Initializable {
 
     @FXML
     private void clearTableView() {
-        /*
-         * This works !!
-         */
         userTable.getItems().clear();
-
-        /************
-         * These both methods bellow work too !!
-         * 1
-         for ( int i = 0; i<userTable.getItems().size(); i++) {
-         userTable.getItems().clear();
-         }
-
-         ************
-         * 2
-         userTable.setItems(null);
-         ***************/
         userTable.refresh();
 
     }
@@ -299,6 +284,7 @@ public class AdminController implements Initializable {
 
             }
         }
+        assert conn != null;
         conn.close();
 
     }
