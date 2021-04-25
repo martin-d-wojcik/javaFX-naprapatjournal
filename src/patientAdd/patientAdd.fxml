@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1323.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patientAdd.PatientAddController">
+<AnchorPane fx:id="paneAddPatients" prefHeight="800.0" prefWidth="1323.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patientAdd.PatientAddController">
    <children>
       <Pane layoutX="62.0" layoutY="97.0" prefHeight="421.0" prefWidth="1192.0" style="-fx-background-color: #E1E2E2;">
          <children>
@@ -20,7 +20,7 @@
             <TextField fx:id="textFieldEmail" layoutX="430.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Email" />
             <TextField fx:id="textFieldPhoneNr" layoutX="430.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Telefonnummer" />
             <Button fx:id="btnAddNewPatient" layoutX="315.0" layoutY="296.0" mnemonicParsing="false" onAction="#AddPatientData" text="Lägg tll" />
-            <Button fx:id="btnCancel" layoutX="430.0" layoutY="296.0" mnemonicParsing="false" text="Avbryt" />
+            <Button fx:id="btnCancel" layoutX="430.0" layoutY="296.0" mnemonicParsing="false" onAction="#CancelAddPatient" text="Avbryt" />
             <Label fx:id="lblAddPatientHeader" layoutX="135.0" layoutY="14.0" text="Lägg till ny patient. Fyll uppgifter och klicka Lägg till">
                <font>
                   <Font size="14.0" />

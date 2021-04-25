@@ -4,13 +4,11 @@ import dbUtil.dbConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import resources.StylingLeftMenu;
 import resources.StylingMainViewContent;
 
@@ -23,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class PatientAddController implements Initializable {
     @FXML
-    private Pane paneMainContent;
+    private AnchorPane paneAddPatients;
     @FXML
     private Label lblAddPatientHeader;
 
@@ -87,9 +85,6 @@ public class PatientAddController implements Initializable {
         textFieldPostalCode.setStyle("-fx-border-color: " + StylingMainViewContent.TEXTFIELD_BORDER_COLOR);
         textFieldEmail.setStyle("-fx-border-color: " + StylingMainViewContent.TEXTFIELD_BORDER_COLOR);
         textFieldPhoneNr.setStyle("-fx-border-color: " + StylingMainViewContent.TEXTFIELD_BORDER_COLOR);
-
-        // styling warning labels
-        // TODO
 
         // styling buttons
         btnAddNewPatient.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
@@ -164,12 +159,22 @@ public class PatientAddController implements Initializable {
             prepStmt.setString(7, email);
             prepStmt.setString(8, phoneNr);
 
-            prepStmt.executeUpdate();//
+            prepStmt.executeUpdate();
             prepStmt.close();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ny patient tillagd.");
-            alert.setHeaderText("Insättning lyckad");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Patienten sparad.");
+            alert.setHeaderText("Det gick ju bra.");
             alert.show();
+        }
+    }
+
+    public void CancelAddPatient(javafx.event.ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
+            Stage window = (Stage) btnCancel.getScene().getWindow();
+            window.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -182,5 +187,16 @@ public class PatientAddController implements Initializable {
         lblPostalCodeWarning.visibleProperty().setValue(false);
         lblEmailWarning.visibleProperty().setValue(false);
         lblPhoneNrWarning.visibleProperty().setValue(false);
+    }
+
+    private void clearTextFields() {
+        textFieldPersonNr.clear();
+        textFieldFirstName.clear();
+        textFieldLastName.clear();
+        textFieldStreetAdress.clear();
+        textFieldCity.clear();
+        textFieldPostalCode.clear();
+        textFieldEmail.clear();
+        textFieldPhoneNr.clear();
     }
 }
