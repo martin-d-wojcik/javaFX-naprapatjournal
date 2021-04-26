@@ -1,19 +1,28 @@
 package journal;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import patients.PatientHolder;
 import resources.StylingLeftMenu;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class JournalController implements Initializable {
+    JournalModel journalModel = new JournalModel();
+
     // left menu
     @FXML
     private Label lblUserLoggedInHeader;
@@ -40,7 +49,11 @@ public class JournalController implements Initializable {
     @FXML
     public Button btnNewProgram;
 
-    // list of journals
+    // journal notes
+    @FXML
+    public AnchorPane anchorPaneJournalNotes;
+    @FXML
+    public Label lblJournalNotesHeader;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -73,7 +86,8 @@ public class JournalController implements Initializable {
         lblUserLoggedInHeader.setText("Inloggad: " + login.UserHolder.getLoggedInUser());
 
         // patient header
-        lblPatientName.setText("Journaler för: " + PatientHolder.getFirstName() + " " + PatientHolder.getLastName());
+        lblPatientName.setText(PatientHolder.getFirstName() + " " + PatientHolder.getLastName()
+                + ", " + PatientHolder.getPersonNr());
         lblPatientName.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-font-weight: bold");
         btnNewJournal.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
@@ -82,5 +96,30 @@ public class JournalController implements Initializable {
         btnNewProgram.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
+
+        // load journals if the patient has any
+        try {
+            ResultSet resultSet = this.journalModel.getJournals(PatientHolder.getPersonNr());
+
+            if (resultSet.next()) {
+                lblJournalNotesHeader.setText("Något finns det.");
+                // display all journals with date as header in tabular format in anchorPaneListOfJournals
+            }
+            else {
+                lblJournalNotesHeader.setText("Det finns inga journaler för denna patient");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void GoToPatients(javafx.event.ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
+            Stage window = (Stage) btnPatients.getScene().getWindow();
+            window.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

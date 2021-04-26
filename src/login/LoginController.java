@@ -49,7 +49,6 @@ public class LoginController implements Initializable {
 
                 String currentUser = this.username.getText();
                 UserHolder.setLoggedInUser(currentUser);
-                // works too: UserHolder.loggedInUser = currentUser;
 
                 if(this.loginModel.isAdmin(currentUser)) {
                     adminLogin();

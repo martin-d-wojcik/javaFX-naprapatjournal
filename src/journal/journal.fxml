@@ -22,7 +22,7 @@
             <VBox layoutY="100.0" prefHeight="473.0" prefWidth="277.0">
                <children>
                   <Button fx:id="btnStart" mnemonicParsing="false" prefHeight="35.0" prefWidth="278.0" text="Start" />
-                  <Button fx:id="btnPatients" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
+                  <Button fx:id="btnPatients" mnemonicParsing="false" onAction="#GoToPatients" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
                   <Button fx:id="btnJournals" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
                   <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
                </children>
@@ -33,5 +33,10 @@
       <Label fx:id="lblPatientName" layoutX="606.0" layoutY="47.0" text="Label" />
       <Button fx:id="btnNewJournal" layoutX="1215.0" layoutY="43.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Ny journal" />
       <Button fx:id="btnNewProgram" layoutX="1356.0" layoutY="43.0" mnemonicParsing="false" prefWidth="110.0" text="Nytt program" />
+      <AnchorPane fx:id="anchorPaneJournalNotes" layoutX="554.0" layoutY="104.0" prefHeight="720.0" prefWidth="1046.0">
+         <children>
+            <Label fx:id="lblJournalNotesHeader" layoutX="53.0" layoutY="51.0" text="Label" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
