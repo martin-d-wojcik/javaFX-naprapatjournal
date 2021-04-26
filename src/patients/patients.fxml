@@ -25,9 +25,10 @@
                <children>
                   <Button fx:id="btnStart" mnemonicParsing="false" prefHeight="35.0" prefWidth="278.0" text="Start" />
                   <Button fx:id="btnPatients" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
-                  <Button fx:id="btnJournaler" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
+                  <Button fx:id="btnJournals" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
                   <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
                </children></VBox>
+            <Label fx:id="lblTemp" layoutX="125.0" layoutY="708.0" text="Label" />
          </children>
       </AnchorPane>
       <VBox layoutX="277.0" prefHeight="800.0" prefWidth="1322.0">
@@ -52,7 +53,7 @@
                   </Button>
                   <Button fx:id="btnAllPatients" layoutX="661.0" layoutY="27.0" mnemonicParsing="false" onAction="#ListAllPatients" text="Visa alla" />
                   <Label fx:id="lblTemp" layoutX="779.0" layoutY="31.0" text="Label" />
-                   <TableView fx:id="tableViewPatients" layoutY="96.0" prefHeight="705.0" prefWidth="1322.0">
+                   <TableView fx:id="tableViewPatients" layoutY="96.0" onMouseClicked="#SelectPatientFromTable" prefHeight="705.0" prefWidth="1322.0">
                        <columns>
                            <TableColumn fx:id="tableColumnPersonNr" prefWidth="110.0" text="Person nr" />
                            <TableColumn fx:id="tableColumnFirstName" prefWidth="110.0" text="Förnamn" />

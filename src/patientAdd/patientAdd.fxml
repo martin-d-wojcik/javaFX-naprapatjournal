@@ -34,6 +34,7 @@
             <Label fx:id="lblPostalCodeWarning" layoutX="441.0" layoutY="134.0" prefHeight="17.0" prefWidth="215.0" text="Ange postnummer!" textFill="#f20404" />
             <Label fx:id="lblEmailWarning" layoutX="441.0" layoutY="181.0" prefHeight="17.0" prefWidth="215.0" text="Ange email!" textFill="#f80606" />
             <Label fx:id="lblPhoneNrWarning" layoutX="442.0" layoutY="231.0" prefHeight="17.0" prefWidth="215.0" text="Ange telefonnummer!" textFill="#f80303" />
+            <Label fx:id="lblTemp" layoutX="850.0" layoutY="113.0" text="Label" />
          </children>
       </Pane>
    </children>

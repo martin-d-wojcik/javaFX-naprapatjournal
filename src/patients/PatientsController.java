@@ -8,16 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import jdk.jfr.StackTrace;
-import patientAdd.PatientAddController;
 import resources.StylingLeftMenu;
-import resources.StylingMainViewHeader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -40,7 +38,7 @@ public class PatientsController implements Initializable {
     @FXML
     private Button btnPatients;
     @FXML
-    private Button btnJournaler;
+    private Button btnJournals;
     @FXML
     private Button btnProgram;
     @FXML
@@ -93,9 +91,7 @@ public class PatientsController implements Initializable {
         // styling left menu - buttons
         btnPatients.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
-        btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-        btnJournaler.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+        btnJournals.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
         btnProgram.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
@@ -103,17 +99,16 @@ public class PatientsController implements Initializable {
                 "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
         btnPatients.setAlignment(Pos.BASELINE_LEFT);
         btnProgram.setAlignment(Pos.BASELINE_LEFT);
-        btnJournaler.setAlignment(Pos.BASELINE_LEFT);
+        btnJournals.setAlignment(Pos.BASELINE_LEFT);
         btnStart.setAlignment(Pos.BASELINE_LEFT);
         btnPatients.setPadding(new Insets(0, 0, 0, 20));
         btnProgram.setPadding(new Insets(0, 0, 0, 20));
-        btnJournaler.setPadding(new Insets(0, 0, 0, 20));
+        btnJournals.setPadding(new Insets(0, 0, 0, 20));
         btnStart.setPadding(new Insets(0, 0, 0, 20));
 
-        // styling table view
-        // tableColumnPersonNr.setStyle("-fx-background-color: #366F2B");
-
         // styling search section
+        /* btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+                + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL); */
         btnSearchPatient.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
@@ -123,9 +118,6 @@ public class PatientsController implements Initializable {
         btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLeftMenu.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
-        // txtFieldPersonNr.setStyle("-fx-font-weight: italic");
-        // txtFieldFirstName.setStyle("-fx-font-weight: italic");
-        // txtFieldLastName.setStyle("-fx-font-weight: italic");
 
         setHeader(login.UserHolder.getLoggedInUser());
         fillTableView();
@@ -229,6 +221,26 @@ public class PatientsController implements Initializable {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
+        }
+    }
+
+    @FXML
+    public void SelectPatientFromTable(MouseEvent e) {
+        // TODO: parse personNr, firstName, lastName to JournalController
+        try {
+            String patientPersonNr = tableViewPatients.getSelectionModel().getSelectedItem().getPatientPersonNr();
+            String patientFirstName = tableViewPatients.getSelectionModel().getSelectedItem().getPatientFirstName();
+            String patientLastName = tableViewPatients.getSelectionModel().getSelectedItem().getPatientLastName();
+
+            PatientHolder.setPersonNr(patientPersonNr);
+            PatientHolder.setFirstName(patientFirstName);
+            PatientHolder.setLastName(patientLastName);
+
+            Parent root = FXMLLoader.load(getClass().getResource("/journal/journal.fxml"));
+            Stage window = (Stage) tableViewPatients.getScene().getWindow();
+            window.setScene(new Scene(root));
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 

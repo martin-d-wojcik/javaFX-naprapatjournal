@@ -12,12 +12,6 @@ public class UserData {
     private final StringProperty userPhoneNr;
     private final StringProperty userEmail;
 
-    /*    public UserData(String name, String password, String role) {
-            this.userName = new SimpleStringProperty(name);
-            this.userPassword = new SimpleStringProperty(password);
-            this.userRole = new SimpleStringProperty(role);
-        }
-    */
     public UserData(String loginName, String password, String role, String firstname, String lastname, String telnr, String email) {
         this.userLoginName = new SimpleStringProperty(loginName);
         this.userPassword = new SimpleStringProperty(password);

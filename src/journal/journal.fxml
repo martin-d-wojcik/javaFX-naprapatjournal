@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+
+
+<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="journal.JournalController">
+   <children>
+      <AnchorPane fx:id="anchorPaneListOfJournals" layoutX="277.0" prefHeight="824.0" prefWidth="277.0" />
+      <AnchorPane fx:id="anchorPaneLeftmenu" prefHeight="824.0" prefWidth="277.0" style="-fx-background-color: #7A7D7B;">
+         <children>
+            <Label fx:id="lblUserLoggedInHeader" layoutY="17.0" text="uuuuu" textFill="#eb7826">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </Label>
+            <Line fx:id="lineLeftMenuTop" endX="132.0" layoutX="132.0" layoutY="71.0" startX="-122.0" stroke="#444545" />
+            <VBox layoutY="100.0" prefHeight="473.0" prefWidth="277.0">
+               <children>
+                  <Button fx:id="btnStart" mnemonicParsing="false" prefHeight="35.0" prefWidth="278.0" text="Start" />
+                  <Button fx:id="btnPatients" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
+                  <Button fx:id="btnJournals" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
+                  <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
+               </children>
+            </VBox>
+            <Label fx:id="lblTemp" layoutX="125.0" layoutY="708.0" text="Label" />
+         </children>
+      </AnchorPane>
+      <Label fx:id="lblPatientName" layoutX="606.0" layoutY="47.0" text="Label" />
+      <Button fx:id="btnNewJournal" layoutX="1215.0" layoutY="43.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Ny journal" />
+      <Button fx:id="btnNewProgram" layoutX="1356.0" layoutY="43.0" mnemonicParsing="false" prefWidth="110.0" text="Nytt program" />
+   </children>
+</AnchorPane>
