@@ -81,6 +81,21 @@ public class PatientsController implements Initializable {
     // SQL queries
     private String sqlGetAllCustomersBasic = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer";
     private String sqlGetCustomerByPersonNr = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer WHERE personNr=?";
+    /********************************************
+     * 2021-04-26
+     */
+    /*
+     * Input some characters to find PersonNumbers beginning with
+     */
+    private String sqlGetCustomerByPersonNr_Like = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber "
+            + "FROM customer WHERE personNr LIKE ?";
+    /*
+     * Input some capitals or common letters to find lastName/firstName beginning with
+     * SQL clause "LIKE" is case INSENSITIVE
+     */
+    private String sqlGetCustomerByName_Like = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber "
+            + "FROM customer WHERE firstName LIKE ? AND lastName LIKE ?";
+    /*********************************************/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -180,34 +195,66 @@ public class PatientsController implements Initializable {
     public void SearchPatient(javafx.event.ActionEvent event) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
+/********************************************
+ * 2021-04-26
+ */
+        Connection conn = null;
 
-        // search for personNr OR firstName/lastName
-        if (txtFieldPersonNr.getText().isEmpty()
-                && txtFieldFirstName.getText().isEmpty()
-                && txtFieldLastName.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Ange personn nummer, förnamn eller efternamn");
-            alert.setHeaderText("Ett fel har inträffat !");
-            alert.show();
-        }
-        else if (txtFieldPersonNr.getText().isEmpty()) {
-            lblTemp.setText("namn");
+        try {
+            conn = dbConnection.getConnection();
+            assert conn != null;
 
-            // TODO: query the DB with firstName and/or lastName
-        }
-        else {
-            try {
-                String personNr = txtFieldPersonNr.getText();
+            // search for personNr OR firstName/lastName
+            // TRIM TRIM TRIM !!!
+            if (txtFieldPersonNr.getText().trim().isEmpty() && txtFieldFirstName.getText().trim().isEmpty()
+                    && txtFieldLastName.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Ange personn nummer, förnamn eller efternamn");
+                alert.setHeaderText("Ett fel har inträffat !");
+                alert.show();
 
-                Connection conn = dbConnection.getConnection();
+            } else if (txtFieldPersonNr.getText().trim().isEmpty()) {
+                lblTemp.setText("namn");
 
-                assert conn != null;
-                preparedStatement = conn.prepareStatement(sqlGetCustomerByPersonNr);
-                preparedStatement.setString(1, personNr);
+                String firstName = txtFieldFirstName.getText().trim(); // trim ALLWAYS !!!
+                String lastName = txtFieldLastName.getText().trim(); // trim ALLWAYS !!!
+
+                /*
+                 * You can input: sv , SVEN
+                 * to find Sven Svensson
+                 * OR sve / blanc to find every Sven
+                 * OR blanc / svenss to find every Svensson
+                 */
+                preparedStatement = conn.prepareStatement(sqlGetCustomerByName_Like);
+                preparedStatement.setString(1, firstName + "%");
+                preparedStatement.setString(2, lastName + "%");
 
                 resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
-                    displayQueryResultInTable(resultSet);
+                    displayQueryResultInTable_SomeRows(resultSet);
+
+                    /// ? txtFieldFirstName.clear();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "Inga patienter hittades med det namnet");
+                    alert.setHeaderText("Ett fel har inträffat !");
+                    alert.show();
+                }
+
+            } else {
+                String personNr = txtFieldPersonNr.getText().trim();  // trim ALLWAYS !!!
+
+/***********************************************
+ * 2021-04-26
+ */
+                ///		preparedStatement = conn.prepareStatement(sqlGetCustomerByPersonNr);
+                ///		preparedStatement.setString(1, personNr);
+                preparedStatement = conn.prepareStatement(sqlGetCustomerByPersonNr_Like);
+                preparedStatement.setString(1, personNr + "%");
+/*********************************************/
+                resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    displayQueryResultInTable_SomeRows(resultSet);
 
                     txtFieldPersonNr.clear();
                 } else {
@@ -216,14 +263,17 @@ public class PatientsController implements Initializable {
                     alert.show();
                 }
 
-                conn.close();
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
             }
-        }
-    }
+            conn.close();
 
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, throwables.toString());
+            alert.setHeaderText("SQLException har inträffat !");
+            alert.show();
+        }
+
+    }
     @FXML
     public void SelectPatientFromTable(MouseEvent e) {
         // TODO: parse personNr, firstName, lastName to JournalController
@@ -244,7 +294,42 @@ public class PatientsController implements Initializable {
         }
     }
 
-    private void displayQueryResultInTable(ResultSet resultSet) throws SQLException {
+    /***************************************************
+     *
+     * Displays actual row, pointed by actual RecordSet pointer
+     *
+     private void xdisplayQueryResultInTable_ActualRow(ResultSet resultSet) throws SQLException {
+     ObservableList<PatientData> data = FXCollections.observableArrayList();
+
+     if (resultSet.getRow() == 0) {
+     lblTemp.setText("Inga användare hittades");
+     Alert alert = new Alert(Alert.AlertType.WARNING, "Inga användare hittades");
+     alert.setHeaderText("Ett fel har inträffat");
+     alert.show();
+
+     } else {
+     try {
+     {
+     data.add(new PatientData(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
+     resultSet.getString(4), resultSet.getString(5), resultSet.getString(6),
+     resultSet.getString(7), resultSet.getString(8)));
+     }
+     } catch (SQLException e) {
+     System.err.println("Error: " + e);
+     }
+
+     fillTableWithPatientData(data);
+     }
+     }
+     ***************************************************/
+
+    /******************************************
+     *
+     * Displays all rows
+     * from the actual pointer to the last row
+     *
+     ******************************************/
+    private void displayQueryResultInTable_SomeRows(ResultSet resultSet) throws SQLException {
         ObservableList<PatientData> data = FXCollections.observableArrayList();
 
         if (resultSet.getRow() == 0) {
@@ -255,14 +340,13 @@ public class PatientsController implements Initializable {
 
         } else {
             try {
-                data.add(new PatientData(resultSet.getString(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getString(6),
-                        resultSet.getString(7),
-                        resultSet.getString(8)));
+                do{
+                    data.add(new PatientData(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
+                            resultSet.getString(4), resultSet.getString(5), resultSet.getString(6),
+                            resultSet.getString(7), resultSet.getString(8)));
+                }
+                while (resultSet.next());
+
             } catch (SQLException e) {
                 System.err.println("Error: " + e);
             }
