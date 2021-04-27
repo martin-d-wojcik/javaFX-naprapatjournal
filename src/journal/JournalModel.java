@@ -1,10 +1,13 @@
 package journal;
 
 import dbUtil.dbConnection;
+import javafx.collections.ObservableList;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class JournalModel {
     Connection connection;
@@ -22,13 +25,14 @@ public class JournalModel {
         }
     }
 
-    public ResultSet getJournals(String personNr) throws SQLException {
+    public ArrayList<JournalData> getJournals(String personNr) throws SQLException {
+        ArrayList<JournalData> journalList = new ArrayList<JournalData>();
         PreparedStatement pr = null;
         ResultSet rs = null;
-        String sqlQueryPreparedStatement = "SELECT notes.information, notes.dateOfCreation\n" +
-                "FROM notes\n" +
-                "INNER JOIN customer ON notes.personNr=customer.personNr\n" +
-                "WHERE customer.personNr=?";
+        // String resultStringToReturn = "";
+        String sqlQueryPreparedStatement = "SELECT information, dateOfCreation " +
+                "FROM notes " +
+                "WHERE personNr=?";
 
         try {
             pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
@@ -37,10 +41,10 @@ public class JournalModel {
             // the result of the query is returned in an tabular format
             rs = pr.executeQuery();
 
-            // move the cursor to the last row
-            // rs.last();
-            // get the index of the last row
-            // numberOdRows = rs.getRow();
+            if (rs.next()) {
+                JournalData journalData = new JournalData(rs.getString(1), rs.getString(2));
+                journalList.add(journalData);
+            }
         }
         catch (SQLException ex) {
             ex.printStackTrace();
@@ -51,6 +55,6 @@ public class JournalModel {
             assert rs != null;
             rs.close();
         }
-        return rs;
+        return journalList;
     }
 }

@@ -81,21 +81,10 @@ public class PatientsController implements Initializable {
     // SQL queries
     private String sqlGetAllCustomersBasic = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer";
     private String sqlGetCustomerByPersonNr = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer WHERE personNr=?";
-    /********************************************
-     * 2021-04-26
-     */
-    /*
-     * Input some characters to find PersonNumbers beginning with
-     */
     private String sqlGetCustomerByPersonNr_Like = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber "
             + "FROM customer WHERE personNr LIKE ?";
-    /*
-     * Input some capitals or common letters to find lastName/firstName beginning with
-     * SQL clause "LIKE" is case INSENSITIVE
-     */
     private String sqlGetCustomerByName_Like = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber "
             + "FROM customer WHERE firstName LIKE ? AND lastName LIKE ?";
-    /*********************************************/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -122,8 +111,6 @@ public class PatientsController implements Initializable {
         btnStart.setPadding(new Insets(0, 0, 0, 20));
 
         // styling search section
-        /* btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL); */
         btnSearchPatient.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
@@ -133,6 +120,7 @@ public class PatientsController implements Initializable {
         btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLeftMenu.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
+        lblTemp.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
 
         setHeader(login.UserHolder.getLoggedInUser());
         fillTableView();
@@ -195,9 +183,6 @@ public class PatientsController implements Initializable {
     public void SearchPatient(javafx.event.ActionEvent event) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-/********************************************
- * 2021-04-26
- */
         Connection conn = null;
 
         try {
@@ -205,7 +190,6 @@ public class PatientsController implements Initializable {
             assert conn != null;
 
             // search for personNr OR firstName/lastName
-            // TRIM TRIM TRIM !!!
             if (txtFieldPersonNr.getText().trim().isEmpty() && txtFieldFirstName.getText().trim().isEmpty()
                     && txtFieldLastName.getText().trim().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Ange personn nummer, förnamn eller efternamn");
@@ -213,17 +197,9 @@ public class PatientsController implements Initializable {
                 alert.show();
 
             } else if (txtFieldPersonNr.getText().trim().isEmpty()) {
-                lblTemp.setText("namn");
+                String firstName = txtFieldFirstName.getText().trim();
+                String lastName = txtFieldLastName.getText().trim();
 
-                String firstName = txtFieldFirstName.getText().trim(); // trim ALLWAYS !!!
-                String lastName = txtFieldLastName.getText().trim(); // trim ALLWAYS !!!
-
-                /*
-                 * You can input: sv , SVEN
-                 * to find Sven Svensson
-                 * OR sve / blanc to find every Sven
-                 * OR blanc / svenss to find every Svensson
-                 */
                 preparedStatement = conn.prepareStatement(sqlGetCustomerByName_Like);
                 preparedStatement.setString(1, firstName + "%");
                 preparedStatement.setString(2, lastName + "%");
@@ -241,16 +217,9 @@ public class PatientsController implements Initializable {
                 }
 
             } else {
-                String personNr = txtFieldPersonNr.getText().trim();  // trim ALLWAYS !!!
-
-/***********************************************
- * 2021-04-26
- */
-                ///		preparedStatement = conn.prepareStatement(sqlGetCustomerByPersonNr);
-                ///		preparedStatement.setString(1, personNr);
+                String personNr = txtFieldPersonNr.getText().trim();
                 preparedStatement = conn.prepareStatement(sqlGetCustomerByPersonNr_Like);
                 preparedStatement.setString(1, personNr + "%");
-/*********************************************/
                 resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
@@ -294,41 +263,6 @@ public class PatientsController implements Initializable {
         }
     }
 
-    /***************************************************
-     *
-     * Displays actual row, pointed by actual RecordSet pointer
-     *
-     private void xdisplayQueryResultInTable_ActualRow(ResultSet resultSet) throws SQLException {
-     ObservableList<PatientData> data = FXCollections.observableArrayList();
-
-     if (resultSet.getRow() == 0) {
-     lblTemp.setText("Inga användare hittades");
-     Alert alert = new Alert(Alert.AlertType.WARNING, "Inga användare hittades");
-     alert.setHeaderText("Ett fel har inträffat");
-     alert.show();
-
-     } else {
-     try {
-     {
-     data.add(new PatientData(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
-     resultSet.getString(4), resultSet.getString(5), resultSet.getString(6),
-     resultSet.getString(7), resultSet.getString(8)));
-     }
-     } catch (SQLException e) {
-     System.err.println("Error: " + e);
-     }
-
-     fillTableWithPatientData(data);
-     }
-     }
-     ***************************************************/
-
-    /******************************************
-     *
-     * Displays all rows
-     * from the actual pointer to the last row
-     *
-     ******************************************/
     private void displayQueryResultInTable_SomeRows(ResultSet resultSet) throws SQLException {
         ObservableList<PatientData> data = FXCollections.observableArrayList();
 

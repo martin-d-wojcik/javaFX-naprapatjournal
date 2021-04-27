@@ -52,7 +52,7 @@
                      </font>
                   </Button>
                   <Button fx:id="btnAllPatients" layoutX="661.0" layoutY="27.0" mnemonicParsing="false" onAction="#ListAllPatients" text="Visa alla" />
-                  <Label fx:id="lblTemp" layoutX="779.0" layoutY="31.0" text="Label" />
+                  <Label fx:id="lblTemp" layoutX="779.0" layoutY="31.0" />
                    <TableView fx:id="tableViewPatients" layoutY="96.0" onMouseClicked="#SelectPatientFromTable" prefHeight="705.0" prefWidth="1322.0">
                        <columns>
                            <TableColumn fx:id="tableColumnPersonNr" prefWidth="110.0" text="Person nr" />

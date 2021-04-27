@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import patients.PatientHolder;
@@ -16,8 +17,8 @@ import resources.StylingLeftMenu;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class JournalController implements Initializable {
@@ -54,6 +55,8 @@ public class JournalController implements Initializable {
     public AnchorPane anchorPaneJournalNotes;
     @FXML
     public Label lblJournalNotesHeader;
+    @FXML
+    public TextArea textAreaJournalNotes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -99,14 +102,16 @@ public class JournalController implements Initializable {
 
         // load journals if the patient has any
         try {
-            ResultSet resultSet = this.journalModel.getJournals(PatientHolder.getPersonNr());
+            ArrayList<JournalData> journalList = this.journalModel.getJournals(PatientHolder.getPersonNr());
 
-            if (resultSet.next()) {
-                lblJournalNotesHeader.setText("Något finns det.");
-                // display all journals with date as header in tabular format in anchorPaneListOfJournals
+            if (!journalList.isEmpty()) {
+                for (JournalData jd : journalList) {
+                    lblJournalNotesHeader.setText(jd.getDateOfCreation());
+                    textAreaJournalNotes.setText(jd.getInformation());
+                }
             }
             else {
-                lblJournalNotesHeader.setText("Det finns inga journaler för denna patient");
+                lblJournalNotesHeader.setText("Det finns inga journaler.");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
