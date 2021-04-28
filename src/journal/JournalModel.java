@@ -42,7 +42,7 @@ public class JournalModel {
             rs = pr.executeQuery();
 
             if (rs.next()) {
-                JournalData journalData = new JournalData(rs.getString(1), rs.getString(2));
+                JournalData journalData = new JournalData(rs.getString(2), rs.getString(1));
                 journalList.add(journalData);
             }
         }

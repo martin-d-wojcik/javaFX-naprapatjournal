@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import patients.PatientHolder;
 import resources.StylingLeftMenu;
@@ -41,6 +42,10 @@ public class JournalController implements Initializable {
     // list of journals
     @FXML
     public AnchorPane anchorPaneListOfJournals;
+    // @FXML
+    // private GridPane gridPaneJounalsList;
+    @FXML
+    private Label lblDateInJournalList;
 
     // header
     @FXML
@@ -107,11 +112,24 @@ public class JournalController implements Initializable {
             if (!journalList.isEmpty()) {
                 for (JournalData jd : journalList) {
                     lblJournalNotesHeader.setText(jd.getDateOfCreation());
-                    textAreaJournalNotes.setText(jd.getInformation());
+                    // textAreaJournalNotes.setText(jd.getInformation());
+
+
+                    // TODO: dynamically create gridPane with labels containing journal dates, and place the gridPane inside the anchorPane, anchorPaneListOfJournals
+                    // GridPane gridPane = new GridPane();
+                    // Label label = new Label();
+                    // label.setText(jd.getDateOfCreation());
+                    // gridPane.add(label, 1, 1);
+                    // anchorPaneListOfJournals.getChildren().add(0, gridPane);
+                    
+                    // gridPaneJounalsList.add(lblDateInJournalList, 0, 0);
                 }
             }
             else {
-                lblJournalNotesHeader.setText("Det finns inga journaler.");
+                lblJournalNotesHeader.setText("Det finns inga journaler för denna patient. Klicka Ny journal för " +
+                        "att lägga till en journal");
+                textAreaJournalNotes.visibleProperty().setValue(false);
+                // gridPaneJounalsList.visibleProperty().setValue(false);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
