@@ -7,12 +7,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import patients.PatientHolder;
 import resources.StylingLeftMenu;
@@ -63,6 +63,8 @@ public class JournalController implements Initializable {
     public Label lblJournalNotesHeader;
     @FXML
     public TextArea textAreaJournalNotes;
+    @FXML
+    public Button btnSaveJournalNotes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -107,6 +109,9 @@ public class JournalController implements Initializable {
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
 
+        // Notes
+        btnSaveJournalNotes.setVisible(false);
+
         fillJournalsList();
     }
 
@@ -116,7 +121,8 @@ public class JournalController implements Initializable {
 
             if (!journalList.isEmpty()) {
                 for (JournalData jd : journalList) {
-                    lblJournalNotesHeader.setText(jd.getDateOfCreation());
+                    // lblJournalNotesHeader.setText(jd.getDateOfCreation());
+                    lblJournalNotesHeader.setText(this.journalModel.newJournalNotes("10", "hehe"));
                     textAreaJournalNotes.setText(jd.getInformation());
 
                     GridPane gridPane = new GridPane();
@@ -148,5 +154,18 @@ public class JournalController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void AddNewJournal(javafx.event.ActionEvent event) {
+        textAreaJournalNotes.visibleProperty().setValue(true);
+        btnSaveJournalNotes.setVisible(true);
+    }
+
+    public void SaveNewJournal(javafx.event.ActionEvent event) throws SQLException {
+        this.journalModel.newJournalNotes(PatientHolder.getPersonNr(), textAreaJournalNotes.getText());
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ny journal sparad");
+        alert.setHeaderText("Det gick ju bra!");
+        alert.show();
     }
 }

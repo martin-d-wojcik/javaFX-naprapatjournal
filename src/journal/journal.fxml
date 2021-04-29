@@ -34,12 +34,13 @@
          </children>
       </AnchorPane>
       <Label fx:id="lblPatientName" layoutX="606.0" layoutY="47.0" text="Label" />
-      <Button fx:id="btnNewJournal" layoutX="1215.0" layoutY="43.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Ny journal" />
+      <Button fx:id="btnNewJournal" layoutX="1215.0" layoutY="43.0" mnemonicParsing="false" onAction="#AddNewJournal" prefHeight="25.0" prefWidth="110.0" text="Ny journal" />
       <Button fx:id="btnNewProgram" layoutX="1356.0" layoutY="43.0" mnemonicParsing="false" prefWidth="110.0" text="Nytt program" />
       <AnchorPane fx:id="anchorPaneJournalNotes" layoutX="554.0" layoutY="104.0" prefHeight="720.0" prefWidth="1046.0">
          <children>
             <Label fx:id="lblJournalNotesHeader" layoutX="53.0" layoutY="51.0" text="Label" />
-            <TextArea fx:id="textAreaJournalNotes" layoutX="53.0" layoutY="106.0" prefHeight="587.0" prefWidth="950.0" />
+            <TextArea fx:id="textAreaJournalNotes" layoutX="53.0" layoutY="106.0" prefHeight="541.0" prefWidth="950.0" />
+            <Button fx:id="btnSaveJournalNotes" layoutX="802.0" layoutY="668.0" mnemonicParsing="false" onAction="#SaveNewJournal" prefHeight="25.0" prefWidth="110.0" text="Spara" />
          </children>
       </AnchorPane>
    </children>

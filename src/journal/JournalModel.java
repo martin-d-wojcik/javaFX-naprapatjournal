@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class JournalModel {
     Connection connection;
@@ -29,7 +31,6 @@ public class JournalModel {
         ArrayList<JournalData> journalList = new ArrayList<JournalData>();
         PreparedStatement pr = null;
         ResultSet rs = null;
-        // String resultStringToReturn = "";
         String sqlQueryPreparedStatement = "SELECT information, dateOfCreation " +
                 "FROM notes " +
                 "WHERE personNr=?";
@@ -56,5 +57,32 @@ public class JournalModel {
             rs.close();
         }
         return journalList;
+    }
+
+    public String newJournalNotes(String personNr, String information) throws SQLException {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
+
+        String sqlQueryPreparedStatement = "INSERT INTO notes (personNr, information, dateOfCreation)\n" +
+                "VALUES (?, ?, ?);";
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
+            pr.setString(1, personNr);
+            pr.setString(2, information);
+            pr.setString(3, timeStamp);
+            
+            int i = pr.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+        }
+
+        return timeStamp;
     }
 }
