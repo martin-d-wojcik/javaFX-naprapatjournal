@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import patients.PatientHolder;
 import resources.StylingLeftMenu;
@@ -42,8 +43,8 @@ public class JournalController implements Initializable {
     // list of journals
     @FXML
     public AnchorPane anchorPaneListOfJournals;
-    // @FXML
-    // private GridPane gridPaneJounalsList;
+    @FXML
+    private AnchorPane anchorPaneListOfJournalTopPadding;
     @FXML
     private Label lblDateInJournalList;
 
@@ -89,6 +90,7 @@ public class JournalController implements Initializable {
 
         // styling list of journals
         anchorPaneListOfJournals.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND);
+        anchorPaneListOfJournalTopPadding.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND);
 
         // logged in user
         lblUserLoggedInHeader.setText("Inloggad: " + login.UserHolder.getLoggedInUser());
@@ -105,31 +107,33 @@ public class JournalController implements Initializable {
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
 
-        // load journals if the patient has any
+        fillJournalsList();
+    }
+
+    private void fillJournalsList() {
         try {
             ArrayList<JournalData> journalList = this.journalModel.getJournals(PatientHolder.getPersonNr());
 
             if (!journalList.isEmpty()) {
                 for (JournalData jd : journalList) {
                     lblJournalNotesHeader.setText(jd.getDateOfCreation());
-                    // textAreaJournalNotes.setText(jd.getInformation());
+                    textAreaJournalNotes.setText(jd.getInformation());
 
+                    GridPane gridPane = new GridPane();
 
-                    // TODO: dynamically create gridPane with labels containing journal dates, and place the gridPane inside the anchorPane, anchorPaneListOfJournals
-                    // GridPane gridPane = new GridPane();
-                    // Label label = new Label();
-                    // label.setText(jd.getDateOfCreation());
-                    // gridPane.add(label, 1, 1);
-                    // anchorPaneListOfJournals.getChildren().add(0, gridPane);
-                    
-                    // gridPaneJounalsList.add(lblDateInJournalList, 0, 0);
+                    Label label = new Label();
+                    label.setText(jd.getDateOfCreation());
+                    label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                    label.setPadding(new Insets(10, 40, 0, 40));
+                    gridPane.add(label, 1, journalList.indexOf(jd) + 1);
+
+                    anchorPaneListOfJournals.getChildren().add(0, gridPane);
                 }
             }
             else {
                 lblJournalNotesHeader.setText("Det finns inga journaler för denna patient. Klicka Ny journal för " +
                         "att lägga till en journal");
                 textAreaJournalNotes.visibleProperty().setValue(false);
-                // gridPaneJounalsList.visibleProperty().setValue(false);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
