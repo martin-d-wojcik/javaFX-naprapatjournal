@@ -42,7 +42,8 @@ public class JournalModel {
             // the result of the query is returned in an tabular format
             rs = pr.executeQuery();
 
-            if (rs.next()) {
+            // if (rs.next()) {
+            while (rs.next()) {
                 JournalData journalData = new JournalData(rs.getString(2), rs.getString(1));
                 journalList.add(journalData);
             }
@@ -59,7 +60,7 @@ public class JournalModel {
         return journalList;
     }
 
-    public String newJournalNotes(String personNr, String information) throws SQLException {
+    public void newJournalNotes(String personNr, String information) throws SQLException {
         PreparedStatement pr = null;
         ResultSet rs = null;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
@@ -72,7 +73,7 @@ public class JournalModel {
             pr.setString(1, personNr);
             pr.setString(2, information);
             pr.setString(3, timeStamp);
-            
+
             int i = pr.executeUpdate();
         }
         catch (SQLException ex) {
@@ -82,7 +83,5 @@ public class JournalModel {
             assert pr != null;
             pr.close();
         }
-
-        return timeStamp;
     }
 }

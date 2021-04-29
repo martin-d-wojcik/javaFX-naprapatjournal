@@ -121,8 +121,7 @@ public class JournalController implements Initializable {
 
             if (!journalList.isEmpty()) {
                 for (JournalData jd : journalList) {
-                    // lblJournalNotesHeader.setText(jd.getDateOfCreation());
-                    lblJournalNotesHeader.setText(this.journalModel.newJournalNotes("10", "hehe"));
+                    lblJournalNotesHeader.setText(jd.getDateOfCreation());
                     textAreaJournalNotes.setText(jd.getInformation());
 
                     GridPane gridPane = new GridPane();
@@ -158,6 +157,7 @@ public class JournalController implements Initializable {
 
     public void AddNewJournal(javafx.event.ActionEvent event) {
         textAreaJournalNotes.visibleProperty().setValue(true);
+        textAreaJournalNotes.clear();
         btnSaveJournalNotes.setVisible(true);
     }
 
