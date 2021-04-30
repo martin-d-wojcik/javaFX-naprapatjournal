@@ -41,7 +41,7 @@
             <Label fx:id="lblJournalNotesHeader" layoutX="53.0" layoutY="51.0" text="Label" />
             <TextArea fx:id="textAreaJournalNotes" layoutX="53.0" layoutY="106.0" prefHeight="541.0" prefWidth="950.0" />
             <Button fx:id="btnSaveJournalNotes" layoutX="802.0" layoutY="668.0" mnemonicParsing="false" onAction="#SaveNewJournal" prefHeight="25.0" prefWidth="110.0" text="Spara" />
-            <Button fx:id="btnSaveChanges" layoutX="666.0" layoutY="668.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Spara ändringar" />
+            <Button fx:id="btnSaveChanges" layoutX="666.0" layoutY="668.0" mnemonicParsing="false" onAction="#SaveChangedJournal" prefHeight="25.0" prefWidth="110.0" text="Spara ändringar" />
          </children>
       </AnchorPane>
    </children>

@@ -117,8 +117,8 @@ public class JournalController implements Initializable {
                 + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
         btnSaveJournalNotes.setVisible(false);
-        btnSaveChanges.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+        btnSaveChanges.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-font-weight: bold");
 
         fillJournalsList();
@@ -132,13 +132,12 @@ public class JournalController implements Initializable {
                 GridPane gridPane = new GridPane();
 
                 for (JournalData jd : journalList) {
-                    String dummy = "white";
                     Label label = new Label();
                     label.setText(jd.getDateOfCreation());
                     label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
                     label.setPadding(new Insets(10, 40, 0, 40));
                     label.setOnMouseClicked((mouseEvent) -> {
-                        lblJournalNotesHeader.setText("hmm.. " + jd.getDateOfCreation());
+                        lblJournalNotesHeader.setText(jd.getDateOfCreation());
                         textAreaJournalNotes.setText(jd.getInformation());
 
                         label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
@@ -148,7 +147,6 @@ public class JournalController implements Initializable {
                     // show the latest journal in textArea and date in the header
                     textAreaJournalNotes.setText(jd.getInformation());
                     lblJournalNotesHeader.setText(jd.getDateOfCreation());
-                    // label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
                 }
                 anchorPaneListOfJournals.getChildren().add(0, gridPane);
             }
@@ -191,6 +189,15 @@ public class JournalController implements Initializable {
     }
 
     public void SaveChangedJournal(javafx.event.ActionEvent event) throws SQLException {
-        
+        // TODO: create UPDATE method in JournalModel
+
+        /* this.journalModel.newJournalNotes(PatientHolder.getPersonNr(), textAreaJournalNotes.getText());
+
+        // update list of journals listArray
+        fillJournalsList();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ändringarna sparade");
+        alert.setHeaderText("Milda maränger!");
+        alert.show(); */
     }
 }
