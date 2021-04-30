@@ -120,11 +120,9 @@ public class JournalController implements Initializable {
             ArrayList<JournalData> journalList = this.journalModel.getJournals(PatientHolder.getPersonNr());
 
             if (!journalList.isEmpty()) {
+                GridPane gridPane = new GridPane();
+                
                 for (JournalData jd : journalList) {
-                    lblJournalNotesHeader.setText(jd.getDateOfCreation());
-                    textAreaJournalNotes.setText(jd.getInformation());
-
-                    GridPane gridPane = new GridPane();
 
                     Label label = new Label();
                     label.setText(jd.getDateOfCreation());
@@ -132,8 +130,13 @@ public class JournalController implements Initializable {
                     label.setPadding(new Insets(10, 40, 0, 40));
                     gridPane.add(label, 1, journalList.indexOf(jd) + 1);
 
-                    anchorPaneListOfJournals.getChildren().add(0, gridPane);
+                    // show the latest journal in textArea and date in the header
+                    if (journalList.indexOf(jd) == 0) {
+                        textAreaJournalNotes.setText(jd.getInformation());
+                        lblJournalNotesHeader.setText(jd.getDateOfCreation());
+                    }
                 }
+                anchorPaneListOfJournals.getChildren().add(0, gridPane);
             }
             else {
                 lblJournalNotesHeader.setText("Det finns inga journaler för denna patient. Klicka Ny journal för " +
