@@ -60,7 +60,40 @@ public class JournalModel {
         return journalList;
     }
 
-    public void newJournalNotes(String personNr, String information) throws SQLException {
+    public JournalData updateJournalNotes(String information, int notesId) throws SQLException {
+        JournalData journalData = new JournalData();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String sqlPreparedStatement = "UPDATE notes\n" +
+                "SET information=?\n" +
+                "WHERE notesId=?;";
+
+        try {
+            preparedStatement = this.connection.prepareStatement(sqlPreparedStatement);
+            preparedStatement.setString(1, information);
+            preparedStatement.setString(2, String.valueOf(notesId));
+
+            // the result of the query is returned in an tabular format
+            resultSet = preparedStatement.executeQuery();
+
+            // if (rs.next()) {
+            while (resultSet.next()) {
+                journalData.setInformation(information);
+            }
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert preparedStatement != null;
+            preparedStatement.close();
+            assert resultSet != null;
+            resultSet.close();
+        }
+        return journalData;
+    }
+
+    public int newJournalNotes(String personNr, String information) throws SQLException {
         PreparedStatement pr = null;
         ResultSet rs = null;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
@@ -68,13 +101,15 @@ public class JournalModel {
         String sqlQueryPreparedStatement = "INSERT INTO notes (personNr, information, dateOfCreation)\n" +
                 "VALUES (?, ?, ?);";
 
+        int rowsInserted = 0;
+
         try {
             pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
             pr.setString(1, personNr);
             pr.setString(2, information);
             pr.setString(3, timeStamp);
 
-            int i = pr.executeUpdate();
+            rowsInserted = pr.executeUpdate();
         }
         catch (SQLException ex) {
             ex.printStackTrace();
@@ -82,6 +117,37 @@ public class JournalModel {
         finally {
             assert pr != null;
             pr.close();
+
         }
+        return rowsInserted;
+    }
+
+    public int updateJournalNotes(String personNr, String information, String date) throws SQLException {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
+
+        String sqlQueryPreparedStatement = "UPDATE notes SET information = ? " +
+                " WHERE personNr = ? AND dateOfCreation =  ?";
+
+        int rowsUpdated = 0;
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
+            pr.setString(1, "*** Text ändrad " + timeStamp + " ***\n" + information);
+            pr.setString(2, personNr);
+            pr.setString(3, date);
+
+            rowsUpdated = pr.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+
+        }
+        return rowsUpdated;
     }
 }

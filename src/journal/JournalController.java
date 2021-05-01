@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -95,7 +97,7 @@ public class JournalController implements Initializable {
 
         // styling list of journals
         anchorPaneListOfJournals.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND);
-        anchorPaneListOfJournalTopPadding.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND);
+        anchorPaneListOfJournalTopPadding.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY);
 
         // logged in user
         lblUserLoggedInHeader.setText("Inloggad: " + login.UserHolder.getLoggedInUser());
@@ -128,7 +130,11 @@ public class JournalController implements Initializable {
         try {
             ArrayList<JournalData> journalList = this.journalModel.getJournals(PatientHolder.getPersonNr());
 
+            Collections.reverse(journalList);
+
             if (!journalList.isEmpty()) {
+                this.anchorPaneListOfJournals.getChildren().clear();
+
                 GridPane gridPane = new GridPane();
 
                 for (JournalData jd : journalList) {
@@ -136,18 +142,23 @@ public class JournalController implements Initializable {
                     label.setText(jd.getDateOfCreation());
                     label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
                     label.setPadding(new Insets(10, 40, 0, 40));
+
                     label.setOnMouseClicked((mouseEvent) -> {
                         lblJournalNotesHeader.setText(jd.getDateOfCreation());
                         textAreaJournalNotes.setText(jd.getInformation());
 
+                        // Set All Labels text to default color
+                        resetGridPaneLabelsTextFill(gridPane);
+
                         label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
                     });
+
                     gridPane.add(label, 1, journalList.indexOf(jd) + 1);
 
                     // show the latest journal in textArea and date in the header
-                    textAreaJournalNotes.setText(jd.getInformation());
-                    lblJournalNotesHeader.setText(jd.getDateOfCreation());
-                }
+                    textAreaJournalNotes.setText(journalList.get(0).getInformation());
+                    lblJournalNotesHeader.setText(journalList.get(0).getDateOfCreation());
+               }
                 anchorPaneListOfJournals.getChildren().add(0, gridPane);
             }
             else {
@@ -157,6 +168,19 @@ public class JournalController implements Initializable {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    private void resetGridPaneLabelsTextFill(GridPane gridPane){
+        int gridPaneHeight = gridPane.getChildren().size();
+
+        for (int row = 0; row < gridPaneHeight; row++){
+            // Get Node from gridPane
+            Node n = gridPane.getChildren().get(row);
+            // Cast to Label
+            Label l = (Label) n;
+            // Set default style
+            l.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
         }
     }
 
@@ -177,27 +201,48 @@ public class JournalController implements Initializable {
     }
 
     public void SaveNewJournal(javafx.event.ActionEvent event) throws SQLException {
-        this.journalModel.newJournalNotes(PatientHolder.getPersonNr(), textAreaJournalNotes.getText());
-        btnSaveJournalNotes.setVisible(false);
+        int rowsInserted = this.journalModel.newJournalNotes(PatientHolder.getPersonNr(), textAreaJournalNotes.getText());
 
-        // update list of journals listArray
-        fillJournalsList();
+        if (rowsInserted==1){
+            btnSaveJournalNotes.setVisible(false);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ny journal sparad");
-        alert.setHeaderText("Det gick ju bra!");
-        alert.show();
+            // update list of journals listArray
+            fillJournalsList();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ny journal sparad");
+            alert.setHeaderText("Det gick ju bra!");
+            alert.show();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Ny journal skapades INTE");
+            alert.setHeaderText("Något gick snett!");
+            alert.show();
+        }
     }
 
     public void SaveChangedJournal(javafx.event.ActionEvent event) throws SQLException {
-        // TODO: create UPDATE method in JournalModel
 
-        /* this.journalModel.newJournalNotes(PatientHolder.getPersonNr(), textAreaJournalNotes.getText());
+        String date = lblJournalNotesHeader.getText().trim();
+        int rowsUpdated = this.journalModel.updateJournalNotes(PatientHolder.getPersonNr(),
+                textAreaJournalNotes.getText(), date);
 
-        // update list of journals listArray
-        fillJournalsList();
+        if (rowsUpdated==1){
+            btnSaveJournalNotes.setVisible(false);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ändringarna sparade");
-        alert.setHeaderText("Milda maränger!");
-        alert.show(); */
+            // update list of journals listArray
+            fillJournalsList();
+            // TODO
+            // Select updated row
+            //selectRowInJournalsList(date);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ändringarna i journalen sparades");
+            alert.setHeaderText("Det gick ju bra!");
+            alert.show();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Ändringarna i journalen sparades INTE");
+            alert.setHeaderText("Uppdateringen misllyckades!");
+            alert.show();
+        }
     }
 }
