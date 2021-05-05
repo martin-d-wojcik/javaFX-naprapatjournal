@@ -10,10 +10,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="journal.JournalController">
    <children>
-      <AnchorPane fx:id="anchorPaneListOfJournals" layoutX="277.0" layoutY="86.0" prefHeight="738.0" prefWidth="277.0">
-         <children>
-            <AnchorPane fx:id="anchorPaneListOfJournalTopPadding" layoutY="-86.0" prefHeight="88.0" prefWidth="277.0" />
-         </children></AnchorPane>
+      <AnchorPane fx:id="anchorPaneListOfJournals" layoutX="277.0" prefHeight="824.0" prefWidth="277.0" />
       <AnchorPane fx:id="anchorPaneLeftmenu" prefHeight="824.0" prefWidth="277.0" style="-fx-background-color: #7A7D7B;">
          <children>
             <Label fx:id="lblUserLoggedInHeader" layoutY="17.0" text="uuuuu" textFill="#eb7826">

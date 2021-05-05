@@ -46,8 +46,8 @@ public class JournalController implements Initializable {
     // list of journals
     @FXML
     public AnchorPane anchorPaneListOfJournals;
-    @FXML
-    private AnchorPane anchorPaneListOfJournalTopPadding;
+    // @FXML
+    // private AnchorPane anchorPaneListOfJournalTopPadding;
     @FXML
     private Label lblDateInJournalList;
 
@@ -97,7 +97,7 @@ public class JournalController implements Initializable {
 
         // styling list of journals
         anchorPaneListOfJournals.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND);
-        anchorPaneListOfJournalTopPadding.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY);
+        // anchorPaneListOfJournalTopPadding.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND);
 
         // logged in user
         lblUserLoggedInHeader.setText("Inloggad: " + login.UserHolder.getLoggedInUser());
@@ -140,8 +140,16 @@ public class JournalController implements Initializable {
                 for (JournalData jd : journalList) {
                     Label label = new Label();
                     label.setText(jd.getDateOfCreation());
-                    label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-                    label.setPadding(new Insets(10, 40, 0, 40));
+
+                    // set bigger top padding to the first row only
+                    if (journalList.indexOf(jd) == 0) {
+                        label.setPadding(new Insets(50, 40, 0, 40));
+                        label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
+                    }
+                    else {
+                        label.setPadding(new Insets(10, 40, 0, 40));
+                        label.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                    }
 
                     label.setOnMouseClicked((mouseEvent) -> {
                         lblJournalNotesHeader.setText(jd.getDateOfCreation());
