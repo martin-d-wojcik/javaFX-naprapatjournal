@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 
-public final class StylingLeftMenu {
+public final class StylingLayout {
         // left menu coloring
         public static final String BACKGROUND_DARK_GREY = "#1F2020";
         public static final String LOGGED_IN_USER_HEADER_TEXT_FILL = "#696C6C";
@@ -20,23 +20,47 @@ public final class StylingLeftMenu {
                         case "start":
                                 break;
                         case "patients":
+                                anchorPaneLeftmenu.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY);
+                                lblUserLoggedInHeader.setStyle("-fx-text-fill: " + StylingLayout.LOGGED_IN_USER_HEADER_TEXT_FILL);
+
+                                // styling left menu - buttons
+                                btnPatients.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                                        + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
+                                btnJournals.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY
+                                        + "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnProgram.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY
+                                        + "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnStart.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY +
+                                        "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnExercises.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY +
+                                        "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnPatients.setAlignment(Pos.BASELINE_LEFT);
+                                btnProgram.setAlignment(Pos.BASELINE_LEFT);
+                                btnJournals.setAlignment(Pos.BASELINE_LEFT);
+                                btnStart.setAlignment(Pos.BASELINE_LEFT);
+                                btnExercises.setAlignment(Pos.BASELINE_LEFT);
+                                btnPatients.setPadding(new Insets(0, 0, 0, 20));
+                                btnProgram.setPadding(new Insets(0, 0, 0, 20));
+                                btnJournals.setPadding(new Insets(0, 0, 0, 20));
+                                btnStart.setPadding(new Insets(0, 0, 0, 20));
+                                btnExercises.setPadding(new Insets(0, 0, 0, 20));
                                 break;
                         case "journal":
                                 // styling left menu
-                                anchorPaneLeftmenu.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY);
-                                lblUserLoggedInHeader.setStyle("-fx-text-fill: " + StylingLeftMenu.LOGGED_IN_USER_HEADER_TEXT_FILL);
+                                anchorPaneLeftmenu.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY);
+                                lblUserLoggedInHeader.setStyle("-fx-text-fill: " + StylingLayout.LOGGED_IN_USER_HEADER_TEXT_FILL);
 
                                 // styling left menu - buttons
-                                btnPatients.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
-                                        + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-                                btnJournals.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
-                                        + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
-                                btnProgram.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
-                                        + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-                                btnStart.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY +
-                                        "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-                                btnExercises.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY +
-                                        "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnPatients.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY
+                                        + "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnJournals.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                                        + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
+                                btnProgram.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY
+                                        + "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnStart.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY +
+                                        "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                                btnExercises.setStyle("-fx-background-color: " + StylingLayout.BACKGROUND_DARK_GREY +
+                                        "; -fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
                                 btnPatients.setAlignment(Pos.BASELINE_LEFT);
                                 btnProgram.setAlignment(Pos.BASELINE_LEFT);
                                 btnJournals.setAlignment(Pos.BASELINE_LEFT);
