@@ -15,7 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import resources.StylingLeftMenu;
+import resources.StylingLayout;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -43,6 +43,8 @@ public class PatientsController implements Initializable {
     private Button btnProgram;
     @FXML
     private Button btnStart;
+    @FXML
+    private Button btnExercises;
 
     // search section
     @FXML
@@ -88,37 +90,18 @@ public class PatientsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // styling left menu
-        anchorPaneLeftmenu.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY);
-        lblUserLoggedInHeader.setStyle("-fx-text-fill: " + StylingLeftMenu.LOGGED_IN_USER_HEADER_TEXT_FILL);
-
-        // styling left menu - buttons
-        btnPatients.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
-        btnJournals.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-        btnProgram.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-        btnStart.setStyle("-fx-background-color: " + StylingLeftMenu.BACKGROUND_DARK_GREY +
-                "; -fx-text-fill: " + StylingLeftMenu.ITEMS_IN_LEFT_MENU_TEXT_FILL);
-        btnPatients.setAlignment(Pos.BASELINE_LEFT);
-        btnProgram.setAlignment(Pos.BASELINE_LEFT);
-        btnJournals.setAlignment(Pos.BASELINE_LEFT);
-        btnStart.setAlignment(Pos.BASELINE_LEFT);
-        btnPatients.setPadding(new Insets(0, 0, 0, 20));
-        btnProgram.setPadding(new Insets(0, 0, 0, 20));
-        btnJournals.setPadding(new Insets(0, 0, 0, 20));
-        btnStart.setPadding(new Insets(0, 0, 0, 20));
+        StylingLayout.stylingLeftMenu("patients", lblUserLoggedInHeader, anchorPaneLeftmenu, btnPatients,
+                btnJournals, btnProgram, btnStart, btnExercises);
 
         // styling search section
-        btnSearchPatient.setStyle("-fx-background-color:  " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+        btnSearchPatient.setStyle("-fx-background-color:  " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
-        btnAllPatients.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+        btnAllPatients.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
-        btnAddPatient.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
-                + "; -fx-text-fill: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+        btnAddPatient.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
         lblTemp.setStyle("-fx-text-fill: red; -fx-font-weight: bold");
 

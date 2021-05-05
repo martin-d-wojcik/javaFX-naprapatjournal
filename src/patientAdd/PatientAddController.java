@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import resources.StylingLeftMenu;
+import resources.StylingLayout;
 import resources.StylingMainViewContent;
 
 import java.io.IOException;
@@ -73,7 +73,7 @@ public class PatientAddController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // styling header
-       lblAddPatientHeader.setStyle("-fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+       lblAddPatientHeader.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
 
         // styling textFields
@@ -87,11 +87,11 @@ public class PatientAddController implements Initializable {
         textFieldPhoneNr.setStyle("-fx-border-color: " + StylingMainViewContent.TEXTFIELD_BORDER_COLOR);
 
         // styling buttons
-        btnAddNewPatient.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
-                + "; -fx-text-fill: " + StylingLeftMenu.BACKGROUND_DARK_GREY
+        btnAddNewPatient.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
-        btnCancel.setStyle("-fx-background-color: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
-                + "; -fx-text-fill: " + StylingLeftMenu.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+        btnCancel.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
 
         hideWarningLabels();
