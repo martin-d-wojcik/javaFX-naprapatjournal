@@ -1,5 +1,6 @@
 package journal;
 
+import helpers.Navigation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +26,7 @@ import java.util.ResourceBundle;
 
 public class JournalController implements Initializable {
     JournalModel journalModel = new JournalModel();
+    Navigation navigation = new Navigation();
 
     // left menu
     @FXML
@@ -168,13 +170,7 @@ public class JournalController implements Initializable {
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
-            Stage window = (Stage) btnPatients.getScene().getWindow();
-            window.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navigation.navigateToPatients(btnPatients);
     }
 
     public void AddNewJournal(javafx.event.ActionEvent event) {

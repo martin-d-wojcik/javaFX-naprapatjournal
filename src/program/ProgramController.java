@@ -1,5 +1,6 @@
 package program;
 
+import helpers.Navigation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +19,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ProgramController implements Initializable {
+    Navigation navigation = new Navigation();
+
     // left menu
     @FXML
     private Label lblUserLoggedInHeader;
@@ -55,15 +58,11 @@ public class ProgramController implements Initializable {
 
         lblPatientName.setText(PatientHolder.getFirstName() + " " + PatientHolder.getLastName()
                 + ", " + PatientHolder.getPersonNr());
+        lblPatientName.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-font-weight: bold");
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
-            Stage window = (Stage) btnPatients.getScene().getWindow();
-            window.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navigation.navigateToPatients(btnPatients);
     }
 }
