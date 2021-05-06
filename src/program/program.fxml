@@ -3,14 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="journal.JournalController">
+<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="program.ProgramController">
    <children>
-      <AnchorPane fx:id="anchorPaneListOfJournals" layoutX="277.0" prefHeight="824.0" prefWidth="277.0" />
+      <AnchorPane fx:id="anchorPaneListOfPrograms" layoutX="277.0" prefHeight="824.0" prefWidth="277.0" />
       <AnchorPane fx:id="anchorPaneLeftmenu" prefHeight="824.0" prefWidth="277.0" style="-fx-background-color: #7A7D7B;">
          <children>
             <Label fx:id="lblUserLoggedInHeader" layoutY="17.0" text="uuuuu" textFill="#eb7826">
@@ -31,15 +30,6 @@
          </children>
       </AnchorPane>
       <Label fx:id="lblPatientName" layoutX="606.0" layoutY="47.0" text="Label" />
-      <Button fx:id="btnNewJournal" layoutX="1215.0" layoutY="43.0" mnemonicParsing="false" onAction="#AddNewJournal" prefHeight="25.0" prefWidth="110.0" text="Ny journal" />
-      <Button fx:id="btnNewProgram" layoutX="1356.0" layoutY="43.0" mnemonicParsing="false" onAction="#ShowNewProgram" prefWidth="110.0" text="Nytt program" />
-      <AnchorPane fx:id="anchorPaneJournalNotes" layoutX="554.0" layoutY="104.0" prefHeight="720.0" prefWidth="1046.0">
-         <children>
-            <Label fx:id="lblJournalNotesHeader" layoutX="53.0" layoutY="51.0" text="Label" />
-            <TextArea fx:id="textAreaJournalNotes" layoutX="53.0" layoutY="106.0" prefHeight="541.0" prefWidth="950.0" />
-            <Button fx:id="btnSaveJournalNotes" layoutX="802.0" layoutY="668.0" mnemonicParsing="false" onAction="#SaveNewJournal" prefHeight="25.0" prefWidth="110.0" text="Spara" />
-            <Button fx:id="btnSaveChanges" layoutX="666.0" layoutY="668.0" mnemonicParsing="false" onAction="#SaveChangedJournal" prefHeight="25.0" prefWidth="110.0" text="Spara ändringar" />
-         </children>
-      </AnchorPane>
+      <AnchorPane fx:id="anchorPaneJournalNotes" layoutX="554.0" layoutY="104.0" prefHeight="720.0" prefWidth="1046.0" />
    </children>
 </AnchorPane>

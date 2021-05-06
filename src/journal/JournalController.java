@@ -229,17 +229,17 @@ public class JournalController implements Initializable {
         }
     }
 
-    /* public void ShowNewProgram(javafx.event.ActionEvent event) {
+    public void ShowNewProgram(javafx.event.ActionEvent event) {
         try {
             // TODO: load exercises fxml
             // AnchorPane paneAddPatient = FXMLLoader.load(getClass().getResource("/patientAdd/patientAdd.fxml"));
             // rootPane.getChildren().setAll(paneAddPatient);
 
-            Parent root = FXMLLoader.load(getClass().getResource("/journal/journal.fxml"));
-            Stage window = (Stage) tableViewPatients.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/program/program.fxml"));
+            Stage window = (Stage) btnNewProgram.getScene().getWindow();
             window.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    } */
+    }
 }

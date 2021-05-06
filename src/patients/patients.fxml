@@ -29,7 +29,6 @@
                   <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
                   <Button fx:id="btnExercises" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Övningar" />
                </children></VBox>
-            <Label fx:id="lblTemp" layoutX="125.0" layoutY="708.0" text="Label" />
          </children>
       </AnchorPane>
       <VBox layoutX="277.0" prefHeight="800.0" prefWidth="1322.0">
