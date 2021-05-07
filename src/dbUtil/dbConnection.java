@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class dbConnection {
-    // private static final String DBCONNECTION = "jdbc:sqlite:C://Coding//Java//NaprapatJournal//journalDb.db";
     private static final String DBSQLITECONN = "jdbc:sqlite:C://Coding//Java//NaprapatJournal//journalDb.db";
 
     public static Connection getConnection() throws SQLException {

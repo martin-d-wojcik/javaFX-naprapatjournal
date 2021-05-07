@@ -37,7 +37,9 @@ public class LoginController implements Initializable {
     @FXML
     private Label loginStatus;
 
-    public void initialize(URL url, ResourceBundle rb) {}
+    public void initialize(URL url, ResourceBundle rb) {
+        loginBtn.setDefaultButton(true);
+    }
 
     @FXML
     public void logIn(ActionEvent event) {
