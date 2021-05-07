@@ -69,4 +69,8 @@ public class ProgramController implements Initializable {
     public void GoToJournals(javafx.event.ActionEvent event) {
         this.navigation.navigateToJournals(btnJournals);
     }
+
+    public void GoToExercises(javafx.event.ActionEvent event) {
+        this.navigation.navigateToExercises(btnExercises);
+    }
 }

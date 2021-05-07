@@ -1,13 +1,12 @@
 package patients;
 
 import dbUtil.dbConnection;
+import helpers.Navigation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -25,6 +24,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class PatientsController implements Initializable {
+    Navigation navigation = new Navigation();
+
     @FXML
     private AnchorPane rootPane;
 
@@ -270,5 +271,9 @@ public class PatientsController implements Initializable {
 
             fillTableWithPatientData(data);
         }
+    }
+
+    public void GoToExercises(javafx.event.ActionEvent event) {
+        this.navigation.navigateToExercises(btnExercises);
     }
 }

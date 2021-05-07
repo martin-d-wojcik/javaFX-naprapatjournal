@@ -2,12 +2,14 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="journal.JournalController">
+<AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="exercises.ExercisesController">
    <children>
       <AnchorPane fx:id="anchorPaneLeftmenu" prefHeight="824.0" prefWidth="277.0" style="-fx-background-color: #7A7D7B;">
          <children>
@@ -26,7 +28,19 @@
                   <Button fx:id="btnExercises" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Övningar" />
                </children>
             </VBox>
-            <Label fx:id="lblTemp" layoutX="125.0" layoutY="708.0" text="Label" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="277.0" prefHeight="824.0" prefWidth="1323.0">
+         <children>
+            <Button fx:id="btnAllExercises" layoutX="484.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Visa alla" />
+            <ComboBox fx:id="comboBoxType" layoutX="79.0" layoutY="23.0" prefWidth="150.0" promptText="Typ av övning" />
+            <ComboBox fx:id="comboBoxBodyPart" layoutX="250.0" layoutY="23.0" prefWidth="150.0" promptText="Kroppsdel" />
+            <Button fx:id="btnSearch" layoutX="421.0" layoutY="23.0" mnemonicParsing="false" text="Sök">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnNewExercise" layoutX="1063.0" layoutY="23.0" mnemonicParsing="false" text="Lägg till övning" />
          </children>
       </AnchorPane>
    </children>

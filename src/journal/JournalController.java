@@ -238,4 +238,8 @@ public class JournalController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void GoToExercises(javafx.event.ActionEvent event) {
+        this.navigation.navigateToExercises(btnExercises);
+    }
 }

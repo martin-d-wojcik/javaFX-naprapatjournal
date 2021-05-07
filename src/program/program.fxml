@@ -24,7 +24,7 @@
                   <Button fx:id="btnPatients" mnemonicParsing="false" onAction="#GoToPatients" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
                   <Button fx:id="btnJournals" mnemonicParsing="false" onAction="#GoToJournals" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
                   <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
-                  <Button fx:id="btnExercises" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Övningar" />
+                  <Button fx:id="btnExercises" mnemonicParsing="false" onAction="#GoToExercises" prefHeight="35.0" prefWidth="280.0" text="Övningar" />
                </children>
             </VBox>
          </children>
