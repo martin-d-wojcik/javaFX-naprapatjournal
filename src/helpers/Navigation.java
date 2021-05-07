@@ -18,4 +18,14 @@ public class Navigation {
             e.printStackTrace();
         }
     }
+
+    public void navigateToJournals(Button button) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/journal/journal.fxml"));
+            Stage window = (Stage) button.getScene().getWindow();
+            window.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
