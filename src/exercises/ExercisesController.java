@@ -1,6 +1,9 @@
 package exercises;
 
+import dbUtil.dbConnection;
 import helpers.Navigation;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,6 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import resources.StylingLayout;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ExercisesController implements Initializable {
@@ -42,6 +51,10 @@ public class ExercisesController implements Initializable {
     @FXML
     private Button btnNewExercise;
 
+    // sql queries
+    private String sqlQueryType = "SELECT DISTINCT type FROM exercise";
+    private String sqlQueryBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         StylingLayout.stylingLeftMenu("exercises", lblUserLoggedInHeader, anchorPaneLeftmenu, btnPatients,
@@ -60,6 +73,53 @@ public class ExercisesController implements Initializable {
         btnNewExercise.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
+
+        comboBoxType.setItems(FXCollections.observableArrayList(getTypeData()));
+        comboBoxBodyPart.setItems(FXCollections.observableArrayList(getBodyPartData()));
+    }
+
+    private List<String> getBodyPartData() {
+        List<String> options = new ArrayList<>();
+
+        try {
+            Connection conn = dbConnection.getConnection();
+            assert conn != null;
+            ResultSet rs = conn.createStatement().executeQuery(sqlQueryBodyPart);
+
+            while (rs.next()) {
+                options.add(rs.getString("bodyPart"));
+            }
+
+            rs.close();
+
+            return options;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<String> getTypeData() {
+        List<String> options = new ArrayList<>();
+
+        try {
+            Connection conn = dbConnection.getConnection();
+            assert conn != null;
+            ResultSet rs = conn.createStatement().executeQuery(sqlQueryType);
+
+            while (rs.next()) {
+                options.add(rs.getString("type"));
+            }
+
+            rs.close();
+
+            return options;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {
