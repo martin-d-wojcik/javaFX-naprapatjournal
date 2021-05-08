@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -41,6 +43,14 @@
                </font>
             </Button>
             <Button fx:id="btnNewExercise" layoutX="1063.0" layoutY="23.0" mnemonicParsing="false" text="Lägg till övning" />
+            <TableView fx:id="tableViewExercises" layoutX="79.0" layoutY="101.0" prefHeight="691.0" prefWidth="790.0">
+              <columns>
+                <TableColumn fx:id="tableColumnName" prefWidth="200.0" text="Namn övning" />
+                <TableColumn fx:id="tableColumnBodyPart" prefWidth="200.0" text="Kroppsdel" />
+                <TableColumn fx:id="tableColumntype" prefWidth="200.0" text="Typ av övning" />
+                <TableColumn fx:id="tableColumnDescription" prefWidth="200.0" text="Beskrivning" />
+              </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </children>
