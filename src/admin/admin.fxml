@@ -39,9 +39,9 @@
                                 </HBox>
                                 <VBox layoutX="8.0" layoutY="3.0" prefHeight="679.0" prefWidth="319.0">
                                     <children>
-                                        <Label prefHeight="25.0" prefWidth="323.0" text="Lägg till ny användare" textFill="#3d2ab9">
+                                        <Label prefHeight="25.0" prefWidth="323.0" text="Lägg till ny / Uppdatera användare" textFill="#3d2ab9">
                                             <padding>
-                                                <Insets left="50.0" />
+                                                <Insets left="30.0" />
                                             </padding>
                                             <font>
                                                 <Font name="Elephant" size="14.0" />
@@ -49,19 +49,19 @@
                                         </Label>
                                         <TextField fx:id="txtLoginName" maxWidth="200" promptText="Inloggning-namn">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></TextField>
                                         <TextField fx:id="txtPassword" maxWidth="200" promptText="Lösenord">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></TextField>
                                         <RadioButton fx:id="rbUser" mnemonicParsing="false" text="Användare">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></RadioButton>
                                         <RadioButton fx:id="rbAdmin" mnemonicParsing="false" text="Administratör">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></RadioButton>
 
                                         <TextField fx:id="txtFirstName" maxWidth="200" promptText="Förnamn">
@@ -70,43 +70,36 @@
                                             </VBox.margin></TextField>
                                         <TextField fx:id="txtLastName" maxWidth="200" promptText="Efternamn">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></TextField>
                                         <TextField fx:id="txtPhoneNr" maxWidth="200" promptText="Telefonnummer">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></TextField>
                                         <TextField fx:id="txtEmail" maxWidth="200" promptText="e-mail">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin></TextField>
 
                                         <Button mnemonicParsing="false" onAction="#addUser" text="Lägg tll användare">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin>
                                         </Button>
-                                        <Button mnemonicParsing="false" onAction="#loadUserData" text="Ladda användare">
+                                        <Button mnemonicParsing="false" onAction="#updateUser" text="Updatera användare">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#clearInputPane" text="Rensa formulär">
-                                            <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
-                                            </VBox.margin>
-                                        </Button>
-                                        <Button mnemonicParsing="false" onAction="#clearTableView" text="Rensa tabell">
-                                            <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin>
                                         </Button>
                                         <Label fx:id="lblAddUser">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin>
+                                            <font>
+                                                <Font name="Elephant" size="12.0" />
+                                            </font>
                                         </Label>
-                                        <Label prefHeight="25.0" prefWidth="323.0" text="Sök användare" textFill="#3d2ab9">
+                                        <Label prefHeight="25.0" prefWidth="323.0" text="Sök / Ta bort användare" textFill="#3d2ab9">
                                             <padding>
                                                 <Insets left="50.0" />
                                             </padding>
@@ -116,19 +109,50 @@
                                         </Label>
                                         <TextField fx:id="txtUserNameSearch" maxWidth="200" promptText="Användarnamn">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin>
                                         </TextField>
                                         <Button mnemonicParsing="false" onAction="#searchUser" text="Sök användare">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin>
                                         </Button>
-                                        <Label fx:id="lblSearchUser">
+                                        <Button mnemonicParsing="false" onAction="#deleteUser" text="Ta bort användare">
                                             <VBox.margin>
-                                                <Insets left="30.0" top="10.0" />
+                                                <Insets left="30.0" top="5.0" />
                                             </VBox.margin>
+                                        </Button>
+                                        <Label fx:id="lblNotification">
+                                            <VBox.margin>
+                                                <Insets left="30.0" top="5.0" />
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Elephant" size="12.0" />
+                                            </font>
                                         </Label>
+                                        <Label prefHeight="25.0" prefWidth="323.0" text="Ladda / Rensa" textFill="#3d2ab9">
+                                            <padding>
+                                                <Insets left="50.0" />
+                                            </padding>
+                                            <font>
+                                                <Font name="Elephant" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#loadUserData" text="Ladda alla användare">
+                                            <VBox.margin>
+                                                <Insets left="30.0" top="5.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button mnemonicParsing="false" onAction="#clearInputPane" text="Rensa formulär">
+                                            <VBox.margin>
+                                                <Insets left="30.0" top="5.0" />
+                                            </VBox.margin>
+                                        </Button>
+                                        <Button mnemonicParsing="false" onAction="#clearTableView" text="Rensa tabell">
+                                            <VBox.margin>
+                                                <Insets left="30.0" top="5.0" />
+                                            </VBox.margin>
+                                        </Button>
                                     </children>
                                 </VBox>
                             </children></AnchorPane>
