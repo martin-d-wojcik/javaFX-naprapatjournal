@@ -68,15 +68,12 @@ public class ExercisesController implements Initializable {
     @FXML
     private TableColumn<ExerciseData, String> tableColumnDescription;
 
-    // TEMP ONLY
-    @FXML
-    private Label lblTemp;
-
     // sql queries
     private String sqlQueryType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
     private String sqlQueryAllExercises = "SELECT exerciseName, bodyPart, type, description FROM exercise";
     private String sqlQueryExercisesByType = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE type=?";
+    private String sqlQueryExercisesByBodyPart = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE bodyPart=?";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -206,23 +203,18 @@ public class ExercisesController implements Initializable {
     }
 
     public void FilterExercises(javafx.event.ActionEvent event) {
-        String type = comboBoxType.getSelectionModel().getSelectedItem();
-        String bodyPart = comboBoxBodyPart.getSelectionModel().getSelectedItem();
-
-        if (!type.equals(null)) {
-            String selectedType = comboBoxType.getSelectionModel().getSelectedItem();
-            fillTableViewWithDropdownValue(sqlQueryExercisesByType, selectedType);
+        if (!comboBoxType.getSelectionModel().isEmpty()) {
+            String type = comboBoxType.getSelectionModel().getSelectedItem();
+            fillTableViewWithDropdownValue(sqlQueryExercisesByType, type);
         }
-        else if (!bodyPart.equals(null)) {
-            lblTemp.setText("comboBox bp: " + comboBoxBodyPart.getSelectionModel().getSelectedItem());
+        else if (!comboBoxBodyPart.getSelectionModel().isEmpty()) {
+            String bodyPart = comboBoxBodyPart.getSelectionModel().getSelectedItem();
+            fillTableViewWithDropdownValue(sqlQueryExercisesByBodyPart, bodyPart);
         }
-        else if (!type.equals(null) && !bodyPart.equals(null)) {
+        /* else if (!type.equals(null) && !bodyPart.equals(null)) {
             lblTemp.setText("both: " + comboBoxBodyPart.getSelectionModel().getSelectedItem() +
                     comboBoxType.getSelectionModel().getSelectedItem());
-        }
-        else {
-            lblTemp.setText("none selected");
-        }
+        } */
     }
 
     public void ShowAddExercise(javafx.event.ActionEvent event) {
