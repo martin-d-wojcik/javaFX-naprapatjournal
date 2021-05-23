@@ -5,13 +5,17 @@ import helpers.Navigation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import resources.StylingLayout;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,6 +24,9 @@ import java.util.ResourceBundle;
 
 public class ExercisesController implements Initializable {
     Navigation navigation = new Navigation();
+
+    @FXML
+    private AnchorPane rootPane;
 
     // left menu
     @FXML
@@ -61,10 +68,15 @@ public class ExercisesController implements Initializable {
     @FXML
     private TableColumn<ExerciseData, String> tableColumnDescription;
 
+    // TEMP ONLY
+    @FXML
+    private Label lblTemp;
+
     // sql queries
     private String sqlQueryType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
     private String sqlQueryAllExercises = "SELECT exerciseName, bodyPart, type, description FROM exercise";
+    private String sqlQueryExercisesByType = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE type=?";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -157,14 +169,69 @@ public class ExercisesController implements Initializable {
         fillTableWithExerciseData(data);
     }
 
+    private void fillTableViewWithDropdownValue(String sqlQuery, String sqlParameter) {
+        ObservableList<ExerciseData> data = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection conn = dbConnection.getConnection();
+            assert conn != null;
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, sqlParameter);
+            resultSet = preparedStatement.executeQuery();
+
+            // check if the resultSet, rs has anything in the table
+            while (resultSet.next()) {
+                data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
+                        resultSet.getString(3), resultSet.getString(4)));
+            }
+            conn.close();
+
+        } catch (SQLException e) {
+            System.err.println("Error: " + e);
+        }
+
+        fillTableWithExerciseData(data);
+    }
+
     private void fillTableWithExerciseData(ObservableList<ExerciseData> data) {
         this.tableColumnName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
-        this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
-        this.tableColumntype.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
+        this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
+        this.tableColumntype.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
         this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
 
         this.tableViewExercises.setItems(null);
         this.tableViewExercises.setItems(data);
+    }
+
+    public void FilterExercises(javafx.event.ActionEvent event) {
+        String type = comboBoxType.getSelectionModel().getSelectedItem();
+        String bodyPart = comboBoxBodyPart.getSelectionModel().getSelectedItem();
+
+        if (!type.equals(null)) {
+            String selectedType = comboBoxType.getSelectionModel().getSelectedItem();
+            fillTableViewWithDropdownValue(sqlQueryExercisesByType, selectedType);
+        }
+        else if (!bodyPart.equals(null)) {
+            lblTemp.setText("comboBox bp: " + comboBoxBodyPart.getSelectionModel().getSelectedItem());
+        }
+        else if (!type.equals(null) && !bodyPart.equals(null)) {
+            lblTemp.setText("both: " + comboBoxBodyPart.getSelectionModel().getSelectedItem() +
+                    comboBoxType.getSelectionModel().getSelectedItem());
+        }
+        else {
+            lblTemp.setText("none selected");
+        }
+    }
+
+    public void ShowAddExercise(javafx.event.ActionEvent event) {
+        try {
+            AnchorPane paneAddExercise = FXMLLoader.load(getClass().getResource("/exerciseAdd/exerciseAdd.fxml"));
+            rootPane.getChildren().setAll(paneAddExercise);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {

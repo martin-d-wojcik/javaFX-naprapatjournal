@@ -225,8 +225,8 @@ public class PatientsController implements Initializable {
             alert.setHeaderText("SQLException har inträffat !");
             alert.show();
         }
-
     }
+
     @FXML
     public void SelectPatientFromTable(MouseEvent e) {
         // TODO: parse personNr, firstName, lastName to JournalController

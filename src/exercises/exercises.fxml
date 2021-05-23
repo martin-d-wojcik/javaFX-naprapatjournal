@@ -32,17 +32,17 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="277.0" prefHeight="824.0" prefWidth="1323.0">
+      <AnchorPane fx:id="rootPane" layoutX="277.0" prefHeight="824.0" prefWidth="1323.0">
          <children>
             <Button fx:id="btnAllExercises" layoutX="484.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Visa alla" />
             <ComboBox fx:id="comboBoxType" layoutX="79.0" layoutY="23.0" prefWidth="150.0" promptText="Typ av övning" />
             <ComboBox fx:id="comboBoxBodyPart" layoutX="250.0" layoutY="23.0" prefWidth="150.0" promptText="Kroppsdel" />
-            <Button fx:id="btnSearch" layoutX="421.0" layoutY="23.0" mnemonicParsing="false" text="Sök">
+            <Button fx:id="btnSearch" layoutX="421.0" layoutY="23.0" mnemonicParsing="false" onAction="#FilterExercises" text="Sök">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnNewExercise" layoutX="1063.0" layoutY="23.0" mnemonicParsing="false" text="Lägg till övning" />
+            <Button fx:id="btnNewExercise" layoutX="1063.0" layoutY="23.0" mnemonicParsing="false" onAction="#ShowAddExercise" text="Lägg till övning" />
             <TableView fx:id="tableViewExercises" layoutX="79.0" layoutY="101.0" prefHeight="691.0" prefWidth="790.0">
               <columns>
                 <TableColumn fx:id="tableColumnName" prefWidth="200.0" text="Namn övning" />
@@ -51,6 +51,7 @@
                 <TableColumn fx:id="tableColumnDescription" prefWidth="200.0" text="Beskrivning" />
               </columns>
             </TableView>
+            <Label fx:id="lblTemp" layoutX="712.0" layoutY="27.0" text="Label" />
          </children>
       </AnchorPane>
    </children>
