@@ -123,7 +123,7 @@ public class AdminController implements Initializable {
          * Add Change_Text_Listeners to TextFields
          *****************************************/
         txtLoginName.textProperty().addListener((obs, oldText, newText) -> {
-///            System.out.println("txtPassword changed from "+oldText+" to "+newText);
+///            System.out.println("txtLoginName changed from "+oldText+" to "+newText);
             if(newText.equals(loginName_savedInDB)){
                 this.txtLoginName.setStyle("-fx-text-inner-color: #000000;");
             }
@@ -274,7 +274,7 @@ public class AdminController implements Initializable {
     }
 
     private void displayQueryResultInLeftPane(ResultSet resultSet) throws SQLException {
-        ObservableList<UserData> data = FXCollections.observableArrayList();
+//        ObservableList<UserData> data = FXCollections.observableArrayList();
 
         if (resultSet.getRow() == 0) {
             lblNotification.setText("Inga användare hittades");
@@ -287,13 +287,13 @@ public class AdminController implements Initializable {
                  * Save origin text from database
                  * for detecting changes later
                  */
-                loginName_savedInDB = resultSet.getString(1).trim();
-                password_savedInDB = resultSet.getString(2).trim();
-                role_savedInDB = resultSet.getString(3).trim();
-                firstName_savedInDB = resultSet.getString(4).trim();
-                lastName_savedInDB = resultSet.getString(5).trim();
-                phoneNr_savedInDB = resultSet.getString(6).trim();
-                email_savedInDB = resultSet.getString(7).trim();
+                loginName_savedInDB = getValueOrDefault(resultSet.getString(1), "");
+                password_savedInDB = getValueOrDefault(resultSet.getString(2), "");
+                role_savedInDB = getValueOrDefault(resultSet.getString(3), "");
+                firstName_savedInDB = getValueOrDefault(resultSet.getString(4), "");
+                lastName_savedInDB = getValueOrDefault(resultSet.getString(5), "");
+                phoneNr_savedInDB = getValueOrDefault(resultSet.getString(6), "");
+                email_savedInDB = getValueOrDefault(resultSet.getString(7), "");
 
                 this.txtLoginName.setText(loginName_savedInDB);
                 this.txtPassword.setText(password_savedInDB);
@@ -332,6 +332,20 @@ public class AdminController implements Initializable {
         txtEmail.clear();
 
     }
+
+    /*
+     * Functions bellow
+     * replace NULL with a default string for ex ""
+     * Call: getValueOrDefault(resultSet.getString(i), ""),
+     */
+    public static <T> T getValueOrDefault(T value, T defaultValue) {
+        return value == null ? defaultValue : value;
+    }
+
+    public static String getValueOrDefaultStr(String value, String defaultValue) {
+        return value == null ? defaultValue : value;
+    }
+
 
     /*************************************
      *
