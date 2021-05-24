@@ -34,7 +34,7 @@
       </AnchorPane>
       <AnchorPane fx:id="rootPane" layoutX="277.0" prefHeight="824.0" prefWidth="1323.0">
          <children>
-            <Button fx:id="btnAllExercises" layoutX="484.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Visa alla" />
+            <Button fx:id="btnAllExercises" layoutX="484.0" layoutY="23.0" mnemonicParsing="false" onAction="#ShowAllExercises" prefHeight="25.0" prefWidth="79.0" text="Visa alla" />
             <ComboBox fx:id="comboBoxType" layoutX="79.0" layoutY="23.0" prefWidth="150.0" promptText="Typ av övning" />
             <ComboBox fx:id="comboBoxBodyPart" layoutX="250.0" layoutY="23.0" prefWidth="150.0" promptText="Kroppsdel" />
             <Button fx:id="btnSearch" layoutX="421.0" layoutY="23.0" mnemonicParsing="false" onAction="#FilterExercises" text="Sök">
@@ -51,7 +51,6 @@
                 <TableColumn fx:id="tableColumnDescription" prefWidth="200.0" text="Beskrivning" />
               </columns>
             </TableView>
-            <Label fx:id="lblTemp" layoutX="712.0" layoutY="27.0" text="Label" />
          </children>
       </AnchorPane>
    </children>

@@ -74,6 +74,7 @@ public class ExercisesController implements Initializable {
     private String sqlQueryAllExercises = "SELECT exerciseName, bodyPart, type, description FROM exercise";
     private String sqlQueryExercisesByType = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE type=?";
     private String sqlQueryExercisesByBodyPart = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE bodyPart=?";
+    private String sqlQueryExercisesByTypeAndBodyPart = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE bodyPart=? AND type=?";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -166,7 +167,7 @@ public class ExercisesController implements Initializable {
         fillTableWithExerciseData(data);
     }
 
-    private void fillTableViewWithDropdownValue(String sqlQuery, String sqlParameter) {
+    private void fillTableViewWithDropdownValue(String sqlQuery, String sqlParameterFirst) {
         ObservableList<ExerciseData> data = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -175,7 +176,36 @@ public class ExercisesController implements Initializable {
             Connection conn = dbConnection.getConnection();
             assert conn != null;
             preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, sqlParameter);
+            preparedStatement.setString(1, sqlParameterFirst);
+
+            resultSet = preparedStatement.executeQuery();
+
+            // check if the resultSet, rs has anything in the table
+            while (resultSet.next()) {
+                data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
+                        resultSet.getString(3), resultSet.getString(4)));
+            }
+            conn.close();
+
+        } catch (SQLException e) {
+            System.err.println("Error: " + e);
+        }
+
+        fillTableWithExerciseData(data);
+    }
+
+    private void fillTableViewTwoDropdowns(String sqlQuery, String sqlParameterFirst, String sqlParameterSecond) {
+        ObservableList<ExerciseData> data = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection conn = dbConnection.getConnection();
+            assert conn != null;
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, sqlParameterFirst);
+            preparedStatement.setString(2, sqlParameterSecond);
+
             resultSet = preparedStatement.executeQuery();
 
             // check if the resultSet, rs has anything in the table
@@ -203,18 +233,21 @@ public class ExercisesController implements Initializable {
     }
 
     public void FilterExercises(javafx.event.ActionEvent event) {
-        if (!comboBoxType.getSelectionModel().isEmpty()) {
+        if (!comboBoxType.getSelectionModel().isEmpty() && !comboBoxBodyPart.getSelectionModel().isEmpty()) {
             String type = comboBoxType.getSelectionModel().getSelectedItem();
-            fillTableViewWithDropdownValue(sqlQueryExercisesByType, type);
-        }
-        else if (!comboBoxBodyPart.getSelectionModel().isEmpty()) {
             String bodyPart = comboBoxBodyPart.getSelectionModel().getSelectedItem();
-            fillTableViewWithDropdownValue(sqlQueryExercisesByBodyPart, bodyPart);
+            fillTableViewTwoDropdowns(sqlQueryExercisesByTypeAndBodyPart, bodyPart, type);
         }
-        /* else if (!type.equals(null) && !bodyPart.equals(null)) {
-            lblTemp.setText("both: " + comboBoxBodyPart.getSelectionModel().getSelectedItem() +
-                    comboBoxType.getSelectionModel().getSelectedItem());
-        } */
+        else {
+            if (!comboBoxType.getSelectionModel().isEmpty()) {
+                String type = comboBoxType.getSelectionModel().getSelectedItem();
+                fillTableViewWithDropdownValue(sqlQueryExercisesByType, type);
+            }
+            else if (!comboBoxBodyPart.getSelectionModel().isEmpty()) {
+                String bodyPart = comboBoxBodyPart.getSelectionModel().getSelectedItem();
+                fillTableViewWithDropdownValue(sqlQueryExercisesByBodyPart, bodyPart);
+            }
+        }
     }
 
     public void ShowAddExercise(javafx.event.ActionEvent event) {
@@ -224,6 +257,16 @@ public class ExercisesController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void ShowAllExercises(javafx.event.ActionEvent event) {
+        fillTableView();
+
+        // TODO: reset prompt text in comboboxes
+        comboBoxType.getSelectionModel().clearSelection();
+        comboBoxType.setPromptText("Typ av lalala");
+        // comboBoxBodyPart.getSelectionModel().clearSelection();
+        comboBoxBodyPart.setPromptText("Kroppsdel lalala");
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {
