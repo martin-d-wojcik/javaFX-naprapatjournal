@@ -9,18 +9,31 @@
 
 <AnchorPane fx:id="paneAddPatients" prefHeight="800.0" prefWidth="1323.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patientAdd.PatientAddController">
    <children>
-      <Pane layoutX="62.0" layoutY="97.0" prefHeight="421.0" prefWidth="1192.0" style="-fx-background-color: #E1E2E2;">
+      <Pane layoutX="66.0" layoutY="100.0" prefHeight="543.0" prefWidth="1192.0" style="-fx-background-color: #E1E2E2;">
          <children>
             <TextField fx:id="textFieldPersonNr" layoutX="135.0" layoutY="61.0" prefHeight="25.0" prefWidth="232.0" promptText="Personnummer" />
             <TextField fx:id="textFieldFirstName" layoutX="135.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" promptText="Förnamn" />
             <TextField fx:id="textFieldLastName" layoutX="135.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Efternamn" />
             <TextField fx:id="textFieldStreetAdress" layoutX="135.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Gatuadress" />
-            <TextField fx:id="textFieldCity" layoutX="430.0" layoutY="61.0" prefHeight="25.0" prefWidth="232.0" promptText="Stad" />
-            <TextField fx:id="textFieldPostalCode" layoutX="430.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" promptText="Postnummer" />
-            <TextField fx:id="textFieldEmail" layoutX="430.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Email" />
-            <TextField fx:id="textFieldPhoneNr" layoutX="430.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Telefonnummer" />
-            <Button fx:id="btnAddNewPatient" layoutX="315.0" layoutY="296.0" mnemonicParsing="false" onAction="#AddPatientData" text="Lägg tll" />
-            <Button fx:id="btnCancel" layoutX="430.0" layoutY="296.0" mnemonicParsing="false" onAction="#CancelAddPatient" text="Avbryt" />
+            <TextField fx:id="textFieldCity" layoutX="135.0" layoutY="256.0" prefHeight="25.0" prefWidth="232.0" promptText="Stad" />
+            <TextField fx:id="textFieldPostalCode" layoutX="135.0" layoutY="306.0" prefHeight="25.0" prefWidth="232.0" promptText="Postnummer" />
+            <TextField fx:id="textFieldEmail" layoutX="135.0" layoutY="358.0" prefHeight="25.0" prefWidth="232.0" promptText="Email" />
+            <TextField fx:id="textFieldPhoneNr" layoutX="135.0" layoutY="408.0" prefHeight="25.0" prefWidth="232.0" promptText="Telefonnummer" />
+
+            <TextField fx:id="textFieldRegistrationDate" layoutX="430.0" layoutY="61.0" prefHeight="25.0" prefWidth="232.0" promptText="Registrerinsdatum" />
+            <TextField fx:id="textFieldOccupation" layoutX="430.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" promptText="Yrke" />
+            <TextField fx:id="textFieldIllnessList" layoutX="430.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Sjukdomar" />
+            <TextField fx:id="textFieldOperationList" layoutX="430.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Operationer" />
+            <TextField fx:id="textFieldMedicinUsed" layoutX="430.0" layoutY="256.0" prefHeight="25.0" prefWidth="232.0" promptText="Mediciner" />
+            <TextField fx:id="textFieldAttention" layoutX="430.0" layoutY="306.0" prefHeight="25.0" prefWidth="232.0" promptText="Anmärkningar" />
+            <TextField fx:id="textFieldDiagnosis" layoutX="430.0" layoutY="358.0" prefHeight="25.0" prefWidth="232.0" promptText="Diagnos" />
+            <TextField fx:id="textFieldNextVisit" layoutX="430.0" layoutY="408.0" prefHeight="25.0" prefWidth="232.0" promptText="Nästa besök" />
+
+            <Button fx:id="btnAddNewPatient" layoutX="208.0" layoutY="458.0" mnemonicParsing="false" onAction="#AddPatientData" prefHeight="25.0" prefWidth="152.0" text="Lägg tll ny patient" />
+            <Button fx:id="btnUpdatePatient" layoutX="137.0" layoutY="496.0" mnemonicParsing="false" onAction="#UpdatePatientData" text="Spara nya uppgifter" />
+            <Button fx:id="btnRefillPatient" layoutX="295.0" layoutY="496.0" mnemonicParsing="false" onAction="#RefillPatientData" text="Återställ uppgifter" />
+            <Button fx:id="btnArchive" layoutX="446.0" layoutY="496.0" mnemonicParsing="false" onAction="#ArchivePatient" text="Arkivera patienten" />
+            <Button fx:id="btnCancel" layoutX="430.0" layoutY="458.0" mnemonicParsing="false" onAction="#CancelAddPatient" text="Avbryt" />
             <Label fx:id="lblAddPatientHeader" layoutX="135.0" layoutY="14.0" text="Lägg till ny patient. Fyll uppgifter och klicka Lägg till">
                <font>
                   <Font size="14.0" />
@@ -30,10 +43,11 @@
             <Label fx:id="lblFirstNameWarning" layoutX="151.0" layoutY="134.0" prefHeight="17.0" prefWidth="215.0" text="Ange förnamn!" textFill="#f80505" />
             <Label fx:id="lblLastNameWarning" layoutX="151.0" layoutY="181.0" prefHeight="17.0" prefWidth="215.0" text="Ange efternamn!" textFill="#f80606" />
             <Label fx:id="lblStreetAdressWarning" layoutX="151.0" layoutY="231.0" text="Ange gatuadress!" textFill="#f80707" />
-            <Label fx:id="lblCityWarning" layoutX="442.0" layoutY="89.0" text="Ange stad!" textFill="#fc0808" />
-            <Label fx:id="lblPostalCodeWarning" layoutX="441.0" layoutY="134.0" prefHeight="17.0" prefWidth="215.0" text="Ange postnummer!" textFill="#f20404" />
-            <Label fx:id="lblEmailWarning" layoutX="441.0" layoutY="181.0" prefHeight="17.0" prefWidth="215.0" text="Ange email!" textFill="#f80606" />
-            <Label fx:id="lblPhoneNrWarning" layoutX="442.0" layoutY="231.0" prefHeight="17.0" prefWidth="215.0" text="Ange telefonnummer!" textFill="#f80303" />
+            <Label fx:id="lblCityWarning" layoutX="151.0" layoutY="281.0" text="Ange stad!" textFill="#fc0808" />
+            <Label fx:id="lblPostalCodeWarning" layoutX="146.0" layoutY="331.0" prefHeight="17.0" prefWidth="215.0" text="Ange postnummer!" textFill="#f20404" />
+            <Label fx:id="lblEmailWarning" layoutX="144.0" layoutY="383.0" prefHeight="17.0" prefWidth="215.0" text="Ange email!" textFill="#f80606" />
+            <Label fx:id="lblPhoneNrWarning" layoutX="144.0" layoutY="433.0" prefHeight="17.0" prefWidth="215.0" text="Ange telefonnummer!" textFill="#f80303" />
+            <Button fx:id="btnCancelUpdate" layoutX="603.0" layoutY="496.0" mnemonicParsing="false" onAction="#CancelAddPatient" text="Avbryt" />
          </children>
       </Pane>
    </children>

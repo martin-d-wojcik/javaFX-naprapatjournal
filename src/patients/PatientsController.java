@@ -2,6 +2,9 @@ package patients;
 
 import dbUtil.dbConnection;
 import helpers.Navigation;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,11 +13,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import resources.StylingLayout;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -28,7 +34,6 @@ public class PatientsController implements Initializable {
 
     @FXML
     private AnchorPane rootPane;
-
     // left menu
     @FXML
     private Label lblTemp;
@@ -80,6 +85,11 @@ public class PatientsController implements Initializable {
     private TableColumn<PatientData, String> tableColumnEmail;
     @FXML
     private TableColumn<PatientData, String> tableColumnPhoneNr;
+    @FXML
+    private TableColumn<PatientData, String> tableColumnEdit;
+
+    private final int TABLE_EDIT_COLUMN_NR = 8;
+    private final String columnEditText = "[ Redigera ]";
 
     // SQL queries
     private String sqlGetAllCustomersBasic = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer";
@@ -124,9 +134,10 @@ public class PatientsController implements Initializable {
 
             // check if the resultSet, rs has anything in the table
             while (rs.next()) {
+
                 data.add(new PatientData(rs.getString(1), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5), rs.getString(6),
-                        rs.getString(7), rs.getString(8)));
+                        rs.getString(7), rs.getString(8), columnEditText));
             }
             conn.close();
 
@@ -146,6 +157,8 @@ public class PatientsController implements Initializable {
         this.tableColumnPostalCode.setCellValueFactory(new PropertyValueFactory<PatientData, String>("patientPostalCode"));
         this.tableColumnEmail.setCellValueFactory(new PropertyValueFactory<PatientData, String>("patientEmail"));
         this.tableColumnPhoneNr.setCellValueFactory(new PropertyValueFactory<PatientData, String>("patientPhoneNr"));
+        this.tableColumnEdit.setCellValueFactory(new PropertyValueFactory<PatientData, String>("patientEdit"));
+        this.tableColumnEdit.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
 
         this.tableViewPatients.setItems(null);
         this.tableViewPatients.setItems(data);
@@ -157,6 +170,10 @@ public class PatientsController implements Initializable {
 
     public void ShowAddPatient(javafx.event.ActionEvent event) {
         try {
+            PatientHolder.setPersonNr("");
+            PatientHolder.setFirstName("");
+            PatientHolder.setLastName("");
+
             AnchorPane paneAddPatient = FXMLLoader.load(getClass().getResource("/patientAdd/patientAdd.fxml"));
             rootPane.getChildren().setAll(paneAddPatient);
         } catch (IOException e) {
@@ -193,7 +210,6 @@ public class PatientsController implements Initializable {
                 if (resultSet.next()) {
                     displayQueryResultInTable_SomeRows(resultSet);
 
-                    /// ? txtFieldFirstName.clear();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "Inga patienter hittades med det namnet");
                     alert.setHeaderText("Ett fel har inträffat !");
@@ -227,6 +243,7 @@ public class PatientsController implements Initializable {
         }
     }
 
+
     @FXML
     public void SelectPatientFromTable(MouseEvent e) {
         // TODO: parse personNr, firstName, lastName to JournalController
@@ -239,9 +256,17 @@ public class PatientsController implements Initializable {
             PatientHolder.setFirstName(patientFirstName);
             PatientHolder.setLastName(patientLastName);
 
-            Parent root = FXMLLoader.load(getClass().getResource("/journal/journal.fxml"));
-            Stage window = (Stage) tableViewPatients.getScene().getWindow();
-            window.setScene(new Scene(root));
+            int selectedColumn = tableViewPatients.getSelectionModel().getSelectedCells().get(0).getColumn();
+
+            if (selectedColumn == TABLE_EDIT_COLUMN_NR){
+                AnchorPane paneAddPatient = FXMLLoader.load(getClass().getResource("/patientAdd/patientAdd.fxml"));
+                rootPane.getChildren().setAll(paneAddPatient);
+            }
+            else{
+                Parent root = FXMLLoader.load(getClass().getResource("/journal/journal.fxml"));
+                Stage window = (Stage) tableViewPatients.getScene().getWindow();
+                window.setScene(new Scene(root));
+            }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -261,7 +286,7 @@ public class PatientsController implements Initializable {
                 do{
                     data.add(new PatientData(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3),
                             resultSet.getString(4), resultSet.getString(5), resultSet.getString(6),
-                            resultSet.getString(7), resultSet.getString(8)));
+                            resultSet.getString(7), resultSet.getString(8), columnEditText));
                 }
                 while (resultSet.next());
 

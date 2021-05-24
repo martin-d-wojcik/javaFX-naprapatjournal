@@ -12,66 +12,67 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="patients.PatientsController">
-   <children>
-      <AnchorPane fx:id="anchorPaneLeftmenu" prefHeight="821.0" prefWidth="277.0" style="-fx-background-color: #7A7D7B;">
-         <children>
-            <Label fx:id="lblUserLoggedInHeader" layoutY="17.0" text="uuuuu" textFill="#eb7826">
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </Label>
-            <Line fx:id="lineLeftMenuTop" endX="132.0" layoutX="132.0" layoutY="71.0" startX="-122.0" stroke="#444545" />
-            <VBox layoutY="100.0" prefHeight="473.0" prefWidth="277.0">
-               <children>
-                  <Button fx:id="btnStart" mnemonicParsing="false" prefHeight="35.0" prefWidth="278.0" text="Start" />
-                  <Button fx:id="btnPatients" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
-                  <Button fx:id="btnJournals" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
-                  <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
-                  <Button fx:id="btnExercises" mnemonicParsing="false" onAction="#GoToExercises" prefHeight="35.0" prefWidth="280.0" text="Övningar" />
-               </children></VBox>
-         </children>
-      </AnchorPane>
-      <VBox layoutX="277.0" prefHeight="800.0" prefWidth="1322.0">
-         <children>
-            <AnchorPane fx:id="rootPane" prefHeight="922.0" prefWidth="1322.0" style="-fx-background-color: #FFFFFF;">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" />
-               </padding>
-               <children>
-                  <TextField fx:id="txtFieldPersonNr" layoutX="24.0" layoutY="27.0" promptText="Person nr">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </TextField>
-                  <TextField fx:id="txtFieldFirstName" layoutX="250.0" layoutY="27.0" promptText="Förnamn" />
-                  <TextField fx:id="txtFieldLastName" layoutX="410.0" layoutY="27.0" promptText="Efternamn" />
-                  <Label layoutX="195.0" layoutY="31.0" text="eller" />
-                  <Button fx:id="btnSearchPatient" layoutX="607.0" layoutY="27.0" mnemonicParsing="false" onAction="#SearchPatient" text="Sök">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnAllPatients" layoutX="661.0" layoutY="27.0" mnemonicParsing="false" onAction="#ListAllPatients" text="Visa alla" />
-                  <Label fx:id="lblTemp" layoutX="779.0" layoutY="31.0" />
-                   <TableView fx:id="tableViewPatients" layoutY="96.0" onMouseClicked="#SelectPatientFromTable" prefHeight="705.0" prefWidth="1322.0">
-                       <columns>
-                           <TableColumn fx:id="tableColumnPersonNr" prefWidth="110.0" text="Person nr" />
-                           <TableColumn fx:id="tableColumnFirstName" prefWidth="110.0" text="Förnamn" />
-                           <TableColumn fx:id="tableColumnLastName" prefWidth="110.0" text="Efternamn" />
-                           <TableColumn fx:id="tableColumnStreetAdress" prefWidth="110.0" text="Gatuadress" />
-                           <TableColumn fx:id="tableColumnCity" prefWidth="110.0" text="Stad" />
-                           <TableColumn fx:id="tableColumnPostalCode" prefWidth="110.0" text="Post nr" />
-                           <TableColumn fx:id="tableColumnEmail" prefWidth="110.0" text="E-mail" />
-                           <TableColumn fx:id="tableColumnPhoneNr" prefWidth="110.0" text="Tel nr" />
-                       </columns>
-                       <padding>
-                           <Insets left="20.0" right="20.0" top="20.0" />
-                       </padding>
-                   </TableView>
-                  <Button fx:id="btnAddPatient" layoutX="882.0" layoutY="27.0" mnemonicParsing="false" onAction="#ShowAddPatient" prefHeight="25.0" prefWidth="150.0" text="Lägg till patient" />
-               </children>
-            </AnchorPane>
-         </children>
-      </VBox>
-   </children>
+    <children>
+        <AnchorPane fx:id="anchorPaneLeftmenu" prefHeight="821.0" prefWidth="277.0" style="-fx-background-color: #7A7D7B;">
+            <children>
+                <Label fx:id="lblUserLoggedInHeader" layoutY="17.0" text="uuuuu" textFill="#eb7826">
+                    <padding>
+                        <Insets left="30.0" />
+                    </padding>
+                </Label>
+                <Line fx:id="lineLeftMenuTop" endX="132.0" layoutX="132.0" layoutY="71.0" startX="-122.0" stroke="#444545" />
+                <VBox layoutY="100.0" prefHeight="473.0" prefWidth="277.0">
+                    <children>
+                        <Button fx:id="btnStart" mnemonicParsing="false" prefHeight="35.0" prefWidth="278.0" text="Start" />
+                        <Button fx:id="btnPatients" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Patienter" />
+                        <Button fx:id="btnJournals" mnemonicParsing="false" prefHeight="35.0" prefWidth="279.0" text="Journaler" />
+                        <Button fx:id="btnProgram" mnemonicParsing="false" prefHeight="35.0" prefWidth="280.0" text="Program" />
+                        <Button fx:id="btnExercises" mnemonicParsing="false" onAction="#GoToExercises" prefHeight="35.0" prefWidth="280.0" text="Övningar" />
+                    </children></VBox>
+            </children>
+        </AnchorPane>
+        <VBox layoutX="277.0" prefHeight="800.0" prefWidth="1322.0">
+            <children>
+                <AnchorPane fx:id="rootPane" prefHeight="922.0" prefWidth="1322.0" style="-fx-background-color: #FFFFFF;">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" />
+                    </padding>
+                    <children>
+                        <TextField fx:id="txtFieldPersonNr" layoutX="24.0" layoutY="27.0" promptText="Person nr">
+                            <font>
+                                <Font name="System Italic" size="12.0" />
+                            </font>
+                        </TextField>
+                        <TextField fx:id="txtFieldFirstName" layoutX="250.0" layoutY="27.0" promptText="Förnamn" />
+                        <TextField fx:id="txtFieldLastName" layoutX="410.0" layoutY="27.0" promptText="Efternamn" />
+                        <Label layoutX="195.0" layoutY="31.0" text="eller" />
+                        <Button fx:id="btnSearchPatient" layoutX="607.0" layoutY="27.0" mnemonicParsing="false" onAction="#SearchPatient" text="Sök">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="btnAllPatients" layoutX="661.0" layoutY="27.0" mnemonicParsing="false" onAction="#ListAllPatients" text="Visa alla" />
+                        <Label fx:id="lblTemp" layoutX="779.0" layoutY="31.0" />
+                        <TableView fx:id="tableViewPatients" layoutY="96.0" onMouseClicked="#SelectPatientFromTable" prefHeight="705.0" prefWidth="1322.0">
+                            <columns>
+                                <TableColumn fx:id="tableColumnPersonNr" prefWidth="110.0" text="Person nr" />
+                                <TableColumn fx:id="tableColumnFirstName" prefWidth="110.0" text="Förnamn" />
+                                <TableColumn fx:id="tableColumnLastName" prefWidth="110.0" text="Efternamn" />
+                                <TableColumn fx:id="tableColumnStreetAdress" prefWidth="110.0" text="Gatuadress" />
+                                <TableColumn fx:id="tableColumnCity" prefWidth="110.0" text="Stad" />
+                                <TableColumn fx:id="tableColumnPostalCode" prefWidth="110.0" text="Post nr" />
+                                <TableColumn fx:id="tableColumnEmail" prefWidth="110.0" text="E-mail" />
+                                <TableColumn fx:id="tableColumnPhoneNr" prefWidth="110.0" text="Tel nr" />
+                                <TableColumn fx:id="tableColumnEdit" prefWidth="110.0" />
+                            </columns>
+                            <padding>
+                                <Insets left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                        </TableView>
+                        <Button fx:id="btnAddPatient" layoutX="882.0" layoutY="27.0" mnemonicParsing="false" onAction="#ShowAddPatient" prefHeight="25.0" prefWidth="150.0" text="Lägg till patient" />
+                    </children>
+                </AnchorPane>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
