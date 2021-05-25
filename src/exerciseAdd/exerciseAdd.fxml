@@ -15,8 +15,8 @@
             <TextField fx:id="textFieldbodyPart" layoutX="135.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" promptText="Kroppsdel" />
             <TextField fx:id="textFieldexerciseType" layoutX="135.0" layoutY="156.0" prefHeight="25.0" prefWidth="232.0" promptText="Typ av övning" />
             <TextField fx:id="textFielddescription" layoutX="135.0" layoutY="206.0" prefHeight="25.0" prefWidth="232.0" promptText="Beskrivning" />
-            <Button fx:id="btnAddNewPatient" layoutX="135.0" layoutY="284.0" mnemonicParsing="false" text="Lägg tll" />
-            <Button fx:id="btnCancel" layoutX="208.0" layoutY="284.0" mnemonicParsing="false" text="Avbryt" />
+            <Button fx:id="btnAddNewExercise" layoutX="135.0" layoutY="284.0" mnemonicParsing="false" onAction="#AddExerciseData" text="Lägg tll" />
+            <Button fx:id="btnCancel" layoutX="208.0" layoutY="284.0" mnemonicParsing="false" onAction="#CancelAddExercise" text="Avbryt" />
             <Label fx:id="lblAddPatientHeader" layoutX="135.0" layoutY="14.0" text="Lägg till ny övning. Fyll uppgifter och klicka Lägg till">
                <font>
                   <Font size="14.0" />
