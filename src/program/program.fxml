@@ -2,7 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -29,7 +33,25 @@
             </VBox>
          </children>
       </AnchorPane>
-      <Label fx:id="lblPatientName" layoutX="606.0" layoutY="47.0" text="Label" />
-      <AnchorPane fx:id="anchorPaneJournalNotes" layoutX="554.0" layoutY="104.0" prefHeight="720.0" prefWidth="1046.0" />
+      <Label fx:id="lblPatientName" layoutX="658.0" layoutY="49.0" text="Label" />
+      <AnchorPane fx:id="anchorPaneJournalNotes" layoutX="554.0" layoutY="104.0" prefHeight="720.0" prefWidth="1046.0">
+         <children>
+            <Button fx:id="btnCreateProgram" layoutX="562.0" layoutY="56.0" mnemonicParsing="false" onAction="#AddProgramData" prefHeight="25.0" prefWidth="131.0" text="Skapa nytt program" />
+            <Label fx:id="lblProgramHeader" layoutX="103.0" layoutY="118.0" prefHeight="17.0" prefWidth="816.0" text="Välj övningar och klicka Skapa nytt program. Filtrera övningar efter Typ av övning och Kroppsdel." />
+            <ComboBox fx:id="comboBoxExerciseType" layoutX="103.0" layoutY="154.0" prefHeight="25.0" prefWidth="194.0" promptText="Typ av övning" />
+            <ComboBox fx:id="comboBoxExerciseBodyPart" layoutX="329.0" layoutY="154.0" prefHeight="25.0" prefWidth="194.0" promptText="Kroppsdel" />
+            <ComboBox fx:id="comboBoxNameOfExercise" layoutX="562.0" layoutY="154.0" onAction="#ExerciseSelected" prefHeight="25.0" prefWidth="277.0" promptText="Övningens namn" />
+            <TextField fx:id="textFieldNameOfProgram" layoutX="103.0" layoutY="56.0" prefHeight="25.0" prefWidth="418.0" promptText="Ange programmets namn" />
+            <Button fx:id="btnSaveProgram" layoutX="103.0" layoutY="650.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="95.0" text="Spara" />
+            <Button fx:id="btnCancel" layoutX="243.0" layoutY="650.0" mnemonicParsing="false" onAction="#CancelAddProgram" prefHeight="25.0" prefWidth="95.0" text="Avbryt" />
+            <TableView fx:id="tableViewExercises" layoutX="100.0" layoutY="212.0" prefHeight="401.0" prefWidth="741.0">
+              <columns>
+                <TableColumn fx:id="tableColumnExerciseName" prefWidth="635.0" text="C1" />
+                <TableColumn fx:id="tableColumnDelete" prefWidth="105.0" text="C2" />
+              </columns>
+            </TableView>
+            <Label fx:id="lblProgramNameWarning" layoutX="103.0" layoutY="89.0" prefHeight="17.0" prefWidth="246.0" text="Ange program namn!" textFill="#ff0707" />
+            <Label fx:id="lblTemp" layoutX="449.0" layoutY="650.0" text="Label" />
+         </children></AnchorPane>
    </children>
 </AnchorPane>
