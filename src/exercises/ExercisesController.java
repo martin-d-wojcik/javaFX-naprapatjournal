@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import patients.PatientData;
 import resources.StylingLayout;
 
 import java.io.IOException;
@@ -67,6 +68,11 @@ public class ExercisesController implements Initializable {
     private TableColumn<ExerciseData, String> tableColumntype;
     @FXML
     private TableColumn<ExerciseData, String> tableColumnDescription;
+    @FXML
+    private TableColumn<PatientData, String> tableColumnEdit;
+
+    private final int TABLE_EDIT_COLUMN_NR = 4;
+    private final String columnEditText = "<--Redigera";
 
     // sql queries
     private String sqlQueryType = "SELECT DISTINCT type FROM exercise";
@@ -156,7 +162,7 @@ public class ExercisesController implements Initializable {
             // check if the resultSet, rs has anything in the table
             while (rs.next()) {
                 data.add(new ExerciseData(rs.getString(1), rs.getString(2),
-                        rs.getString(3), rs.getString(4)));
+                        rs.getString(3), rs.getString(4), columnEditText));
             }
             conn.close();
 
@@ -183,7 +189,7 @@ public class ExercisesController implements Initializable {
             // check if the resultSet, rs has anything in the table
             while (resultSet.next()) {
                 data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getString(4)));
+                        resultSet.getString(3), resultSet.getString(4), columnEditText));
             }
             conn.close();
 
@@ -211,7 +217,7 @@ public class ExercisesController implements Initializable {
             // check if the resultSet, rs has anything in the table
             while (resultSet.next()) {
                 data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getString(4)));
+                        resultSet.getString(3), resultSet.getString(4), columnEditText));
             }
             conn.close();
 
@@ -227,6 +233,8 @@ public class ExercisesController implements Initializable {
         this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
         this.tableColumntype.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
         this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
+        this.tableColumnEdit.setCellValueFactory(new PropertyValueFactory<PatientData, String>("exerciseEdit"));
+        this.tableColumnEdit.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
 
         this.tableViewExercises.setItems(null);
         this.tableViewExercises.setItems(data);
@@ -264,9 +272,10 @@ public class ExercisesController implements Initializable {
 
         // TODO: reset prompt text in comboboxes
         comboBoxType.getSelectionModel().clearSelection();
-        comboBoxType.setPromptText("Typ av lalala");
-        // comboBoxBodyPart.getSelectionModel().clearSelection();
-        comboBoxBodyPart.setPromptText("Kroppsdel lalala");
+        comboBoxType.setPromptText("Välj Typ");
+
+        comboBoxBodyPart.getSelectionModel().clearSelection();
+        comboBoxBodyPart.setPromptText("Välj Kroppsdel");
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {

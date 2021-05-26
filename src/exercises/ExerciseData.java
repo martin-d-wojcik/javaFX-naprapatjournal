@@ -8,12 +8,14 @@ public class ExerciseData {
     private final StringProperty type;
     private final StringProperty bodyPart;
     private final StringProperty description;
+    private final StringProperty exerciseEdit;
 
-    public ExerciseData(String exerciseName, String type, String bodyPart, String description) {
+    public ExerciseData(String exerciseName, String type, String bodyPart, String description, String exercEdit) {
         this.exerciseName = new SimpleStringProperty(exerciseName);
         this.type = new SimpleStringProperty(type);
         this.bodyPart = new SimpleStringProperty(bodyPart);
         this.description = new SimpleStringProperty(description);
+        this.exerciseEdit = new SimpleStringProperty(exercEdit);
     }
 
     public String getExerciseName() {
@@ -63,4 +65,17 @@ public class ExerciseData {
     public void setDescription(String description) {
         this.description.set(description);
     }
+
+    public String getExerciseEdit() {
+        return exerciseEdit.get();
+    }
+
+    public StringProperty exerciseEditProperty() {
+        return exerciseEdit;
+    }
+
+    public void setExerciseEdit(String exEdit) {
+        this.exerciseEdit.set(exEdit);
+    }
+
 }

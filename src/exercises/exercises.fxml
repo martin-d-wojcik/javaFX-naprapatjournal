@@ -43,13 +43,14 @@
                </font>
             </Button>
             <Button fx:id="btnNewExercise" layoutX="591.0" layoutY="23.0" mnemonicParsing="false" onAction="#ShowAddExercise" text="Lägg till övning" />
-            <TableView fx:id="tableViewExercises" layoutX="79.0" layoutY="101.0" prefHeight="691.0" prefWidth="790.0">
-              <columns>
-                <TableColumn fx:id="tableColumnName" prefWidth="200.0" text="Namn övning" />
-                <TableColumn fx:id="tableColumnBodyPart" prefWidth="200.0" text="Kroppsdel" />
-                <TableColumn fx:id="tableColumntype" prefWidth="200.0" text="Typ av övning" />
-                <TableColumn fx:id="tableColumnDescription" prefWidth="200.0" text="Beskrivning" />
-              </columns>
+            <TableView fx:id="tableViewExercises" layoutX="79.0" layoutY="101.0" prefHeight="691.0" prefWidth="1206.0">
+               <columns>
+                  <TableColumn fx:id="tableColumnName" prefWidth="272.0" text="Namn övning" />
+                  <TableColumn fx:id="tableColumnBodyPart" prefWidth="183.0" text="Kroppsdel" />
+                  <TableColumn fx:id="tableColumntype" prefWidth="145.0" text="Typ av övning" />
+                  <TableColumn fx:id="tableColumnDescription" prefWidth="458.0" text="Beskrivning" />
+                  <TableColumn fx:id="tableColumnEdit" prefWidth="147.0" />
+               </columns>
             </TableView>
          </children>
       </AnchorPane>
