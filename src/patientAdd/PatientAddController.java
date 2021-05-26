@@ -1,6 +1,7 @@
 package patientAdd;
 
 import dbUtil.dbConnection;
+import helpers.Navigation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,6 +23,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class PatientAddController implements Initializable {
+    Navigation navigation = new Navigation();
+
     @FXML
     private AnchorPane paneAddPatients;
     @FXML
@@ -460,7 +463,7 @@ public class PatientAddController implements Initializable {
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Patienten " + persNr + " hittades inte");
-                alert.setHeaderText("SÃ¶kning misslyckad !");
+                alert.setHeaderText("Sökning misslyckad !");
                 alert.show();
             }
 
@@ -551,13 +554,7 @@ public class PatientAddController implements Initializable {
             alert.show();
 
             // Close Patient Add window
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
-                Stage window = (Stage) btnCancel.getScene().getWindow();
-                window.setScene(new Scene(root));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            navigation.navigateToPatients(btnCancel);
         }
     }
 

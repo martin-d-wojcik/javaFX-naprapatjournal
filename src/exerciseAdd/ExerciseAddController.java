@@ -1,6 +1,7 @@
 package exerciseAdd;
 
 import dbUtil.dbConnection;
+import helpers.Navigation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +22,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ExerciseAddController implements Initializable {
+    Navigation navigation = new Navigation();
+
     @FXML
     private Label lblAddPatientHeader;
 
@@ -110,25 +113,13 @@ public class ExerciseAddController implements Initializable {
             alert.setHeaderText("Det gick ju bra.");
             alert.show();
 
-            // Close Patient Add window
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/exercises/exercises.fxml"));
-                Stage window = (Stage) btnCancel.getScene().getWindow();
-                window.setScene(new Scene(root));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            // Close exercise Add window
+            navigation.navigateToExercises(btnCancel);
         }
     }
 
     public void CancelAddExercise(javafx.event.ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/exercises/exercises.fxml"));
-            Stage window = (Stage) btnCancel.getScene().getWindow();
-            window.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navigation.navigateToExercises(btnCancel);
     }
 
     private void hideWarningLabels() {
