@@ -3,11 +3,17 @@ package program;
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
 import helpers.Navigation;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import patients.PatientData;
 import patients.PatientHolder;
 import resources.StylingLayout;
 
@@ -20,10 +26,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProgramController implements Initializable {
+    Navigation navigation = new Navigation();
+    ObservableList<ExerciseData> exercisesList = FXCollections.observableArrayList();
+
     @FXML
     private Label lblTemp;
-
-    Navigation navigation = new Navigation();
 
     // left menu
     @FXML
@@ -64,6 +71,10 @@ public class ProgramController implements Initializable {
     private Button btnSaveProgram;
     @FXML
     private Button btnCancel;
+
+    // @FXML
+    // private TableView<List<StringProperty>> tableViewExercises;
+
     @FXML
     private TableView<ExerciseData> tableViewExercises;
     @FXML
@@ -117,7 +128,7 @@ public class ProgramController implements Initializable {
                 + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
 
-        // populate comboboxes
+        // populate combo boxes
         comboBoxExerciseType.setItems(FXCollections.observableArrayList(getExerciseTypeData()));
         comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
         comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
@@ -125,7 +136,31 @@ public class ProgramController implements Initializable {
 
     public void ExerciseSelected(javafx.event.ActionEvent event) {
         String exerciseSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
-        lblTemp.setText(exerciseSelected);
+        String dummy = "";
+        // lblTemp.setText(exerciseSelected);
+
+        // add selected exercise to list
+        exercisesList.add(new ExerciseData(exerciseSelected, dummy, dummy, dummy, dummy));
+
+        tableColumnExerciseName.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getExerciseName()));
+
+        /* TableColumn<ExerciseData,String> c1 = new TableColumn<ExerciseData,String>("first");
+        tableColumnExerciseName.setCellValueFactory(p -> p.getValue().exerciseNameProperty());
+        tableViewExercises.getColumns().add(c1); */
+
+        // populate the table view with selected exercises
+        // tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
+        // tableViewExercises.setItems(exercisesList);
+        // tableViewExercises.setItems(exercisesList);
+        // this.tableColumnExerciseName.setCellValueFactory(param -> new ReadOnlyStringWrapper(exerciseSelected));
+
+        /* for (ExerciseData exerciseData : exercisesList) {
+
+        } */
+
+        // this.tableColumnExerciseName.setCellValueFactory(c -> new SimpleStringProperty(new String("123")));
+        lblTemp.setText(exercisesList.get(0).getExerciseName());
     }
 
     public List<String> getExerciseData() {
@@ -207,6 +242,10 @@ public class ProgramController implements Initializable {
             btnSaveProgram.setVisible(true);
             lblProgramNameWarning.visibleProperty().setValue(false);
         }
+    }
+
+    public void SaveProgram(javafx.event.ActionEvent event) {
+        this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
     }
 
     public void CancelAddProgram(javafx.event.ActionEvent event) {
