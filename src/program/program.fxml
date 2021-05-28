@@ -45,10 +45,13 @@
             <Button fx:id="btnSaveProgram" layoutX="103.0" layoutY="650.0" mnemonicParsing="false" onAction="#SaveProgram" prefHeight="25.0" prefWidth="95.0" text="Spara" />
             <Button fx:id="btnCancel" layoutX="243.0" layoutY="650.0" mnemonicParsing="false" onAction="#CancelAddProgram" prefHeight="25.0" prefWidth="95.0" text="Avbryt" />
             <TableView fx:id="tableViewExercises" layoutX="100.0" layoutY="212.0" prefHeight="401.0" prefWidth="741.0">
-              <columns>
-                <TableColumn fx:id="tableColumnExerciseName" prefWidth="635.0" text="Övningens namn" />
-                <TableColumn fx:id="tableColumnDelete" prefWidth="105.0" />
-              </columns>
+               <columns>
+                  <TableColumn fx:id="tableColumnExerciseName" prefWidth="532.0" text="Övningens namn" />
+                  <TableColumn fx:id="tableColumnEdit" prefWidth="109.0" />
+
+                  <TableColumn fx:id="tableColumnDelete" prefWidth="98.0" />
+
+               </columns>
             </TableView>
             <Label fx:id="lblProgramNameWarning" layoutX="103.0" layoutY="89.0" prefHeight="17.0" prefWidth="246.0" text="Ange program namn!" textFill="#ff0707" />
             <Label fx:id="lblTemp" layoutX="449.0" layoutY="650.0" text="Label" />

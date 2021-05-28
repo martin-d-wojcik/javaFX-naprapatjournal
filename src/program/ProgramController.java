@@ -72,15 +72,20 @@ public class ProgramController implements Initializable {
     @FXML
     private Button btnCancel;
 
-    // @FXML
-    // private TableView<List<StringProperty>> tableViewExercises;
-
     @FXML
     private TableView<ExerciseData> tableViewExercises;
     @FXML
     private TableColumn<ExerciseData, String> tableColumnExerciseName;
+    /* @FXML
+    private TableColumn<ExerciseData, String> tableColumnBodyPart;
     @FXML
-    private TableColumn<ExerciseData, String> tableColumnDelete;
+    private TableColumn<ExerciseData, String> tableColumnType;
+    @FXML
+    private TableColumn<ExerciseData, String> tableColumnDescription; */
+    @FXML
+    private TableColumn<ExerciseData, String> tableColumnEdit;
+//    @FXML
+//    private TableColumn<ExerciseData, String> tableColumnDelete;
 
     // header
     @FXML
@@ -135,31 +140,27 @@ public class ProgramController implements Initializable {
     }
 
     public void ExerciseSelected(javafx.event.ActionEvent event) {
-        String exerciseSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
-        String dummy = "";
-        // lblTemp.setText(exerciseSelected);
+
+        String exerciseNameSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
+        String bodyPartSelected = "dummy bodypart";
+        String typeSelected = "dummy type";
+        String description = "dummy description";
+        String columnEditText = "(Redigera)";
 
         // add selected exercise to list
-        exercisesList.add(new ExerciseData(exerciseSelected, dummy, dummy, dummy, dummy));
+        exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description, columnEditText));
 
-        tableColumnExerciseName.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getExerciseName()));
+        this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
+        /* this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
+        this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
+        this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description")); */
+        this.tableColumnEdit.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseEdit"));
+        this.tableColumnEdit.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
 
-        /* TableColumn<ExerciseData,String> c1 = new TableColumn<ExerciseData,String>("first");
-        tableColumnExerciseName.setCellValueFactory(p -> p.getValue().exerciseNameProperty());
-        tableViewExercises.getColumns().add(c1); */
+        this.tableViewExercises.setItems(null);
+        this.tableViewExercises.setItems(exercisesList);
 
-        // populate the table view with selected exercises
-        // tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
-        // tableViewExercises.setItems(exercisesList);
-        // tableViewExercises.setItems(exercisesList);
-        // this.tableColumnExerciseName.setCellValueFactory(param -> new ReadOnlyStringWrapper(exerciseSelected));
-
-        /* for (ExerciseData exerciseData : exercisesList) {
-
-        } */
-
-        // this.tableColumnExerciseName.setCellValueFactory(c -> new SimpleStringProperty(new String("123")));
+        String name = exercisesList.get(0).getExerciseName();
         lblTemp.setText(exercisesList.get(0).getExerciseName());
     }
 
