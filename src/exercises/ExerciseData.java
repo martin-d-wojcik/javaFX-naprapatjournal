@@ -77,5 +77,4 @@ public class ExerciseData {
     public void setExerciseEdit(String exEdit) {
         this.exerciseEdit.set(exEdit);
     }
-
 }

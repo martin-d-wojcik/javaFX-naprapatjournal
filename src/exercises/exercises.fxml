@@ -43,7 +43,7 @@
                </font>
             </Button>
             <Button fx:id="btnNewExercise" layoutX="591.0" layoutY="23.0" mnemonicParsing="false" onAction="#ShowAddExercise" text="Lägg till övning" />
-            <TableView fx:id="tableViewExercises" layoutX="79.0" layoutY="101.0" prefHeight="691.0" prefWidth="1206.0">
+            <TableView fx:id="tableViewExercises" layoutX="79.0" layoutY="101.0" prefHeight="691.0" prefWidth="1206.0" onMouseClicked="#SelectExerciseFromTable" >
                <columns>
                   <TableColumn fx:id="tableColumnName" prefWidth="272.0" text="Namn övning" />
                   <TableColumn fx:id="tableColumnBodyPart" prefWidth="183.0" text="Kroppsdel" />

@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import patients.PatientData;
 import resources.StylingLayout;
@@ -69,7 +70,7 @@ public class ExercisesController implements Initializable {
     @FXML
     private TableColumn<ExerciseData, String> tableColumnDescription;
     @FXML
-    private TableColumn<PatientData, String> tableColumnEdit;
+    private TableColumn<ExerciseData, String> tableColumnEdit;
 
     private final int TABLE_EDIT_COLUMN_NR = 4;
     private final String columnEditText = "<--Redigera";
@@ -230,10 +231,10 @@ public class ExercisesController implements Initializable {
 
     private void fillTableWithExerciseData(ObservableList<ExerciseData> data) {
         this.tableColumnName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
-        this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
-        this.tableColumntype.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
+        this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
+        this.tableColumntype.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
         this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
-        this.tableColumnEdit.setCellValueFactory(new PropertyValueFactory<PatientData, String>("exerciseEdit"));
+        this.tableColumnEdit.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseEdit"));
         this.tableColumnEdit.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
 
         this.tableViewExercises.setItems(null);
@@ -280,5 +281,35 @@ public class ExercisesController implements Initializable {
 
     public void GoToPatients(javafx.event.ActionEvent event) {
         this.navigation.navigateToPatients(btnPatients);
+    }
+
+    @FXML
+    public void SelectExerciseFromTable(MouseEvent e) {
+
+        try {
+            String exeName = tableViewExercises.getSelectionModel().getSelectedItem().getExerciseName();
+            String progID = "";
+            String exeType = tableViewExercises.getSelectionModel().getSelectedItem().getType();
+            String bodyPart = tableViewExercises.getSelectionModel().getSelectedItem().getBodyPart();
+            String exeDescript = tableViewExercises.getSelectionModel().getSelectedItem().getDescription();
+
+            ExerciseHolder.setExerciseName(exeName);
+            ExerciseHolder.setProgramID(progID);
+            ExerciseHolder.setType(exeType);
+            ExerciseHolder.setBodyPart(bodyPart);
+            ExerciseHolder.setDescription(exeDescript);
+
+            int selectedColumn = tableViewExercises.getSelectionModel().getSelectedCells().get(0).getColumn();
+
+            if (selectedColumn == TABLE_EDIT_COLUMN_NR){
+                AnchorPane paneEditExercise = FXMLLoader.load(getClass().getResource("/exerciseEdit/exerciseEdit.fxml"));
+                rootPane.getChildren().setAll(paneEditExercise);
+            }
+            else {
+                // TODO something perhaps
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 }

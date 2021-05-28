@@ -100,21 +100,40 @@ public class ExerciseAddController implements Initializable {
         else {
             // Prepare query
             assert conn != null;
-            PreparedStatement prepStmt = conn.prepareStatement(sqlInsertNewExercise);
-            prepStmt.setString(1, nameOfExercise);
-            prepStmt.setString(2, typeOfExercise);
-            prepStmt.setString(3, description);
-            prepStmt.setString(4, bodyPart);
+            try {
+                PreparedStatement prepStmt = conn.prepareStatement(sqlInsertNewExercise);
+                prepStmt.setString(1, nameOfExercise);
+                prepStmt.setString(2, typeOfExercise);
+                prepStmt.setString(3, description);
+                prepStmt.setString(4, bodyPart);
 
-            prepStmt.executeUpdate();
-            prepStmt.close();
+                prepStmt.executeUpdate();
+                prepStmt.close();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Övningen sparad.");
-            alert.setHeaderText("Det gick ju bra.");
-            alert.show();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ã–vningen sparad.");
+                alert.setHeaderText("Det gick ju bra.");
+                alert.show();
 
-            // Close exercise Add window
-            navigation.navigateToExercises(btnCancel);
+                // Close exercise Add window
+                navigation.navigateToExercises(btnCancel);
+
+            } catch (SQLException e) {
+                System.err.println("Error: " + e);
+                Alert al;
+                if (e.toString().toLowerCase().contains("primarykey") &&
+                        e.toString().toLowerCase().contains("unique")){
+
+                    al = new Alert(Alert.AlertType.ERROR, "Övning " + nameOfExercise + " finns redan !"
+                            + "\n\nRätta till namnet");
+                    al.setHeaderText("Sparades INTE i databasen !");
+                    al.show();
+                }
+                else{
+                    al = new Alert(Alert.AlertType.ERROR, e.toString());
+                    al.setHeaderText("SQL Exception !");
+                    al.show();
+                }
+            }
         }
     }
 
