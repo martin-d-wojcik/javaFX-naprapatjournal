@@ -73,6 +73,8 @@ public class ProgramController implements Initializable {
     private Button btnSaveProgram;
     @FXML
     private Button btnCancel;
+    @FXML
+    private Button btnRestore;
 
     @FXML
     private TableView<ExerciseData> tableViewExercises;
@@ -133,6 +135,10 @@ public class ProgramController implements Initializable {
         comboBoxExerciseBodyPart.setVisible(false);
         comboBoxExerciseType.setVisible(false);
         comboBoxNameOfExercise.setVisible(false);
+        btnRestore.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
+                + "; -fx-font-weight: bold");
+        btnRestore.setVisible(false);
         tableViewExercises.setVisible(false);
         btnSaveProgram.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
@@ -270,6 +276,10 @@ public class ProgramController implements Initializable {
         }
     }
 
+    public void RestoreExerciseComboBox(javafx.event.ActionEvent event) {
+        comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
+    }
+
     @FXML
     public void SelectExerciseFromTable(MouseEvent e) {
         lblTemp.setText("SelectExerciseFromTable clicked");
@@ -315,6 +325,7 @@ public class ProgramController implements Initializable {
             comboBoxExerciseBodyPart.setVisible(true);
             comboBoxExerciseType.setVisible(true);
             comboBoxNameOfExercise.setVisible(true);
+            btnRestore.setVisible(true);
             tableViewExercises.setVisible(true);
             btnSaveProgram.setVisible(true);
             lblProgramNameWarning.visibleProperty().setValue(false);

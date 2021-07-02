@@ -38,9 +38,9 @@
          <children>
             <Button fx:id="btnCreateProgram" layoutX="562.0" layoutY="56.0" mnemonicParsing="false" onAction="#AddProgramData" prefHeight="25.0" prefWidth="131.0" text="Skapa nytt program" />
             <Label fx:id="lblProgramHeader" layoutX="103.0" layoutY="118.0" prefHeight="17.0" prefWidth="816.0" text="Välj övningar och klicka Skapa nytt program. Filtrera övningar efter Typ av övning och Kroppsdel." />
-            <ComboBox fx:id="comboBoxExerciseType" layoutX="103.0" layoutY="154.0" onAction="#TypeOfExerciseSelected" prefHeight="25.0" prefWidth="194.0" promptText="Typ av övning" />
-            <ComboBox fx:id="comboBoxExerciseBodyPart" layoutX="329.0" layoutY="154.0" prefHeight="25.0" prefWidth="194.0" promptText="Kroppsdel" />
-            <ComboBox fx:id="comboBoxNameOfExercise" layoutX="562.0" layoutY="154.0" onAction="#ExerciseSelected" prefHeight="25.0" prefWidth="277.0" promptText="Övningens namn" />
+            <ComboBox fx:id="comboBoxExerciseType" layoutX="103.0" layoutY="154.0" onAction="#TypeOfExerciseSelected" prefHeight="25.0" prefWidth="180.0" promptText="Typ av övning" />
+            <ComboBox fx:id="comboBoxExerciseBodyPart" layoutX="329.0" layoutY="154.0" prefHeight="25.0" prefWidth="180.0" promptText="Kroppsdel" />
+            <ComboBox fx:id="comboBoxNameOfExercise" layoutX="553.0" layoutY="154.0" onAction="#ExerciseSelected" prefHeight="25.0" prefWidth="180.0" promptText="Övningens namn" />
             <TextField fx:id="textFieldNameOfProgram" layoutX="103.0" layoutY="56.0" prefHeight="25.0" prefWidth="418.0" promptText="Ange programmets namn" />
             <Button fx:id="btnSaveProgram" layoutX="103.0" layoutY="650.0" mnemonicParsing="false" onAction="#SaveProgram" prefHeight="25.0" prefWidth="95.0" text="Spara" />
             <Button fx:id="btnCancel" layoutX="243.0" layoutY="650.0" mnemonicParsing="false" onAction="#CancelAddProgram" prefHeight="25.0" prefWidth="95.0" text="Avbryt" />
@@ -58,6 +58,7 @@
             </TableView>
             <Label fx:id="lblProgramNameWarning" layoutX="103.0" layoutY="89.0" prefHeight="17.0" prefWidth="246.0" text="Ange program namn!" textFill="#ff0707" />
             <Label fx:id="lblTemp" layoutX="449.0" layoutY="650.0" text="Label" />
+            <Button fx:id="btnRestore" layoutX="771.0" layoutY="154.0" mnemonicParsing="false" onAction="#RestoreExerciseComboBox" prefHeight="25.0" prefWidth="70.0" text="Återställ" />
          </children></AnchorPane>
    </children>
 </AnchorPane>
