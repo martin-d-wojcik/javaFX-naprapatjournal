@@ -5,17 +5,15 @@ import javafx.beans.property.StringProperty;
 
 public class ExerciseData {
     private final StringProperty exerciseName;
-    private final StringProperty type;
     private final StringProperty bodyPart;
+    private final StringProperty type;
     private final StringProperty description;
-    private final StringProperty exerciseEdit;
 
-    public ExerciseData(String exerciseName, String type, String bodyPart, String description, String exercEdit) {
+    public ExerciseData(String exerciseName, String type, String bodyPart, String description) {
         this.exerciseName = new SimpleStringProperty(exerciseName);
         this.type = new SimpleStringProperty(type);
         this.bodyPart = new SimpleStringProperty(bodyPart);
         this.description = new SimpleStringProperty(description);
-        this.exerciseEdit = new SimpleStringProperty(exercEdit);
     }
 
     public String getExerciseName() {
@@ -30,18 +28,6 @@ public class ExerciseData {
         this.exerciseName.set(exerciseName);
     }
 
-    public String getType() {
-        return type.get();
-    }
-
-    public StringProperty typeProperty() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type.set(type);
-    }
-
     public String getBodyPart() {
         return bodyPart.get();
     }
@@ -52,6 +38,18 @@ public class ExerciseData {
 
     public void setBodyPart(String bodyPart) {
         this.bodyPart.set(bodyPart);
+    }
+
+    public String getType() {
+        return type.get();
+    }
+
+    public StringProperty typeProperty() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type.set(type);
     }
 
     public String getDescription() {
@@ -66,7 +64,7 @@ public class ExerciseData {
         this.description.set(description);
     }
 
-    public String getExerciseEdit() {
+    /* public String getExerciseEdit() {
         return exerciseEdit.get();
     }
 
@@ -77,4 +75,17 @@ public class ExerciseData {
     public void setExerciseEdit(String exEdit) {
         this.exerciseEdit.set(exEdit);
     }
+
+    public String getExerciseDelete() {
+        return exerciseDelete.get();
+    }
+
+    public StringProperty exerciseDeleteProperty() {
+        return exerciseDelete;
+    }
+
+    public void setExerciseDelete(String exDel) {
+        this.exerciseDelete.set(exDel);
+    }
+    */
 }

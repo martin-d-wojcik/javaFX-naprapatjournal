@@ -231,7 +231,6 @@ public class PatientsController implements Initializable {
                     alert.setHeaderText("Ett fel har inträffat !");
                     alert.show();
                 }
-
             }
             conn.close();
 

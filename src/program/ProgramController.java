@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import patients.PatientData;
 import patients.PatientHolder;
@@ -19,6 +20,7 @@ import resources.StylingLayout;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,16 +78,16 @@ public class ProgramController implements Initializable {
     private TableView<ExerciseData> tableViewExercises;
     @FXML
     private TableColumn<ExerciseData, String> tableColumnExerciseName;
-    /* @FXML
+    @FXML
     private TableColumn<ExerciseData, String> tableColumnBodyPart;
     @FXML
     private TableColumn<ExerciseData, String> tableColumnType;
     @FXML
-    private TableColumn<ExerciseData, String> tableColumnDescription; */
+    private TableColumn<ExerciseData, String> tableColumnDescription;
     @FXML
     private TableColumn<ExerciseData, String> tableColumnEdit;
-//    @FXML
-//    private TableColumn<ExerciseData, String> tableColumnDelete;
+    @FXML
+    private TableColumn<ExerciseData, String> tableColumnDelete;
 
     // header
     @FXML
@@ -95,6 +97,13 @@ public class ProgramController implements Initializable {
     private String sqlQueryExerciseType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryExerciseBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
     private String sqlQueryExerciseName = "SELECT exerciseName from exercise";
+    private String sqlQueryExerciseByType = "SELECT exerciseName from exercise WHERE type=?";
+
+    // table data
+    /* private final int TABLE_EDIT_COLUMN_NR = 4;
+    private final String columnEditText = "Redigera";
+    private final int TABLE_DELETE_COLUMN_NR = 5;
+    private final String columnDeleteText = "Radera"; */
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,28 +149,30 @@ public class ProgramController implements Initializable {
     }
 
     public void ExerciseSelected(javafx.event.ActionEvent event) {
-
         String exerciseNameSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
-        String bodyPartSelected = "dummy bodypart";
-        String typeSelected = "dummy type";
+        String bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
+        String typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
         String description = "dummy description";
-        String columnEditText = "(Redigera)";
 
-        // add selected exercise to list
-        exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description, columnEditText));
+        // add selected items to exercise list
+        exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description));
 
+        // fill columns in exercises table view
         this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
-        /* this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
+        this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
         this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
-        this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description")); */
-        this.tableColumnEdit.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseEdit"));
-        this.tableColumnEdit.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
+        this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
 
         this.tableViewExercises.setItems(null);
         this.tableViewExercises.setItems(exercisesList);
 
-        String name = exercisesList.get(0).getExerciseName();
-        lblTemp.setText(exercisesList.get(0).getExerciseName());
+        lblTemp.setText(exerciseNameSelected);
+    }
+
+    public void TypeOfExerciseSelected(javafx.event.ActionEvent event) {
+        String typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
+
+        comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByType, typeSelected)));
     }
 
     public List<String> getExerciseData() {
@@ -177,6 +188,35 @@ public class ProgramController implements Initializable {
             }
 
             rs.close();
+
+            return options;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<String> getExerciseData(String sqlQuery, String queryParameter) {
+        List<String> options = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Connection conn = null;
+
+        try {
+            conn = dbConnection.getConnection();
+            assert conn != null;
+
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, queryParameter);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                options.add(resultSet.getString("exerciseName"));
+            }
+
+            resultSet.close();
 
             return options;
 
@@ -228,6 +268,42 @@ public class ProgramController implements Initializable {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    @FXML
+    public void SelectExerciseFromTable(MouseEvent e) {
+        lblTemp.setText("SelectExerciseFromTable clicked");
+
+        /* try {
+
+            String exeName = tableViewExercises.getSelectionModel().getSelectedItem().getExerciseName();
+            String progID = "";
+            String exeType = tableViewExercises.getSelectionModel().getSelectedItem().getType();
+            String bodyPart = tableViewExercises.getSelectionModel().getSelectedItem().getBodyPart();
+            String exeDescript = tableViewExercises.getSelectionModel().getSelectedItem().getDescription();
+
+            ExerciseHolder.setExerciseName(exeName);
+            ExerciseHolder.setProgramID(progID);
+            ExerciseHolder.setType(exeType);
+            ExerciseHolder.setBodyPart(bodyPart);
+            ExerciseHolder.setDescription(exeDescript);
+
+            int selectedColumn = tableViewExercises.getSelectionModel().getSelectedCells().get(0).getColumn();
+
+            if (selectedColumn == TABLE_EDIT_COLUMN_NR){
+                Alert al = new Alert(Alert.AlertType.INFORMATION, "EDIT PRESSED");
+                al.show();
+
+                AnchorPane paneEditExercise = FXMLLoader.load(getClass().getResource("/exerciseEdit/exerciseEdit.fxml"));
+                //   rootPane.getChildren().setAll(paneEditExercise);
+            }
+            if (selectedColumn == TABLE_DELETE_COLUMN_NR){
+                Alert al = new Alert(Alert.AlertType.INFORMATION, "DELETE PRESSED");
+                al.show();
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } */
     }
 
     public void AddProgramData(javafx.event.ActionEvent event) {

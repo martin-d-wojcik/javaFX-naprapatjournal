@@ -163,7 +163,7 @@ public class ExercisesController implements Initializable {
             // check if the resultSet, rs has anything in the table
             while (rs.next()) {
                 data.add(new ExerciseData(rs.getString(1), rs.getString(2),
-                        rs.getString(3), rs.getString(4), columnEditText));
+                        rs.getString(3), rs.getString(4)));// , columnEditText, "x"));
             }
             conn.close();
 
@@ -190,7 +190,7 @@ public class ExercisesController implements Initializable {
             // check if the resultSet, rs has anything in the table
             while (resultSet.next()) {
                 data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getString(4), columnEditText));
+                        resultSet.getString(3), resultSet.getString(4)));//, columnEditText, "x"));
             }
             conn.close();
 
@@ -218,7 +218,7 @@ public class ExercisesController implements Initializable {
             // check if the resultSet, rs has anything in the table
             while (resultSet.next()) {
                 data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
-                        resultSet.getString(3), resultSet.getString(4), columnEditText));
+                        resultSet.getString(3), resultSet.getString(4)));
             }
             conn.close();
 
@@ -305,11 +305,18 @@ public class ExercisesController implements Initializable {
                 AnchorPane paneEditExercise = FXMLLoader.load(getClass().getResource("/exerciseEdit/exerciseEdit.fxml"));
                 rootPane.getChildren().setAll(paneEditExercise);
             }
-            else {
+            else{
                 // TODO something perhaps
+                System.out.println("whoops");
             }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
+
+    /* private <T> TableColumn<T, ?> getTableColumnByName(TableView<T> tableView, String name) {
+        for (TableColumn<T, ?> col : tableView.getColumns())
+            if (col.getText().equals(name)) return col ;
+        return null ;
+    } */
 }
