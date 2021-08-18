@@ -10,10 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import journal.JournalData;
 import patients.PatientData;
 import patients.PatientHolder;
 import resources.StylingLayout;
@@ -24,12 +27,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProgramController implements Initializable {
+    ProgramModel programModel = new ProgramModel();
     Navigation navigation = new Navigation();
     ObservableList<ExerciseData> exercisesList = FXCollections.observableArrayList();
+    String typeSelected;
+    String bodyPartSelected;
 
     @FXML
     private Label lblTemp;
@@ -100,6 +107,8 @@ public class ProgramController implements Initializable {
     private String sqlQueryExerciseBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
     private String sqlQueryExerciseName = "SELECT exerciseName from exercise";
     private String sqlQueryExerciseByType = "SELECT exerciseName from exercise WHERE type=?";
+    private String sqlQueryExerciseByBodypart = "SELECT * from exercise WHERE bodyPart=?";
+    private String sqlQueryExerciseByTtypeAndBodyPart = "SELECT * from exercise WHERE bodyPart=? AND type=?";
 
     // table data
     /* private final int TABLE_EDIT_COLUMN_NR = 4;
@@ -149,9 +158,24 @@ public class ProgramController implements Initializable {
                 + "; -fx-font-weight: bold");
 
         // populate combo boxes
+        setComboBoxesToDefault();
+
+        // populate list of programs
+        fillProgramsList();
+    }
+
+    private void setComboBoxesToDefault() {
         comboBoxExerciseType.setItems(FXCollections.observableArrayList(getExerciseTypeData()));
+        comboBoxExerciseType.getSelectionModel().clearSelection();
         comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
+        comboBoxExerciseBodyPart.getSelectionModel().clearSelection();
         comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
+        comboBoxNameOfExercise.getSelectionModel().clearSelection();
+    }
+
+    private void resetSelectionData() {
+        typeSelected = null;
+        bodyPartSelected = null;
     }
 
     public void ExerciseSelected(javafx.event.ActionEvent event) {
@@ -172,13 +196,28 @@ public class ProgramController implements Initializable {
         this.tableViewExercises.setItems(null);
         this.tableViewExercises.setItems(exercisesList);
 
+        // reset combo boxes and selection data
+        // setComboBoxesToDefault();
+        // resetSelectionData();
+
         lblTemp.setText(exerciseNameSelected);
     }
 
     public void TypeOfExerciseSelected(javafx.event.ActionEvent event) {
-        String typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
+        typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
 
         comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByType, typeSelected)));
+    }
+
+    public void BodyPartSelected(javafx.event.ActionEvent event) {
+        if(typeSelected == null) {
+            bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
+
+            comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByBodypart, bodyPartSelected)));
+        }
+        else {
+            comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByTtypeAndBodyPart, bodyPartSelected, typeSelected)));
+        }
     }
 
     public List<String> getExerciseData() {
@@ -215,6 +254,36 @@ public class ProgramController implements Initializable {
 
             preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setString(1, queryParameter);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                options.add(resultSet.getString("exerciseName"));
+            }
+
+            resultSet.close();
+
+            return options;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<String> getExerciseData(String sqlQuery, String queryFirst, String querySecond) {
+        List<String> options = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Connection conn = null;
+
+        try {
+            conn = dbConnection.getConnection();
+            assert conn != null;
+
+            preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setString(1, queryFirst);
+            preparedStatement.setString(1, querySecond);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -277,7 +346,12 @@ public class ProgramController implements Initializable {
     }
 
     public void RestoreExerciseComboBox(javafx.event.ActionEvent event) {
-        comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
+        // comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
+        resetSelectionData();
+        setComboBoxesToDefault();
+        // comboBoxExerciseType.setStyle("fx-background-color: #ff5733");
+        // comboBoxExerciseType.getEditor().promptTextProperty().unbind();
+        comboBoxExerciseType.getEditor().setPromptText("lalal");
     }
 
     @FXML
@@ -332,8 +406,62 @@ public class ProgramController implements Initializable {
         }
     }
 
-    public void SaveProgram(javafx.event.ActionEvent event) {
+    public void fillProgramsList() {
+        try {
+            ArrayList<ProgramData> programList = this.programModel.getPrograms(PatientHolder.getPersonNr());
+
+            Collections.reverse(programList);
+
+            if (!programList.isEmpty()) {
+                this.anchorPaneListOfPrograms.getChildren().clear();
+
+                GridPane gridPane = new GridPane();
+
+                for (ProgramData pd : programList) {
+                    Label label = new Label();
+                    label.setText(pd.getProgramName() + ", " + pd.getDateOfCreation());
+
+                    // set bigger top padding to the first row only
+                    if (programList.indexOf(pd) == 0) {
+                        label.setPadding(new Insets(50, 40, 0, 40));
+                        label.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
+                    }
+                    else {
+                        label.setPadding(new Insets(10, 40, 0, 40));
+                        label.setStyle("-fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
+                    }
+                    // TODO: on click event
+
+                    gridPane.add(label, 1, programList.indexOf(pd) + 1);
+                }
+                anchorPaneListOfPrograms.getChildren().add(0, gridPane);
+            }
+            else {
+                lblTemp.setText("Det bfinns inga program");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void SaveProgram(javafx.event.ActionEvent event) throws SQLException {
         this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
+
+        int rowsInserted = this.programModel.newProgram(PatientHolder.getPersonNr(), exercisesList, textFieldNameOfProgram.getText());
+
+        if (rowsInserted==1){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Nytt program sparat");
+            alert.setHeaderText("Det gick ju bra!");
+            alert.show();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Nya programmet skapades INTE");
+            alert.setHeaderText("Något gick snett!");
+            alert.show();
+        }
+
+        // TODO: display the program on left hand side
+        // TODO: goto program details anchorpane
     }
 
     public void CancelAddProgram(javafx.event.ActionEvent event) {
