@@ -48,4 +48,14 @@ public class Navigation {
             e.printStackTrace();
         }
     }
+
+    public void navigateToProgramDetails(Button button) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/programDetails/programDetails.fxml"));
+            Stage window = (Stage) button.getScene().getWindow();
+            window.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package journal;
 
+import helpers.JavaFxHelper;
 import helpers.Navigation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,7 @@ import java.util.ResourceBundle;
 public class JournalController implements Initializable {
     JournalModel journalModel = new JournalModel();
     Navigation navigation = new Navigation();
+    JavaFxHelper javaFxHelper = new JavaFxHelper();
 
     // left menu
     @FXML
@@ -55,6 +57,8 @@ public class JournalController implements Initializable {
     public Button btnNewJournal;
     @FXML
     public Button btnNewProgram;
+    @FXML
+    public Button btnShowPrograms;
 
     // journal notes
     @FXML
@@ -133,7 +137,7 @@ public class JournalController implements Initializable {
                         textAreaJournalNotes.setText(jd.getInformation());
 
                         // Set All Labels text to default color
-                        resetGridPaneLabelsTextFill(gridPane);
+                        javaFxHelper.resetGridPaneLabelsTextFill(gridPane);
 
                         label.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
                     });
@@ -153,19 +157,6 @@ public class JournalController implements Initializable {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
-    }
-
-    private void resetGridPaneLabelsTextFill(GridPane gridPane){
-        int gridPaneHeight = gridPane.getChildren().size();
-
-        for (int row = 0; row < gridPaneHeight; row++){
-            // Get Node from gridPane
-            Node n = gridPane.getChildren().get(row);
-            // Cast to Label
-            Label l = (Label) n;
-            // Set default style
-            l.setStyle("-fx-text-fill: " + StylingLayout.ITEMS_IN_LEFT_MENU_TEXT_FILL);
         }
     }
 
@@ -210,9 +201,6 @@ public class JournalController implements Initializable {
 
             // update list of journals listArray
             fillJournalsList();
-            // TODO
-            // Select updated row
-            //selectRowInJournalsList(date);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ändringarna i journalen sparades");
             alert.setHeaderText("Det gick ju bra!");
@@ -227,19 +215,10 @@ public class JournalController implements Initializable {
 
     public void ShowNewProgram(javafx.event.ActionEvent event) {
         navigation.navigateToPrograms(btnNewProgram);
+    }
 
-        /* try {
-            // TODO: load exercises fxml
-            // AnchorPane paneAddPatient = FXMLLoader.load(getClass().getResource("/patientAdd/patientAdd.fxml"));
-            // rootPane.getChildren().setAll(paneAddPatient);
-
-
-            Parent root = FXMLLoader.load(getClass().getResource("/program/program.fxml"));
-            Stage window = (Stage) btnNewProgram.getScene().getWindow();
-            window.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } */
+    public void ShowPrograms(javafx.event.ActionEvent event) {
+        navigation.navigateToProgramDetails(btnShowPrograms);
     }
 
     public void GoToExercises(javafx.event.ActionEvent event) {
