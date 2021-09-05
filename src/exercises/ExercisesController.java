@@ -25,7 +25,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ExercisesController implements Initializable {
-    Navigation navigation = new Navigation();
+/******************************
+ * 
+ * dummy comment
+ * 
+ ******************************/
+	Navigation navigation = new Navigation();
 
     @FXML
     private AnchorPane rootPane;
