@@ -22,7 +22,7 @@
       <TableView fx:id="tableViewExercises" layoutX="113.0" layoutY="234.0" prefHeight="422.0" prefWidth="744.0">
         <columns>
           <TableColumn fx:id="tableColumnExerciseName" prefWidth="170.0" text="Övningens namn" />
-          <TableColumn fx:id="tableColumnExerciseName" prefWidth="170.0" text="Kroppsdel" />
+          <TableColumn fx:id="tableColumnBodyPart" prefWidth="170.0" text="Kroppsdel" />
           <TableColumn fx:id="tableColumnType" prefWidth="170.0" text="Typ av övning" />
           <TableColumn fx:id="tableColumnDescription" prefWidth="170.0" text="Beskrivning" />
           <TableColumn fx:id="tableColumnDelete" prefWidth="62.0" text="Ta bort" />

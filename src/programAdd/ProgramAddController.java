@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.jetbrains.annotations.NotNull;
 import resources.StylingLayout;
 import java.net.URL;
 import java.sql.Connection;
@@ -16,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProgramAddController implements Initializable {
@@ -281,9 +283,9 @@ public class ProgramAddController implements Initializable {
         // fill columns in exercises table view
         this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
 
-        if (!bodyPartSelected.isEmpty()) {this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));}
+        if (bodyPartSelected != null) {this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));}
 
-        if (!typeSelected.isEmpty()) {this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));}
+        if (typeSelected != null) {this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));}
 
         // this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
 
