@@ -118,13 +118,16 @@ public class ProgramController implements Initializable {
         try {
             ArrayList<ProgramData> programList = this.programModel.getPrograms(PatientHolder.getPersonNr());
 
-            // set the newest program name as header and program info
-            lblProgramName.setText(programList.get(programList.size() - 1).getProgramName());
-            textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
+            if (programList.isEmpty()) {
+                lblProgramName.setText("Det finns inga program");
+            }
+            else {
+                // set the newest program name as header and program info
+                lblProgramName.setText(programList.get(programList.size() - 1).getProgramName());
+                textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
 
-            Collections.reverse(programList);
+                Collections.reverse(programList);
 
-            if (!programList.isEmpty()) {
                 this.anchorPaneListOfPrograms.getChildren().clear();
 
                 GridPane gridPane = new GridPane();
@@ -157,9 +160,7 @@ public class ProgramController implements Initializable {
                 }
                 anchorPaneListOfPrograms.getChildren().add(0, gridPane);
             }
-            else {
-                lblProgramName.setText("Det finns inga program");
-            }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
