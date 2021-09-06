@@ -8,10 +8,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1046.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1046.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programEdit.ProgramEditController">
    <children>
-      <AnchorPane fx:id="anchorPaneJournalNotes" prefHeight="720.0" prefWidth="1046.0">
+      <AnchorPane fx:id="anchorPaneJournalNotes" prefHeight="824.0" prefWidth="1046.0">
          <children>
             <Button fx:id="btnCreateProgram" layoutX="562.0" layoutY="56.0" mnemonicParsing="false" onAction="#AddProgramData" prefHeight="25.0" prefWidth="131.0" text="Skapa nytt program" />
             <Label fx:id="lblProgramHeader" layoutX="103.0" layoutY="118.0" prefHeight="17.0" prefWidth="816.0" text="Välj övningar och klicka Skapa nytt program. Filtrera övningar efter Typ av övning och Kroppsdel." />

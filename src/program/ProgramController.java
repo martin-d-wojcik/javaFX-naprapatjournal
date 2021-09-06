@@ -42,6 +42,8 @@ public class ProgramController implements Initializable {
     // temp
     @FXML
     private Label lblTemp;
+    @FXML
+    private AnchorPane rootPane;
 
     // left menu
     @FXML
@@ -78,8 +80,6 @@ public class ProgramController implements Initializable {
     // header
     @FXML
     private Label lblPatientName;
-
-    // sql queires
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -163,6 +163,18 @@ public class ProgramController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void NewProgram(javafx.event.ActionEvent event) {
+        lblTemp.setText("Nytt program clicked");
+
+        AnchorPane paneNewProgram = null;
+        try {
+            paneNewProgram = FXMLLoader.load(getClass().getResource("/programAdd/programAdd.fxml"));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        rootPane.getChildren().setAll(paneNewProgram);
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {
