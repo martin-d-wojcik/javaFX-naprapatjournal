@@ -4,6 +4,9 @@ import dbUtil.dbConnection;
 import exercises.ExerciseData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -59,13 +62,14 @@ public class ProgramAddController implements Initializable {
     @FXML
     private TableColumn<ExerciseData, String> tableColumnDelete;
 
-    // sql queires
+    // sql queiries
     private String sqlQueryExerciseType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryExerciseBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
     private String sqlQueryExerciseName = "SELECT exerciseName from exercise";
     private String sqlQueryExerciseByType = "SELECT exerciseName from exercise WHERE type=?";
     private String sqlQueryExerciseByBodypart = "SELECT * from exercise WHERE bodyPart=?";
     private String sqlQueryExerciseByTtypeAndBodyPart = "SELECT * from exercise WHERE bodyPart=? AND type=?";
+    private String sqlQueryDescription = "SELECT description FROM exercise WHERE exerciseName=? ";
 
 
     @Override
@@ -107,107 +111,70 @@ public class ProgramAddController implements Initializable {
         }
     }
 
-    // combo box selections
-    public void TypeOfExerciseSelected(javafx.event.ActionEvent event) {
-        typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
-    	
-        comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByType, typeSelected)));
-        /*
-         * new
-         */
-        refillCurrentRow(currentListIndex);
-    }
-
-    public void BodyPartSelected(javafx.event.ActionEvent event) {
-        if(typeSelected == null) {
-            bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
-
-            comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByBodypart, bodyPartSelected)));
-        }
-        else {
-            comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByTtypeAndBodyPart, bodyPartSelected, typeSelected)));
-        }
-        /*
-         * new
-         */
-        refillCurrentRow(currentListIndex);
-
-    }
-
-    public void ExerciseSelected(javafx.event.ActionEvent event) {
-        /*
-         * new
-         */
-        refillCurrentRow(currentListIndex);
-    }
-    
-    /*
-     * new
-     */
-	private void refillCurrentRow(int currentListIndex) {
-    	exerciseNameSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
-        bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
-        typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
-        description = "dummy description";
-        
-    	/*
-    	 * Clear current row because it is probably not complete,
-    	 * and refill with newly selected combo content.
-    	 */
-		if (exercisesList.size() > currentListIndex){
-			exercisesList.remove(currentListIndex);
-		}
-		// add selected items to exercise list
-		exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description));
-		   
-		// fill columns names in exercises table view
-		this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
-		this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
-		this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
-		this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
-		
-		this.tableViewExercises.setItems(null);
-		this.tableViewExercises.setItems(exercisesList);
-		
-	}
-	
-    /*
-     * new, not used 
-     */
-	private void saveExercise(){
-		if((exerciseNameSelected != null) && (bodyPartSelected != null) &&
-				(typeSelected != null) && (description != null)) {			
-			/*
-			 * run addExerciseQuery
-			 */
-			// Next row index
-			// INCREMENT currentListIndex and you can fill NEXT ROW
-			currentListIndex++;
+	// combo box selections
+	public void TypeOfExerciseSelected(javafx.event.ActionEvent event) {
+		// 2021-09-11
+		typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
+		if (bodyPartSelected == null) {
+			comboBoxNameOfExercise
+					.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByType, typeSelected)));
+		} else {
+			comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(
+					getExerciseData(sqlQueryExerciseByTtypeAndBodyPart, bodyPartSelected, typeSelected)));
 		}
 	}
-	
-    /*
-     * new, just in case, not necessary
-     */
-    private void readComboSelections() {
-    	exerciseNameSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
-        bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
-        typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
-        description = "dummy description";
-        
-///        if (exerciseNameSelected == null) {	exerciseNameSelected = "??"; }
-///        if (bodyPartSelected == null) {	bodyPartSelected = "??"; }
-///        if (typeSelected == null) { typeSelected = "??"; }		
+
+	public void BodyPartSelected(javafx.event.ActionEvent event) {
+		// 2021-09-11
+		bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
+		if (typeSelected == null) {
+			comboBoxNameOfExercise.setItems(
+					FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByBodypart, bodyPartSelected)));
+		} else {
+			comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(
+					getExerciseData(sqlQueryExerciseByTtypeAndBodyPart, bodyPartSelected, typeSelected)));
+		}
+	}
+
+	public void ExerciseSelected(javafx.event.ActionEvent event) {
+		exerciseNameSelected = comboBoxNameOfExercise.getSelectionModel().getSelectedItem();
+
+		if (exerciseNameSelected != null) {
+
+			description = getExerciseDescription(exerciseNameSelected);
+
+			// add selected items to exercise list
+			exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description));
+
+			// fill columns names in exercises table view
+			this.tableColumnExerciseName
+					.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
+			this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
+			this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
+			this.tableColumnDescription
+					.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
+
+			this.tableViewExercises.setItems(null);
+			this.tableViewExercises.setItems(exercisesList);
+		}
 	}
 
 	private void setComboBoxesToDefault() {
-        comboBoxExerciseType.setItems(FXCollections.observableArrayList(getExerciseTypeData()));
-        comboBoxExerciseType.getSelectionModel().clearSelection();
-        comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
-        comboBoxExerciseBodyPart.getSelectionModel().clearSelection();
-        comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
-        comboBoxNameOfExercise.getSelectionModel().clearSelection();
-    }
+
+		comboBoxExerciseType.setItems(FXCollections.observableArrayList(getExerciseTypeData()));
+		comboBoxExerciseType.getSelectionModel().clearSelection();
+		comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
+		comboBoxExerciseBodyPart.getSelectionModel().clearSelection();
+		/*
+		 * Prevent to fire onAction event when changing comboBoxNameOfExercise
+		 * items
+		 */
+		EventHandler<ActionEvent> handler = comboBoxNameOfExercise.getOnAction(); // save onAction handler
+		comboBoxNameOfExercise.setOnAction(null); // disable onAction
+		comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
+		comboBoxNameOfExercise.getSelectionModel().clearSelection();
+		comboBoxNameOfExercise.setOnAction(handler); // enable onAction again
+	}
 
     public void RestoreExerciseComboBox(javafx.event.ActionEvent event) {
         // comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
@@ -221,6 +188,8 @@ public class ProgramAddController implements Initializable {
     private void resetSelectionData() {
         typeSelected = null;
         bodyPartSelected = null;
+        exerciseNameSelected = null;
+        description = null;
     }
 
     // TODO: move to ProgramAddModel
@@ -275,35 +244,35 @@ public class ProgramAddController implements Initializable {
         }
     }
 
-    public List<String> getExerciseData(String sqlQuery, String queryFirst, String querySecond) {
-        List<String> options = new ArrayList<>();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        Connection conn = null;
+	public List<String> getExerciseData(String sqlQuery, String queryFirst, String querySecond) {
+		List<String> options = new ArrayList<>();
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Connection conn = null;
 
-        try {
-            conn = dbConnection.getConnection();
-            assert conn != null;
+		try {
+			conn = dbConnection.getConnection();
+			assert conn != null;
 
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, queryFirst);
-            preparedStatement.setString(1, querySecond);
+			preparedStatement = conn.prepareStatement(sqlQuery);
+			preparedStatement.setString(1, queryFirst);
+			preparedStatement.setString(2, querySecond);
 
-            resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                options.add(resultSet.getString("exerciseName"));
-            }
+			while (resultSet.next()) {
+				options.add(resultSet.getString("exerciseName"));
+			}
 
-            resultSet.close();
+			resultSet.close();
 
-            return options;
+			return options;
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 
     public List<String> getExerciseBodyPartData() {
         List<String> options = new ArrayList<>();
@@ -349,5 +318,31 @@ public class ProgramAddController implements Initializable {
         }
     }
 
+	public String getExerciseDescription(String exercName) {
+		String descr = "";
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 
+		try {
+			Connection conn = dbConnection.getConnection();
+			assert conn != null;
+
+			preparedStatement = conn.prepareStatement(sqlQueryDescription);
+			preparedStatement.setString(1, exercName);
+
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				descr = resultSet.getString("description");
+			}
+
+			resultSet.close();
+
+			return descr;
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 }
