@@ -42,6 +42,8 @@ public class ProgramController implements Initializable {
     // temp
     @FXML
     private Label lblTemp;
+    @FXML
+    private AnchorPane rootPane;
 
     // left menu
     @FXML
@@ -78,8 +80,6 @@ public class ProgramController implements Initializable {
     // header
     @FXML
     private Label lblPatientName;
-
-    // sql queires
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -118,13 +118,18 @@ public class ProgramController implements Initializable {
         try {
             ArrayList<ProgramData> programList = this.programModel.getPrograms(PatientHolder.getPersonNr());
 
-            // set the newest program name as header and program info
-            lblProgramName.setText(programList.get(programList.size() - 1).getProgramName());
-            textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
+            if (programList.isEmpty()) {
+                lblProgramName.setText("Det finns inga program");
+            }
+            else {
+                // set the newest program name as header and program info
+                lblProgramName.setText(programList.get(programList.size() - 1).getProgramName());
+///                textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
+                // 2021-09-17
+                textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation().replace("; ", "\n").replace(";", "\n"));
 
-            Collections.reverse(programList);
+                Collections.reverse(programList);
 
-            if (!programList.isEmpty()) {
                 this.anchorPaneListOfPrograms.getChildren().clear();
 
                 GridPane gridPane = new GridPane();
@@ -148,7 +153,9 @@ public class ProgramController implements Initializable {
                         javaFxHelper.resetGridPaneLabelsTextFill(gridPane);
 
                         lblProgramName.setText(pd.getProgramName());
-                        textAreaJournalNotes.setText(pd.getInformation());
+                        ///textAreaJournalNotes.setText(pd.getInformation());
+                        //2021-09-17
+                        textAreaJournalNotes.setText(pd.getInformation().replace("; ", "\n").replace(";", "\n"));
 
                         label.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
                     });
@@ -157,12 +164,22 @@ public class ProgramController implements Initializable {
                 }
                 anchorPaneListOfPrograms.getChildren().add(0, gridPane);
             }
-            else {
-                lblProgramName.setText("Det finns inga program");
-            }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void NewProgram(javafx.event.ActionEvent event) {
+        lblTemp.setText("Nytt program clicked");
+
+        AnchorPane paneNewProgram = null;
+        try {
+            paneNewProgram = FXMLLoader.load(getClass().getResource("/programAdd/programAdd.fxml"));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        rootPane.getChildren().setAll(paneNewProgram);
     }
 
     public void GoToPatients(javafx.event.ActionEvent event) {
