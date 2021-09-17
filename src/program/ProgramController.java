@@ -1,37 +1,22 @@
 package program;
 
-import dbUtil.dbConnection;
-import exercises.ExerciseData;
 import helpers.JavaFxHelper;
 import helpers.Navigation;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import journal.JournalData;
-import patients.PatientData;
 import patients.PatientHolder;
 import resources.StylingLayout;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProgramController implements Initializable {
@@ -119,7 +104,20 @@ public class ProgramController implements Initializable {
             ArrayList<ProgramData> programList = this.programModel.getPrograms(PatientHolder.getPersonNr());
 
             if (programList.isEmpty()) {
-                lblProgramName.setText("Det finns inga program");
+                lblProgramName.setText("Klicka Nytt program för att skapa ett program.");
+
+                // display no programs message in left menu
+                Label label = new Label();
+                label.setText(PatientHolder.getFirstName() + " " + PatientHolder.getLastName()
+                        + " har inga program.");
+                label.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL); // + "fx-font-weight: bold");
+                label.setPadding(new Insets(50, 40, 0, 40));
+
+                anchorPaneListOfPrograms.getChildren().add(0, label);
+
+                textAreaJournalNotes.setVisible(false);
+                btnSaveProgram.setVisible(false);
+                btnDeleteProgram.setVisible(false);
             }
             else {
                 // set the newest program name as header and program info

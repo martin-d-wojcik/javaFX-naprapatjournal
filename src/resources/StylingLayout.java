@@ -12,6 +12,7 @@ public final class StylingLayout {
         public static final String ITEMS_IN_LEFT_MENU_TEXT_FILL = "#CCCFCF";
         public static final String ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL = "#D28A0C";
         public static final String ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND = "#272828";
+        public static final String WARNING_TEXT_FILL = "#FF0400";
 
         public static void stylingLeftMenu(String sceneName, Label lblUserLoggedInHeader,
                                            AnchorPane anchorPaneLeftmenu, Button btnPatients, Button btnJournals,
