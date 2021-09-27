@@ -2,6 +2,7 @@ package programAdd;
 
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 //import org.jetbrains.annotations.NotNull;
 import resources.StylingLayout;
 import java.net.URL;
@@ -60,8 +62,13 @@ public class ProgramAddController implements Initializable {
     @FXML
     private TableColumn<ExerciseData, String> tableColumnEdit;
     @FXML
-    private TableColumn<ExerciseData, String> tableColumnDelete;
+//    private TableColumn<ExerciseData, String> tableColumnDelete;
+    private TableColumn<?, ?> tableColumnDelete;
+    
+//    private final int TABLE_DELETE_COLUMN_NR = 5;
+  //  private final String exerciseDelete = "[ Radera ]";
 
+    
     // sql queiries
     private String sqlQueryExerciseType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryExerciseBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
@@ -144,16 +151,17 @@ public class ProgramAddController implements Initializable {
 			description = getExerciseDescription(exerciseNameSelected);
 
 			// add selected items to exercise list
-			exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description));
+			exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description)); //, exerciseDelete));
 
 			// fill columns names in exercises table view
-			this.tableColumnExerciseName
-					.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
+			this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
 			this.tableColumnBodyPart.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("bodyPart"));
 			this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
-			this.tableColumnDescription
-					.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
+			this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
 
+// 2021-09-17
+			addDeleteButtonsToTable();
+			
 			this.tableViewExercises.setItems(null);
 			this.tableViewExercises.setItems(exercisesList);
 		}
@@ -345,4 +353,49 @@ public class ProgramAddController implements Initializable {
 			return null;
 		}
 	}
+	
+	/*
+	 *  2021-09-17
+	 */
+	private void addDeleteButtonsToTable() {
+		
+		if(tableViewExercises.getColumns().size() == 5){
+			// remove last column, than restore it adding new row
+			tableViewExercises.getColumns().remove(4);
+		}
+		
+        TableColumn<ExerciseData, Void> colBtn = new TableColumn("Ta bort");
+
+        Callback<TableColumn<ExerciseData, Void>, TableCell<ExerciseData, Void>> cellFactory = new Callback<TableColumn<ExerciseData, Void>, TableCell<ExerciseData, Void>>() {
+            @Override
+            public TableCell<ExerciseData, Void> call(final TableColumn<ExerciseData, Void> param) {
+                final TableCell<ExerciseData, Void> cell = new TableCell<ExerciseData, Void>() {
+
+                    private final Button btn = new Button("Radera");
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                        	ExerciseData data = getTableView().getItems().get(getIndex());
+                            tableViewExercises.getItems().remove(getIndex());
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colBtn.setCellFactory(cellFactory);
+
+        tableViewExercises.getColumns().add(colBtn);
+
+    }
 }
