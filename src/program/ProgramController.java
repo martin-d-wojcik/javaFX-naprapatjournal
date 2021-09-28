@@ -1,22 +1,37 @@
 package program;
 
+import dbUtil.dbConnection;
+import exercises.ExerciseData;
 import helpers.JavaFxHelper;
 import helpers.Navigation;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import journal.JournalData;
+import patients.PatientData;
 import patients.PatientHolder;
 import resources.StylingLayout;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProgramController implements Initializable {
@@ -58,6 +73,8 @@ public class ProgramController implements Initializable {
     @FXML
     private Button btnNewProgram;
     @FXML
+    private Button btnRestoreText;
+    @FXML
     private Button btnSaveProgram;
     @FXML
     private Button btnDeleteProgram;
@@ -66,6 +83,8 @@ public class ProgramController implements Initializable {
     @FXML
     private Label lblPatientName;
 
+    private String information_origin = "";
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         StylingLayout.stylingLeftMenu("program", lblUserLoggedInHeader, anchorPaneLeftmenu, btnPatients,
@@ -87,6 +106,11 @@ public class ProgramController implements Initializable {
         btnNewProgram.setStyle("-fx-background-color:  " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-font-weight: bold");
+
+        btnRestoreText.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
+                + "; -fx-font-weight: bold");
+        btnRestoreText.setVisible(false);
         btnSaveProgram.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
@@ -94,9 +118,37 @@ public class ProgramController implements Initializable {
         btnDeleteProgram.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
+        
+    	lblTemp.setText("");
 
         // populate list of programs
         fillProgramsList();
+        
+        /*****************************************
+         * Add Text_Listener to TextArea
+         *****************************************/
+        textAreaJournalNotes.textProperty().addListener((obs, oldText, newText) -> {
+            if(newText.equals(information_origin)){
+                textAreaJournalNotes.setStyle("-fx-text-inner-color: #000000;");
+                btnSaveProgram.setVisible(false);
+                btnRestoreText.setVisible(false);
+                lblTemp.setText("");
+            }
+            else{
+                textAreaJournalNotes.setStyle("-fx-text-inner-color: #0000FF;");
+                btnSaveProgram.setVisible(true);
+                btnRestoreText.setVisible(true);
+
+                lblTemp.setText("textArea is changed !");
+	            // Warning: empty TextArea
+	            if(newText.trim().isEmpty()) { 
+	            	//lblTemp.visibleProperty().setValue(true);
+	            	lblTemp.setText("textArea has changed, BUT IS EMPTY !");
+	            }
+            }
+            
+        });
+
     }
 
     public void fillProgramsList() {
@@ -104,26 +156,24 @@ public class ProgramController implements Initializable {
             ArrayList<ProgramData> programList = this.programModel.getPrograms(PatientHolder.getPersonNr());
 
             if (programList.isEmpty()) {
-                lblProgramName.setText("Klicka Nytt program för att skapa ett program.");
-
-                // display no programs message in left menu
-                Label label = new Label();
-                label.setText(PatientHolder.getFirstName() + " " + PatientHolder.getLastName()
-                        + " har inga program.");
-                label.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL); // + "fx-font-weight: bold");
-                label.setPadding(new Insets(50, 40, 0, 40));
-
-                anchorPaneListOfPrograms.getChildren().add(0, label);
-
-                textAreaJournalNotes.setVisible(false);
-                btnSaveProgram.setVisible(false);
-                btnDeleteProgram.setVisible(false);
+                lblProgramName.setText("Det finns inga program");
             }
             else {
                 // set the newest program name as header and program info
                 lblProgramName.setText(programList.get(programList.size() - 1).getProgramName());
-                textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
-
+                ///textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
+                /*
+                 * 2021-09-17
+                 * replace first space+semicolon with newline
+                 * replace semicolon between two words with newline
+                 */
+                textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation().replace("; ", "\n").replace(";", "\n"));
+                /* 2021-09-21
+                 * save as origin text
+                information_origin = programList.get(programList.size() - 1).getInformation().replace("; ", "\n").replace(";", "\n");
+                textAreaJournalNotes.setText(information_origin);
+                 */
+                
                 Collections.reverse(programList);
 
                 this.anchorPaneListOfPrograms.getChildren().clear();
@@ -149,7 +199,19 @@ public class ProgramController implements Initializable {
                         javaFxHelper.resetGridPaneLabelsTextFill(gridPane);
 
                         lblProgramName.setText(pd.getProgramName());
-                        textAreaJournalNotes.setText(pd.getInformation());
+                        ///textAreaJournalNotes.setText(pd.getInformation());
+                        /*
+                         * 2021-09-17
+                         * replace first space+semicolon with newline
+                         * replace semicolon between two words with newline
+                         */                       
+         ///               textAreaJournalNotes.setText(pd.getInformation().replace("; ", "\n").replace(";", "\n"));
+                        /* 2021-09-21
+                         * save as origin text
+                         */
+                        information_origin = pd.getInformation().replace("; ", "\n").replace(";", "\n");
+                        textAreaJournalNotes.setText(information_origin);
+
 
                         label.setStyle("-fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL);
                     });
@@ -176,6 +238,10 @@ public class ProgramController implements Initializable {
         rootPane.getChildren().setAll(paneNewProgram);
     }
 
+    public void RestoreText(javafx.event.ActionEvent event) {
+    	textAreaJournalNotes.setText(information_origin);
+    } 
+    
     public void GoToPatients(javafx.event.ActionEvent event) {
         this.navigation.navigateToPatients(btnPatients);
     }
