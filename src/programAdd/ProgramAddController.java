@@ -2,6 +2,7 @@ package programAdd;
 
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
+import helpers.Navigation;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +28,7 @@ import java.util.ResourceBundle;
 
 public class ProgramAddController implements Initializable {
     ObservableList<ExerciseData> exercisesList = FXCollections.observableArrayList();
+    Navigation navigation = new Navigation();
     String typeSelected;
     String bodyPartSelected;
     String exerciseNameSelected;
@@ -62,13 +64,12 @@ public class ProgramAddController implements Initializable {
     @FXML
     private TableColumn<ExerciseData, String> tableColumnEdit;
     @FXML
-//    private TableColumn<ExerciseData, String> tableColumnDelete;
     private TableColumn<?, ?> tableColumnDelete;
-    
-//    private final int TABLE_DELETE_COLUMN_NR = 5;
-  //  private final String exerciseDelete = "[ Radera ]";
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnCancel;
 
-    
     // sql queiries
     private String sqlQueryExerciseType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryExerciseBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
@@ -96,6 +97,14 @@ public class ProgramAddController implements Initializable {
                 + "; -fx-font-weight: bold");
         btnRestore.setVisible(false);
         tableViewExercises.setVisible(false);
+        btnSave.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
+                + "; -fx-font-weight: bold");
+        btnSave.setVisible(false);
+        btnCancel.setStyle("-fx-background-color:  " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
+                + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-font-weight: bold");
+        btnCancel.setVisible(false);
 
         // populate combo boxes
         setComboBoxesToDefault();
@@ -113,9 +122,14 @@ public class ProgramAddController implements Initializable {
             comboBoxNameOfExercise.setVisible(true);
             btnRestore.setVisible(true);
             tableViewExercises.setVisible(true);
-            /* btnSaveProgram.setVisible(true);
-            lblProgramNameWarning.visibleProperty().setValue(false);*/
+            btnSave.setVisible(true);
+            btnCancel.setVisible(true);
+            // lblProgramNameWarning.visibleProperty().setValue(false);
         }
+    }
+
+    public void CancelAddProgram(javafx.event.ActionEvent event) {
+        navigation.navigateToJournals(btnCancel);
     }
 
 	// combo box selections
@@ -168,7 +182,6 @@ public class ProgramAddController implements Initializable {
 	}
 
 	private void setComboBoxesToDefault() {
-
 		comboBoxExerciseType.setItems(FXCollections.observableArrayList(getExerciseTypeData()));
 		comboBoxExerciseType.getSelectionModel().clearSelection();
 		comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));

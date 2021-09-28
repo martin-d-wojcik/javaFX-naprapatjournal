@@ -28,5 +28,7 @@
           <TableColumn fx:id="tableColumnDelete" prefWidth="62.0" text="Ta bort" />
         </columns>
       </TableView>
+      <Button fx:id="btnSave" layoutX="753.0" layoutY="690.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" text="Spara" />
+      <Button fx:id="btnCancel" layoutX="629.0" layoutY="690.0" mnemonicParsing="false" onAction="#CancelAddProgram" prefHeight="25.0" prefWidth="104.0" text="Avbryt" />
    </children>
 </AnchorPane>
