@@ -3,18 +3,17 @@ package programAdd;
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
 import helpers.Navigation;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 //import org.jetbrains.annotations.NotNull;
+import patients.PatientHolder;
 import resources.StylingLayout;
 import java.net.URL;
 import java.sql.Connection;
@@ -23,12 +22,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProgramAddController implements Initializable {
     ObservableList<ExerciseData> exercisesList = FXCollections.observableArrayList();
     Navigation navigation = new Navigation();
+    ProgramAddModel programAddModel = new ProgramAddModel();
     String typeSelected;
     String bodyPartSelected;
     String exerciseNameSelected;
@@ -79,7 +78,6 @@ public class ProgramAddController implements Initializable {
     private String sqlQueryExerciseByTtypeAndBodyPart = "SELECT * from exercise WHERE bodyPart=? AND type=?";
     private String sqlQueryDescription = "SELECT description FROM exercise WHERE exerciseName=? ";
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnCreateProgram.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
@@ -126,6 +124,44 @@ public class ProgramAddController implements Initializable {
             btnCancel.setVisible(true);
             // lblProgramNameWarning.visibleProperty().setValue(false);
         }
+    }
+
+    public void SaveProgram(javafx.event.ActionEvent event) throws SQLException {
+        Connection conn = dbConnection.getConnection();
+
+        // get all selected exercises from the tableView
+        TableColumn<ExerciseData, String> column = tableColumnExerciseName;
+
+        StringBuilder listOfExercises = new StringBuilder();
+        for (ExerciseData item : tableViewExercises.getItems()) {
+            listOfExercises.append(tableColumnExerciseName.getCellObservableValue(item).getValue());
+            listOfExercises.append("; ");
+        }
+
+        int rowsInserted = this.programAddModel.addNewProgramToDb(listOfExercises.toString(), textFieldNameOfProgram.getText());
+
+        if (rowsInserted==1){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Programmet sparat.");
+            alert.setHeaderText("Det gick ju bra.");
+            alert.show();
+
+            navigation.navigateToPrograms(btnSave);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Programmet skapades inte");
+            alert.setHeaderText("Något gick snett!");
+            alert.show();
+        }
+
+        // execute query
+        /* assert conn != null;
+        PreparedStatement prepStmt = conn.prepareStatement(sqlQuerySaveProgram);
+        prepStmt.setString(1, PatientHolder.getPersonNr());
+        prepStmt.setString(2, listOfExercises.toString());
+        prepStmt.setString(3, textFieldNameOfProgram.getText());
+
+        prepStmt.executeUpdate();
+        prepStmt.close(); */
     }
 
     public void CancelAddProgram(javafx.event.ActionEvent event) {
