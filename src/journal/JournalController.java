@@ -103,6 +103,7 @@ public class JournalController implements Initializable {
         btnSaveChanges.setStyle("-fx-background-color:  " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_BACKGROUND
                 + "; -fx-font-weight: bold");
+        btnSaveChanges.setVisible(false);
 
         fillJournalsList();
     }
