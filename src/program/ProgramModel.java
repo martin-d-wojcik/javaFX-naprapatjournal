@@ -3,9 +3,7 @@ package program;
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
 import javafx.collections.ObservableList;
-import journal.JournalData;
 import org.jetbrains.annotations.NotNull;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +28,32 @@ public class ProgramModel {
         }
     }
 
+    public int deleteProgramFromDb(String personNr, String programName) throws SQLException {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+
+        String sqlQueryDeleteProgram = "DELETE FROM program WHERE personNr=? AND programName=?";
+
+        int rowsInserted = 0;
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryDeleteProgram);
+            pr.setString(1, personNr);
+            pr.setString(2, programName);
+
+            rowsInserted = pr.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+
+        }
+        return rowsInserted;
+    }
+
     public ArrayList<ProgramData> getPrograms(String personNr) throws SQLException {
         ArrayList<ProgramData> programList = new ArrayList<ProgramData>();
         PreparedStatement pr = null;
@@ -47,7 +71,6 @@ public class ProgramModel {
 
             // if (rs.next()) {
             while (rs.next()) {
-                // JournalData journalData = new JournalData(rs.getString(2), rs.getString(1));
                 ProgramData programData = new ProgramData(rs.getString(1), rs.getString(2), rs.getString(3));
                 programList.add(programData);
             }

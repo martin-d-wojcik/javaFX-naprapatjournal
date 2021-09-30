@@ -39,7 +39,7 @@
             <Button fx:id="btnNewProgram" layoutX="804.0" layoutY="63.0" mnemonicParsing="false" onAction="#NewProgram" prefHeight="25.0" prefWidth="105.0" text="Nytt program" />
             <Button fx:id="btnRestoreText" layoutX="524.0" layoutY="735.0" mnemonicParsing="false" onAction="#RestoreText" prefHeight="25.0" prefWidth="105.0" text="Äterställ" />
             <Button fx:id="btnSaveProgram" layoutX="664.0" layoutY="735.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Spara" />
-            <Button fx:id="btnDeleteProgram" layoutX="804.0" layoutY="735.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Ta bort" />
+            <Button fx:id="btnDeleteProgram" layoutX="804.0" layoutY="735.0" mnemonicParsing="false" onAction="#DeleteProgram" prefHeight="25.0" prefWidth="105.0" text="Ta bort" />
          </children>
       </AnchorPane>
    </children>

@@ -127,8 +127,6 @@ public class ProgramAddController implements Initializable {
     }
 
     public void SaveProgram(javafx.event.ActionEvent event) throws SQLException {
-        Connection conn = dbConnection.getConnection();
-
         // get all selected exercises from the tableView
         TableColumn<ExerciseData, String> column = tableColumnExerciseName;
 
@@ -138,7 +136,8 @@ public class ProgramAddController implements Initializable {
             listOfExercises.append("; ");
         }
 
-        int rowsInserted = this.programAddModel.addNewProgramToDb(listOfExercises.toString(), textFieldNameOfProgram.getText());
+        int rowsInserted = this.programAddModel.addNewProgramToDb(PatientHolder.getPersonNr(),
+                listOfExercises.toString(), textFieldNameOfProgram.getText());
 
         if (rowsInserted==1){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Programmet sparat.");
@@ -152,16 +151,6 @@ public class ProgramAddController implements Initializable {
             alert.setHeaderText("Något gick snett!");
             alert.show();
         }
-
-        // execute query
-        /* assert conn != null;
-        PreparedStatement prepStmt = conn.prepareStatement(sqlQuerySaveProgram);
-        prepStmt.setString(1, PatientHolder.getPersonNr());
-        prepStmt.setString(2, listOfExercises.toString());
-        prepStmt.setString(3, textFieldNameOfProgram.getText());
-
-        prepStmt.executeUpdate();
-        prepStmt.close(); */
     }
 
     public void CancelAddProgram(javafx.event.ActionEvent event) {
@@ -170,7 +159,6 @@ public class ProgramAddController implements Initializable {
 
 	// combo box selections
 	public void TypeOfExerciseSelected(javafx.event.ActionEvent event) {
-		// 2021-09-11
 		typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
 		if (bodyPartSelected == null) {
 			comboBoxNameOfExercise
@@ -182,7 +170,6 @@ public class ProgramAddController implements Initializable {
 	}
 
 	public void BodyPartSelected(javafx.event.ActionEvent event) {
-		// 2021-09-11
 		bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
 		if (typeSelected == null) {
 			comboBoxNameOfExercise.setItems(
@@ -209,7 +196,6 @@ public class ProgramAddController implements Initializable {
 			this.tableColumnType.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("type"));
 			this.tableColumnDescription.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("description"));
 
-// 2021-09-17
 			addDeleteButtonsToTable();
 			
 			this.tableViewExercises.setItems(null);
@@ -222,10 +208,8 @@ public class ProgramAddController implements Initializable {
 		comboBoxExerciseType.getSelectionModel().clearSelection();
 		comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
 		comboBoxExerciseBodyPart.getSelectionModel().clearSelection();
-		/*
-		 * Prevent to fire onAction event when changing comboBoxNameOfExercise
-		 * items
-		 */
+
+		// Prevent to fire onAction event when changing comboBoxNameOfExercise items
 		EventHandler<ActionEvent> handler = comboBoxNameOfExercise.getOnAction(); // save onAction handler
 		comboBoxNameOfExercise.setOnAction(null); // disable onAction
 		comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
@@ -234,11 +218,8 @@ public class ProgramAddController implements Initializable {
 	}
 
     public void RestoreExerciseComboBox(javafx.event.ActionEvent event) {
-        // comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
         resetSelectionData();
         setComboBoxesToDefault();
-        // comboBoxExerciseType.setStyle("fx-background-color: #ff5733");
-        // comboBoxExerciseType.getEditor().promptTextProperty().unbind();
         comboBoxExerciseType.getEditor().setPromptText("lalal");
     }
 

@@ -1,8 +1,6 @@
 package programAdd;
 
 import dbUtil.dbConnection;
-import patients.PatientHolder;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +24,7 @@ public class ProgramAddModel {
         }
     }
 
-    public int addNewProgramToDb(String listOfExercises, String programName) throws SQLException {
+    public int addNewProgramToDb(String personNr, String listOfExercises, String programName) throws SQLException {
         PreparedStatement pr = null;
         ResultSet rs = null;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
@@ -38,7 +36,7 @@ public class ProgramAddModel {
 
         try {
             pr = this.connection.prepareStatement(sqlQuerySaveProgram);
-            pr.setString(1, PatientHolder.getPersonNr());
+            pr.setString(1, personNr);
             pr.setString(2, listOfExercises);
             pr.setString(3, programName);
             pr.setString(4, timeStamp);

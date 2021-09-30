@@ -1,37 +1,21 @@
 package program;
 
-import dbUtil.dbConnection;
-import exercises.ExerciseData;
 import helpers.JavaFxHelper;
 import helpers.Navigation;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import journal.JournalData;
-import patients.PatientData;
 import patients.PatientHolder;
 import resources.StylingLayout;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProgramController implements Initializable {
@@ -123,10 +107,7 @@ public class ProgramController implements Initializable {
 
         // populate list of programs
         fillProgramsList();
-        
-        /*****************************************
-         * Add Text_Listener to TextArea
-         *****************************************/
+
         textAreaJournalNotes.textProperty().addListener((obs, oldText, newText) -> {
             if(newText.equals(information_origin)){
                 textAreaJournalNotes.setStyle("-fx-text-inner-color: #000000;");
@@ -146,9 +127,7 @@ public class ProgramController implements Initializable {
 	            	lblTemp.setText("textArea has changed, BUT IS EMPTY !");
 	            }
             }
-            
         });
-
     }
 
     public void fillProgramsList() {
@@ -161,19 +140,8 @@ public class ProgramController implements Initializable {
             else {
                 // set the newest program name as header and program info
                 lblProgramName.setText(programList.get(programList.size() - 1).getProgramName());
-                ///textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation());
-                /*
-                 * 2021-09-17
-                 * replace first space+semicolon with newline
-                 * replace semicolon between two words with newline
-                 */
                 textAreaJournalNotes.setText(programList.get(programList.size() - 1).getInformation().replace("; ", "\n").replace(";", "\n"));
-                /* 2021-09-21
-                 * save as origin text
-                information_origin = programList.get(programList.size() - 1).getInformation().replace("; ", "\n").replace(";", "\n");
-                textAreaJournalNotes.setText(information_origin);
-                 */
-                
+
                 Collections.reverse(programList);
 
                 this.anchorPaneListOfPrograms.getChildren().clear();
@@ -199,16 +167,6 @@ public class ProgramController implements Initializable {
                         javaFxHelper.resetGridPaneLabelsTextFill(gridPane);
 
                         lblProgramName.setText(pd.getProgramName());
-                        ///textAreaJournalNotes.setText(pd.getInformation());
-                        /*
-                         * 2021-09-17
-                         * replace first space+semicolon with newline
-                         * replace semicolon between two words with newline
-                         */                       
-         ///               textAreaJournalNotes.setText(pd.getInformation().replace("; ", "\n").replace(";", "\n"));
-                        /* 2021-09-21
-                         * save as origin text
-                         */
                         information_origin = pd.getInformation().replace("; ", "\n").replace(";", "\n");
                         textAreaJournalNotes.setText(information_origin);
 
@@ -236,6 +194,23 @@ public class ProgramController implements Initializable {
             exception.printStackTrace();
         }
         rootPane.getChildren().setAll(paneNewProgram);
+    }
+
+    public void DeleteProgram(javafx.event.ActionEvent event) throws SQLException {
+        int rowsInserted = this.programModel.deleteProgramFromDb(PatientHolder.getPersonNr(), lblProgramName.getText());
+
+        if (rowsInserted==1){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Programmet togs bort.");
+            alert.setHeaderText("Det gick ju bra.");
+            alert.show();
+
+            navigation.navigateToPrograms(btnDeleteProgram);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Programmet togs inte bort");
+            alert.setHeaderText("Något gick snett!");
+            alert.show();
+        }
     }
 
     public void RestoreText(javafx.event.ActionEvent event) {
