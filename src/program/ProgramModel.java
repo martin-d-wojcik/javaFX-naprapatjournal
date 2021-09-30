@@ -3,6 +3,8 @@ package program;
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
 import javafx.collections.ObservableList;
+import patients.PatientHolder;
+
 import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -88,7 +90,8 @@ public class ProgramModel {
     }
 
     public int newProgram(String personNr, @NotNull ObservableList<ExerciseData> listOfExercises, String programName) throws SQLException {
-        PreparedStatement pr = null;
+//    public int newProgram(String personNr, ObservableList<ExerciseData> listOfExercises, String programName) throws SQLException {
+    	PreparedStatement pr = null;
         ResultSet rs = null;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
         String exercises = "";
@@ -123,4 +126,32 @@ public class ProgramModel {
         }
         return rowsInserted;
     }
+
+    public int updateProgram(String listOfExercises, String programName) throws SQLException {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+
+        String sqlQueryUpdateProgram = "UPDATE program " +
+        							" SET information = ? " +
+        							" WHERE personNr = ? AND programName = ? ";
+
+        int rowsInserted = 0;
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryUpdateProgram);
+            pr.setString(1, listOfExercises);
+            pr.setString(2, PatientHolder.getPersonNr());
+            pr.setString(3, programName);
+            rowsInserted = pr.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+        }
+        return rowsInserted;
+    }
+
 }

@@ -13,10 +13,13 @@ import patients.PatientHolder;
 import resources.StylingLayout;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
+
+import dbUtil.dbConnection;
 
 public class ProgramController implements Initializable {
     ProgramModel programModel = new ProgramModel();
@@ -196,6 +199,26 @@ public class ProgramController implements Initializable {
         rootPane.getChildren().setAll(paneNewProgram);
     }
 
+    public void SaveProgram(javafx.event.ActionEvent event) throws SQLException {
+        // get all exercises from the textArea
+        String exerciseList = textAreaJournalNotes.getText().replace("\n", "; ");       
+
+        int rowsInserted = this.programModel.updateProgram(exerciseList, lblProgramName.getText());
+
+        if (rowsInserted==1){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Programmet uppdaterad.");
+            alert.setHeaderText("Det gick ju bra.");
+            alert.show();
+
+            navigation.navigateToPrograms(btnSaveProgram);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Programmet uppdaterades inte");
+            alert.setHeaderText("Något gick snett!");
+            alert.show();
+        }
+    }
+    
     public void DeleteProgram(javafx.event.ActionEvent event) throws SQLException {
         int rowsInserted = this.programModel.deleteProgramFromDb(PatientHolder.getPersonNr(), lblProgramName.getText());
 
