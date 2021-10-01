@@ -90,7 +90,6 @@ public class ProgramModel {
     }
 
     public int newProgram(String personNr, @NotNull ObservableList<ExerciseData> listOfExercises, String programName) throws SQLException {
-//    public int newProgram(String personNr, ObservableList<ExerciseData> listOfExercises, String programName) throws SQLException {
     	PreparedStatement pr = null;
         ResultSet rs = null;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
@@ -127,8 +126,8 @@ public class ProgramModel {
         return rowsInserted;
     }
 
-    public int updateProgram(String listOfExercises, String programName) throws SQLException {
-        PreparedStatement pr = null;
+    public int updateProgram(String personNr, String programName, String exercises) throws SQLException {
+    	PreparedStatement pr = null;
         ResultSet rs = null;
 
         String sqlQueryUpdateProgram = "UPDATE program " +
@@ -139,8 +138,8 @@ public class ProgramModel {
 
         try {
             pr = this.connection.prepareStatement(sqlQueryUpdateProgram);
-            pr.setString(1, listOfExercises);
-            pr.setString(2, PatientHolder.getPersonNr());
+            pr.setString(1, exercises);
+            pr.setString(2, personNr);
             pr.setString(3, programName);
             rowsInserted = pr.executeUpdate();
         }

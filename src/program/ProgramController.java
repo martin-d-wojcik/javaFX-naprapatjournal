@@ -203,7 +203,7 @@ public class ProgramController implements Initializable {
         // get all exercises from the textArea
         String exerciseList = textAreaJournalNotes.getText().replace("\n", "; ");       
 
-        int rowsInserted = this.programModel.updateProgram(exerciseList, lblProgramName.getText());
+        int rowsInserted = this.programModel.updateProgram(PatientHolder.getPersonNr(), lblProgramName.getText(), exerciseList);
 
         if (rowsInserted==1){
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Programmet uppdaterad.");
