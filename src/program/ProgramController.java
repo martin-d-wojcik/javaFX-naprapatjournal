@@ -13,13 +13,10 @@ import patients.PatientHolder;
 import resources.StylingLayout;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
-
-import dbUtil.dbConnection;
 
 public class ProgramController implements Initializable {
     ProgramModel programModel = new ProgramModel();
@@ -65,6 +62,8 @@ public class ProgramController implements Initializable {
     private Button btnSaveProgram;
     @FXML
     private Button btnDeleteProgram;
+    @FXML
+    private Button btnAddExercise;
 
     // header
     @FXML
@@ -103,6 +102,9 @@ public class ProgramController implements Initializable {
                 + "; -fx-font-weight: bold");
         btnSaveProgram.setVisible(false);
         btnDeleteProgram.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
+                + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
+                + "; -fx-font-weight: bold");
+        btnAddExercise.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
                 + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
         
