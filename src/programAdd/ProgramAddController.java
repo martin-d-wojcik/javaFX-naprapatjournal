@@ -12,8 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-//import org.jetbrains.annotations.NotNull;
 import patients.PatientHolder;
+import program.ProgramHolder;
 import resources.StylingLayout;
 import java.net.URL;
 import java.sql.Connection;
@@ -106,6 +106,33 @@ public class ProgramAddController implements Initializable {
 
         // populate combo boxes
         setComboBoxesToDefault();
+
+        if (ProgramHolder.getAddExercises()) {
+            textFieldNameOfProgram.setText(ProgramHolder.getProgramName());
+            lblProgramNameWarning.setVisible(false);
+            btnCreateProgram.setVisible(false);
+            lblProgramHeader.setVisible(false);
+            comboBoxExerciseType.setVisible(true);
+            comboBoxExerciseBodyPart.setVisible(true);
+            comboBoxNameOfExercise.setVisible(true);
+            btnRestore.setVisible(true);
+            tableViewExercises.setVisible(true);
+            btnSave.setVisible(true);
+            btnCancel.setVisible(true);
+
+            ObservableList<ExerciseData> exercisesAlreadyAdded = FXCollections.observableArrayList();
+
+            try {
+                exercisesAlreadyAdded = this.programAddModel.getExercisesAlreadySaved(PatientHolder.getPersonNr(), ProgramHolder.getProgramName());
+
+                // fill table view with exercises previously selected and saved
+                this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
+                this.tableViewExercises.setItems(null);
+                this.tableViewExercises.setItems(exercisesAlreadyAdded);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
     }
 
     public void AddProgramData(javafx.event.ActionEvent event) {

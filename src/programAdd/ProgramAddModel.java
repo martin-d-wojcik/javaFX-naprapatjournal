@@ -1,6 +1,9 @@
 package programAdd;
 
 import dbUtil.dbConnection;
+import exercises.ExerciseData;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,5 +56,46 @@ public class ProgramAddModel {
 
         }
         return rowsInserted;
+    }
+
+    public ObservableList<ExerciseData> getExercisesAlreadySaved(String personNr, String programName) throws SQLException {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+        String sqlQueryGetExercisesForPatient = "SELECT information FROM program WHERE personNr=? AND programName=?";
+        String[] exerciseSections = null;
+        ObservableList<ExerciseData> data = FXCollections.observableArrayList();
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryGetExercisesForPatient);
+            pr.setString(1, personNr);
+            pr.setString(2, programName);
+
+            rs = pr.executeQuery();
+
+            while (rs.next()) {
+                String exerciseInformation = rs.getString(1);
+
+                // save semo colon separated string to arrayList
+                exerciseSections = exerciseInformation.split(";");
+            }
+
+            // TODO: delete last empty entry in exerciseSections
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+        }
+
+        // insert strings into a ObservableList with ProgramData objects
+        assert exerciseSections != null;
+
+        for (String exercise : exerciseSections) {
+            data.add(new ExerciseData(exercise, "", "", ""));
+        }
+
+        return data;
     }
 }

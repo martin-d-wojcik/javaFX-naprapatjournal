@@ -40,7 +40,7 @@
             <Button fx:id="btnRestoreText" layoutX="524.0" layoutY="735.0" mnemonicParsing="false" onAction="#RestoreText" prefHeight="25.0" prefWidth="105.0" text="Äterställ" />
             <Button fx:id="btnSaveProgram" layoutX="382.0" layoutY="735.0" mnemonicParsing="false" onAction="#SaveProgram" prefHeight="25.0" prefWidth="105.0" text="Spara" />
             <Button fx:id="btnDeleteProgram" layoutX="804.0" layoutY="735.0" mnemonicParsing="false" onAction="#DeleteProgram" prefHeight="25.0" prefWidth="105.0" text="Ta bort" />
-            <Button fx:id="btnAddExercise" layoutX="665.0" layoutY="735.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Lägg till övning" />
+            <Button fx:id="btnAddExercise" layoutX="665.0" layoutY="735.0" mnemonicParsing="false" onAction="#AddExercisesToProgram" prefHeight="25.0" prefWidth="105.0" text="Lägg till övning" />
          </children>
       </AnchorPane>
    </children>

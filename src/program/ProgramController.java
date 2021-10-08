@@ -189,9 +189,20 @@ public class ProgramController implements Initializable {
         }
     }
 
-    public void NewProgram(javafx.event.ActionEvent event) {
-        lblTemp.setText("Nytt program clicked");
+    public void AddExercisesToProgram(javafx.event.ActionEvent event) throws SQLException {
+        ProgramHolder.setAddExercises(true);
+        ProgramHolder.setProgramName(lblProgramName.getText());
 
+        goToProgramAdd();
+    }
+
+    public void NewProgram(javafx.event.ActionEvent event) {
+        ProgramHolder.setAddExercises(false);
+
+        goToProgramAdd();
+    }
+
+    private void goToProgramAdd() {
         AnchorPane paneNewProgram = null;
         try {
             paneNewProgram = FXMLLoader.load(getClass().getResource("/programAdd/programAdd.fxml"));
