@@ -129,6 +129,16 @@ public class ProgramAddController implements Initializable {
                 this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
                 this.tableViewExercises.setItems(null);
                 this.tableViewExercises.setItems(exercisesAlreadyAdded);
+                /* 2021-10-08
+                 * add delete buttons
+                 */
+                addDeleteButtonsToTable();
+                /*
+                 * 2021-10-08
+				 * Save this in global exercisesList
+                 */
+                exercisesList = exercisesAlreadyAdded;
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -161,6 +171,16 @@ public class ProgramAddController implements Initializable {
         for (ExerciseData item : tableViewExercises.getItems()) {
             listOfExercises.append(tableColumnExerciseName.getCellObservableValue(item).getValue());
             listOfExercises.append("; ");
+        }
+        
+        /*
+         * 2021-10-09
+         */
+        if (ProgramHolder.getAddExercises()) {
+        /*
+         * remove old program before saving changes
+         */
+        	this.programAddModel.deleteProgramFromDb(PatientHolder.getPersonNr(), textFieldNameOfProgram.getText());
         }
 
         int rowsInserted = this.programAddModel.addNewProgramToDb(PatientHolder.getPersonNr(),

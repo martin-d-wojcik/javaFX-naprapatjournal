@@ -58,6 +58,33 @@ public class ProgramAddModel {
         return rowsInserted;
     }
 
+    public int deleteProgramFromDb(String personNr, String programName) throws SQLException {
+        PreparedStatement pr = null;
+        ResultSet rs = null;
+
+        String sqlQueryDeleteProgram = "DELETE FROM program WHERE personNr=? AND programName=?";
+
+        int rowsInserted = 0;
+
+        try {
+            pr = this.connection.prepareStatement(sqlQueryDeleteProgram);
+            pr.setString(1, personNr);
+            pr.setString(2, programName);
+
+            rowsInserted = pr.executeUpdate();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            assert pr != null;
+            pr.close();
+
+        }
+        return rowsInserted;
+    }
+
+
     public ObservableList<ExerciseData> getExercisesAlreadySaved(String personNr, String programName) throws SQLException {
         PreparedStatement pr = null;
         ResultSet rs = null;
@@ -75,7 +102,17 @@ public class ProgramAddModel {
             while (rs.next()) {
                 String exerciseInformation = rs.getString(1);
 
-                // save semo colon separated string to arrayList
+                /*
+                 * 2021-10-08
+                 * remove space after semicolon and save in arrayList
+                 * 1. in one raw:
+                 * exerciseSections = exerciseInformation.replace("; ", ";").split(";");
+                 *
+                 * 2. or two rows:
+                 */
+                // remove space after semicolon
+                exerciseInformation = exerciseInformation.replace("; ", ";");
+                // save semicolon separated string to arrayList
                 exerciseSections = exerciseInformation.split(";");
             }
 
