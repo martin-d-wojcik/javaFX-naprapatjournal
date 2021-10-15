@@ -69,15 +69,6 @@ public class ProgramAddController implements Initializable {
     @FXML
     private Button btnCancel;
 
-    // sql queiries
-    private String sqlQueryExerciseType = "SELECT DISTINCT type FROM exercise";
-    private String sqlQueryExerciseBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
-    private String sqlQueryExerciseName = "SELECT exerciseName from exercise";
-    private String sqlQueryExerciseByType = "SELECT exerciseName from exercise WHERE type=?";
-    private String sqlQueryExerciseByBodypart = "SELECT * from exercise WHERE bodyPart=?";
-    private String sqlQueryExerciseByTtypeAndBodyPart = "SELECT * from exercise WHERE bodyPart=? AND type=?";
-    private String sqlQueryDescription = "SELECT description FROM exercise WHERE exerciseName=? ";
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnCreateProgram.setStyle("-fx-background-color: " + StylingLayout.ITEM_SELECTED_IN_LEFT_MENU_TEXT_FILL
@@ -129,14 +120,9 @@ public class ProgramAddController implements Initializable {
                 this.tableColumnExerciseName.setCellValueFactory(new PropertyValueFactory<ExerciseData, String>("exerciseName"));
                 this.tableViewExercises.setItems(null);
                 this.tableViewExercises.setItems(exercisesAlreadyAdded);
-                /* 2021-10-08
-                 * add delete buttons
-                 */
+
                 addDeleteButtonsToTable();
-                /*
-                 * 2021-10-08
-				 * Save this in global exercisesList
-                 */
+
                 exercisesList = exercisesAlreadyAdded;
 
             } catch (SQLException throwables) {
@@ -172,14 +158,9 @@ public class ProgramAddController implements Initializable {
             listOfExercises.append(tableColumnExerciseName.getCellObservableValue(item).getValue());
             listOfExercises.append("; ");
         }
-        
-        /*
-         * 2021-10-09
-         */
+
         if (ProgramHolder.getAddExercises()) {
-        /*
-         * remove old program before saving changes
-         */
+            // remove old program before saving changes
         	this.programAddModel.deleteProgramFromDb(PatientHolder.getPersonNr(), textFieldNameOfProgram.getText());
         }
 
@@ -208,22 +189,24 @@ public class ProgramAddController implements Initializable {
 	public void TypeOfExerciseSelected(javafx.event.ActionEvent event) {
 		typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
 		if (bodyPartSelected == null) {
-			comboBoxNameOfExercise
-					.setItems(FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByType, typeSelected)));
-		} else {
 			comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(
-					getExerciseData(sqlQueryExerciseByTtypeAndBodyPart, bodyPartSelected, typeSelected)));
+			        this.programAddModel.getExerciseDataOneSelection("exerciseType", typeSelected)));
+		} else {
+            bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
+			comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(
+			        this.programAddModel.getExerciseDataTwoSelections(bodyPartSelected, typeSelected)));
 		}
 	}
 
 	public void BodyPartSelected(javafx.event.ActionEvent event) {
 		bodyPartSelected = comboBoxExerciseBodyPart.getSelectionModel().getSelectedItem();
 		if (typeSelected == null) {
-			comboBoxNameOfExercise.setItems(
-					FXCollections.observableArrayList(getExerciseData(sqlQueryExerciseByBodypart, bodyPartSelected)));
+            comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(
+                    this.programAddModel.getExerciseDataOneSelection("exerciseBodyPart", bodyPartSelected)));
 		} else {
+            typeSelected = comboBoxExerciseType.getSelectionModel().getSelectedItem();
 			comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(
-					getExerciseData(sqlQueryExerciseByTtypeAndBodyPart, bodyPartSelected, typeSelected)));
+                    this.programAddModel.getExerciseDataTwoSelections(bodyPartSelected, typeSelected)));
 		}
 	}
 
@@ -232,7 +215,7 @@ public class ProgramAddController implements Initializable {
 
 		if (exerciseNameSelected != null) {
 
-			description = getExerciseDescription(exerciseNameSelected);
+			description = this.programAddModel.getExerciseDescription(exerciseNameSelected);
 
 			// add selected items to exercise list
 			exercisesList.add(new ExerciseData(exerciseNameSelected, typeSelected, bodyPartSelected, description)); //, exerciseDelete));
@@ -251,15 +234,16 @@ public class ProgramAddController implements Initializable {
 	}
 
 	private void setComboBoxesToDefault() {
-		comboBoxExerciseType.setItems(FXCollections.observableArrayList(getExerciseTypeData()));
+		comboBoxExerciseType.setItems(FXCollections.observableArrayList(this.programAddModel.getExerciseTypeData()));
 		comboBoxExerciseType.getSelectionModel().clearSelection();
-		comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
+        comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(this.programAddModel.getExerciseBodyPartData()));
+		// comboBoxExerciseBodyPart.setItems(FXCollections.observableArrayList(getExerciseBodyPartData()));
 		comboBoxExerciseBodyPart.getSelectionModel().clearSelection();
 
 		// Prevent to fire onAction event when changing comboBoxNameOfExercise items
 		EventHandler<ActionEvent> handler = comboBoxNameOfExercise.getOnAction(); // save onAction handler
 		comboBoxNameOfExercise.setOnAction(null); // disable onAction
-		comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(getExerciseData()));
+        comboBoxNameOfExercise.setItems(FXCollections.observableArrayList(this.programAddModel.getExerciseData()));
 		comboBoxNameOfExercise.getSelectionModel().clearSelection();
 		comboBoxNameOfExercise.setOnAction(handler); // enable onAction again
 	}
@@ -267,7 +251,7 @@ public class ProgramAddController implements Initializable {
     public void RestoreExerciseComboBox(javafx.event.ActionEvent event) {
         resetSelectionData();
         setComboBoxesToDefault();
-        comboBoxExerciseType.getEditor().setPromptText("lalal");
+        comboBoxExerciseType.getEditor().setPromptText("Typ av övning");
     }
 
     private void resetSelectionData() {
@@ -277,165 +261,7 @@ public class ProgramAddController implements Initializable {
         description = null;
     }
 
-    // TODO: move to ProgramAddModel
-    public List<String> getExerciseData(String sqlQuery, String queryParameter) {
-        List<String> options = new ArrayList<>();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        Connection conn = null;
-
-        try {
-            conn = dbConnection.getConnection();
-            assert conn != null;
-
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, queryParameter);
-
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                options.add(resultSet.getString("exerciseName"));
-            }
-
-            resultSet.close();
-
-            return options;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<String> getExerciseData() {
-        List<String> options = new ArrayList<>();
-
-        try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQueryExerciseName);
-
-            while (rs.next()) {
-                options.add(rs.getString("exerciseName"));
-            }
-
-            rs.close();
-
-            return options;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-	public List<String> getExerciseData(String sqlQuery, String queryFirst, String querySecond) {
-		List<String> options = new ArrayList<>();
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		Connection conn = null;
-
-		try {
-			conn = dbConnection.getConnection();
-			assert conn != null;
-
-			preparedStatement = conn.prepareStatement(sqlQuery);
-			preparedStatement.setString(1, queryFirst);
-			preparedStatement.setString(2, querySecond);
-
-			resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-				options.add(resultSet.getString("exerciseName"));
-			}
-
-			resultSet.close();
-
-			return options;
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-
-    public List<String> getExerciseBodyPartData() {
-        List<String> options = new ArrayList<>();
-
-        try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQueryExerciseBodyPart);
-
-            while (rs.next()) {
-                options.add(rs.getString("bodyPart"));
-            }
-
-            rs.close();
-
-            return options;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<String> getExerciseTypeData() {
-        List<String> options = new ArrayList<>();
-
-        try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQueryExerciseType);
-
-            while (rs.next()) {
-                options.add(rs.getString("type"));
-            }
-
-            rs.close();
-
-            return options;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-	public String getExerciseDescription(String exercName) {
-		String descr = "";
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-
-		try {
-			Connection conn = dbConnection.getConnection();
-			assert conn != null;
-
-			preparedStatement = conn.prepareStatement(sqlQueryDescription);
-			preparedStatement.setString(1, exercName);
-
-			resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-				descr = resultSet.getString("description");
-			}
-
-			resultSet.close();
-
-			return descr;
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-	
-	/*
-	 *  2021-09-17
-	 */
 	private void addDeleteButtonsToTable() {
-		
 		if(tableViewExercises.getColumns().size() == 5){
 			// remove last column, than restore it adding new row
 			tableViewExercises.getColumns().remove(4);
@@ -473,6 +299,5 @@ public class ProgramAddController implements Initializable {
         colBtn.setCellFactory(cellFactory);
 
         tableViewExercises.getColumns().add(colBtn);
-
     }
 }
