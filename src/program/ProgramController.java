@@ -220,6 +220,11 @@ public class ProgramController implements Initializable {
             alert.setHeaderText("Så där ja.");
             alert.show();
         }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Det gick inte att skicka mejlet");
+            alert.setHeaderText("Typiskt.");
+            alert.show();
+        }
     }
 
     public void SaveProgram(javafx.event.ActionEvent event) throws SQLException {
