@@ -37,10 +37,11 @@
             <Label fx:id="lblTemp" layoutX="184.0" layoutY="739.0" text="Label" />
             <TextArea fx:id="textAreaJournalNotes" layoutX="25.0" layoutY="152.0" prefHeight="541.0" prefWidth="884.0" />
             <Button fx:id="btnNewProgram" layoutX="804.0" layoutY="63.0" mnemonicParsing="false" onAction="#NewProgram" prefHeight="25.0" prefWidth="105.0" text="Nytt program" />
-            <Button fx:id="btnRestoreText" layoutX="524.0" layoutY="735.0" mnemonicParsing="false" onAction="#RestoreText" prefHeight="25.0" prefWidth="105.0" text="Äterställ" />
-            <Button fx:id="btnSaveProgram" layoutX="382.0" layoutY="735.0" mnemonicParsing="false" onAction="#SaveProgram" prefHeight="25.0" prefWidth="105.0" text="Spara" />
-            <Button fx:id="btnDeleteProgram" layoutX="804.0" layoutY="735.0" mnemonicParsing="false" onAction="#DeleteProgram" prefHeight="25.0" prefWidth="105.0" text="Ta bort" />
-            <Button fx:id="btnAddExercise" layoutX="665.0" layoutY="735.0" mnemonicParsing="false" onAction="#AddExercisesToProgram" prefHeight="25.0" prefWidth="105.0" text="Lägg till övning" />
+            <Button fx:id="btnRestoreText" layoutX="386.0" layoutY="735.0" mnemonicParsing="false" onAction="#RestoreText" prefHeight="25.0" prefWidth="105.0" text="Äterställ" />
+            <Button fx:id="btnSaveProgram" layoutX="244.0" layoutY="735.0" mnemonicParsing="false" onAction="#SaveProgram" prefHeight="25.0" prefWidth="105.0" text="Spara" />
+            <Button fx:id="btnDeleteProgram" layoutX="666.0" layoutY="735.0" mnemonicParsing="false" onAction="#DeleteProgram" prefHeight="25.0" prefWidth="105.0" text="Ta bort" />
+            <Button fx:id="btnAddExercise" layoutX="527.0" layoutY="735.0" mnemonicParsing="false" onAction="#AddExercisesToProgram" prefHeight="25.0" prefWidth="105.0" text="Lägg till övning" />
+            <Button fx:id="btnEmail" layoutX="804.0" layoutY="735.0" mnemonicParsing="false" onAction="#EmailProgramToPatient" prefHeight="25.0" prefWidth="105.0" text="Melja patient" />
          </children>
       </AnchorPane>
    </children>

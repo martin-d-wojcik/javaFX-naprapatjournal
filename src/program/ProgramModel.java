@@ -3,8 +3,6 @@ package program;
 import dbUtil.dbConnection;
 import exercises.ExerciseData;
 import javafx.collections.ObservableList;
-import patients.PatientHolder;
-
 import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +15,9 @@ import java.util.Date;
 public class ProgramModel {
     Connection connection;
 
+    // sql queries
+    private String sqlQueryEmailProgramToPatient = "SELECT email FROM customer WHERE personNr=?";
+
     public ProgramModel() {
         try {
             this.connection = dbConnection.getConnection();
@@ -28,6 +29,34 @@ public class ProgramModel {
         if(this.connection == null) {
             System.exit(1);
         }
+    }
+
+    public Boolean sendEmail(String personNr) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Connection conn = null;
+        boolean emailSent = false;
+
+        try {
+            conn = dbConnection.getConnection();
+            assert conn != null;
+
+                preparedStatement = conn.prepareStatement(sqlQueryEmailProgramToPatient);
+                preparedStatement.setString(1, personNr);
+
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    emailSent = true;
+                }
+
+                resultSet.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return emailSent;
     }
 
     public int deleteProgramFromDb(String personNr, String programName) throws SQLException {

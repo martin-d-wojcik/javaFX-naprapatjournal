@@ -64,6 +64,8 @@ public class ProgramController implements Initializable {
     private Button btnDeleteProgram;
     @FXML
     private Button btnAddExercise;
+    @FXML
+    private Button btnEmail;
 
     // header
     @FXML
@@ -210,6 +212,14 @@ public class ProgramController implements Initializable {
             exception.printStackTrace();
         }
         rootPane.getChildren().setAll(paneNewProgram);
+    }
+
+    public void EmailProgramToPatient(javafx.event.ActionEvent event) {
+        if (this.programModel.sendEmail(PatientHolder.getPersonNr())) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Mejlet skickades.");
+            alert.setHeaderText("Så där ja.");
+            alert.show();
+        }
     }
 
     public void SaveProgram(javafx.event.ActionEvent event) throws SQLException {
