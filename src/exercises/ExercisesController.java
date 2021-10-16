@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 
 public class ExercisesController implements Initializable {
     Navigation navigation = new Navigation();
+    ExercisesModel exercisesModel = new ExercisesModel();
 
     @FXML
     private AnchorPane rootPane;
@@ -102,71 +103,23 @@ public class ExercisesController implements Initializable {
                 + "; -fx-text-fill: " + StylingLayout.BACKGROUND_DARK_GREY
                 + "; -fx-font-weight: bold");
 
-        comboBoxType.setItems(FXCollections.observableArrayList(getTypeData()));
-        comboBoxBodyPart.setItems(FXCollections.observableArrayList(getBodyPartData()));
+        comboBoxType.setItems(FXCollections.observableArrayList(this.exercisesModel.getTypeData()));
+        comboBoxBodyPart.setItems(FXCollections.observableArrayList(this.exercisesModel.getBodyPartData()));
 
         fillTableView();
-    }
-
-    private List<String> getBodyPartData() {
-        List<String> options = new ArrayList<>();
-
-        try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQueryBodyPart);
-
-            while (rs.next()) {
-                options.add(rs.getString("bodyPart"));
-            }
-
-            rs.close();
-
-            return options;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<String> getTypeData() {
-        List<String> options = new ArrayList<>();
-
-        try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQueryType);
-
-            while (rs.next()) {
-                options.add(rs.getString("type"));
-            }
-
-            rs.close();
-
-            return options;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
     }
 
     private void fillTableView() {
         ObservableList<ExerciseData> data = FXCollections.observableArrayList();
 
         try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQueryAllExercises);
+            ResultSet rs = this.exercisesModel.getAllExercises();
 
             // check if the resultSet, rs has anything in the table
             while (rs.next()) {
                 data.add(new ExerciseData(rs.getString(1), rs.getString(2),
                         rs.getString(3), rs.getString(4)));// , columnEditText, "x"));
             }
-            conn.close();
-
         } catch (SQLException e) {
             System.err.println("Error: " + e);
         }
@@ -313,10 +266,4 @@ public class ExercisesController implements Initializable {
             exception.printStackTrace();
         }
     }
-
-    /* private <T> TableColumn<T, ?> getTableColumnByName(TableView<T> tableView, String name) {
-        for (TableColumn<T, ?> col : tableView.getColumns())
-            if (col.getText().equals(name)) return col ;
-        return null ;
-    } */
 }
