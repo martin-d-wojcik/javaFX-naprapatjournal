@@ -154,26 +154,18 @@ public class ExercisesController implements Initializable {
         fillTableWithExerciseData(data);
     }
 
-    private void fillTableViewTwoDropdowns(String sqlQuery, String sqlParameterFirst, String sqlParameterSecond) {
+    private void fillTableViewTwoDropdowns(String sqlParameterFirst, String sqlParameterSecond) {
         ObservableList<ExerciseData> data = FXCollections.observableArrayList();
-        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            preparedStatement = conn.prepareStatement(sqlQuery);
-            preparedStatement.setString(1, sqlParameterFirst);
-            preparedStatement.setString(2, sqlParameterSecond);
-
-            resultSet = preparedStatement.executeQuery();
+            resultSet = this.exercisesModel.getExercisesByTypeAndBodyPart(sqlParameterFirst, sqlParameterSecond);
 
             // check if the resultSet, rs has anything in the table
             while (resultSet.next()) {
                 data.add(new ExerciseData(resultSet.getString(1), resultSet.getString(2),
                         resultSet.getString(3), resultSet.getString(4)));
             }
-            conn.close();
 
         } catch (SQLException e) {
             System.err.println("Error: " + e);
@@ -198,7 +190,7 @@ public class ExercisesController implements Initializable {
         if (!comboBoxType.getSelectionModel().isEmpty() && !comboBoxBodyPart.getSelectionModel().isEmpty()) {
             String type = comboBoxType.getSelectionModel().getSelectedItem();
             String bodyPart = comboBoxBodyPart.getSelectionModel().getSelectedItem();
-            fillTableViewTwoDropdowns(sqlQueryExercisesByTypeAndBodyPart, bodyPart, type);
+            fillTableViewTwoDropdowns(bodyPart, type);
         }
         else {
             if (!comboBoxType.getSelectionModel().isEmpty()) {
@@ -223,8 +215,7 @@ public class ExercisesController implements Initializable {
 
     public void ShowAllExercises(javafx.event.ActionEvent event) {
         fillTableView();
-
-        // TODO: reset prompt text in comboboxes
+        
         comboBoxType.getSelectionModel().clearSelection();
         comboBoxType.setPromptText("Välj Typ");
 

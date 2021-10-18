@@ -3,6 +3,7 @@ package exercises;
 import dbUtil.dbConnection;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class ExercisesModel {
     private String sqlQueryBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
     private String sqlQueryType = "SELECT DISTINCT type FROM exercise";
     private String sqlQueryAllExercises = "SELECT exerciseName, bodyPart, type, description FROM exercise";
+    private String sqlQueryExercisesByTypeAndBodyPart = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE bodyPart=? AND type=?";
 
     public ExercisesModel() {
         try {
@@ -28,6 +30,23 @@ public class ExercisesModel {
 
     public ResultSet getAllExercises() throws SQLException {
         return connection.createStatement().executeQuery(sqlQueryAllExercises);
+    }
+
+    public ResultSet getExercisesByTypeAndBodyPart(String paramBodyPart,String paramType) {
+        PreparedStatement preparedStatement;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(sqlQueryExercisesByTypeAndBodyPart);
+            preparedStatement.setString(1, paramBodyPart);
+            preparedStatement.setString(2, paramType);
+
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Error: " + e);
+        }
+
+        return resultSet;
     }
 
     public List<String> getBodyPartData() {
