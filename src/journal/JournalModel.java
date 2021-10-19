@@ -1,8 +1,6 @@
 package journal;
 
 import dbUtil.dbConnection;
-import javafx.collections.ObservableList;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +19,6 @@ public class JournalModel {
             ex.printStackTrace();
         }
 
-        // check if db connection is ok
         if(this.connection == null) {
             System.exit(1);
         }
@@ -41,8 +38,7 @@ public class JournalModel {
 
             // the result of the query is returned in an tabular format
             rs = pr.executeQuery();
-
-            // if (rs.next()) {
+            
             while (rs.next()) {
                 JournalData journalData = new JournalData(rs.getString(2), rs.getString(1));
                 journalList.add(journalData);

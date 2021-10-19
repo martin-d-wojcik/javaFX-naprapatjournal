@@ -2,9 +2,6 @@ package patients;
 
 import dbUtil.dbConnection;
 import helpers.Navigation;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,14 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import patientAdd.PatientsModel;
 import resources.StylingLayout;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -31,6 +26,7 @@ import java.util.ResourceBundle;
 
 public class PatientsController implements Initializable {
     Navigation navigation = new Navigation();
+    PatientsModel patientsModel = new PatientsModel();
 
     @FXML
     private AnchorPane rootPane;
@@ -92,7 +88,6 @@ public class PatientsController implements Initializable {
     private final String columnEditText = "[ Redigera ]";
 
     // SQL queries
-    private String sqlGetAllCustomersBasic = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer";
     private String sqlGetCustomerByPersonNr = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber FROM customer WHERE personNr=?";
     private String sqlGetCustomerByPersonNr_Like = "SELECT personNr, firstName, lastName, streetAdress, city, postalCode, email, phoneNumber "
             + "FROM customer WHERE personNr LIKE ?";
@@ -128,19 +123,14 @@ public class PatientsController implements Initializable {
         ObservableList<PatientData> data = FXCollections.observableArrayList();
 
         try {
-            Connection conn = dbConnection.getConnection();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery(sqlGetAllCustomersBasic);
+            ResultSet rs = this.patientsModel.getAllPatients();
 
-            // check if the resultSet, rs has anything in the table
             while (rs.next()) {
 
                 data.add(new PatientData(rs.getString(1), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5), rs.getString(6),
                         rs.getString(7), rs.getString(8), columnEditText));
             }
-            conn.close();
-
         } catch (SQLException e) {
             System.err.println("Error: " + e);
         }
@@ -182,14 +172,9 @@ public class PatientsController implements Initializable {
     }
 
     public void SearchPatient(javafx.event.ActionEvent event) {
-        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        Connection conn = null;
 
         try {
-            conn = dbConnection.getConnection();
-            assert conn != null;
-
             // search for personNr OR firstName/lastName
             if (txtFieldPersonNr.getText().trim().isEmpty() && txtFieldFirstName.getText().trim().isEmpty()
                     && txtFieldLastName.getText().trim().isEmpty()) {
@@ -200,12 +185,7 @@ public class PatientsController implements Initializable {
             } else if (txtFieldPersonNr.getText().trim().isEmpty()) {
                 String firstName = txtFieldFirstName.getText().trim();
                 String lastName = txtFieldLastName.getText().trim();
-
-                preparedStatement = conn.prepareStatement(sqlGetCustomerByName_Like);
-                preparedStatement.setString(1, firstName + "%");
-                preparedStatement.setString(2, lastName + "%");
-
-                resultSet = preparedStatement.executeQuery();
+                resultSet = this.patientsModel.getCustomerByName(firstName, lastName);
 
                 if (resultSet.next()) {
                     displayQueryResultInTable_SomeRows(resultSet);
@@ -218,9 +198,7 @@ public class PatientsController implements Initializable {
 
             } else {
                 String personNr = txtFieldPersonNr.getText().trim();
-                preparedStatement = conn.prepareStatement(sqlGetCustomerByPersonNr_Like);
-                preparedStatement.setString(1, personNr + "%");
-                resultSet = preparedStatement.executeQuery();
+                resultSet = this.patientsModel.getCustomerByPersonNr(personNr);
 
                 if (resultSet.next()) {
                     displayQueryResultInTable_SomeRows(resultSet);
@@ -232,8 +210,6 @@ public class PatientsController implements Initializable {
                     alert.show();
                 }
             }
-            conn.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, throwables.toString());

@@ -76,13 +76,8 @@ public class ExercisesController implements Initializable {
     private final int TABLE_EDIT_COLUMN_NR = 4;
     private final String columnEditText = "<--Redigera";
 
-    // sql queries
-    private String sqlQueryType = "SELECT DISTINCT type FROM exercise";
-    private String sqlQueryBodyPart = "SELECT DISTINCT bodyPart FROM exercise";
-    private String sqlQueryAllExercises = "SELECT exerciseName, bodyPart, type, description FROM exercise";
     private String sqlQueryExercisesByType = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE type=?";
     private String sqlQueryExercisesByBodyPart = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE bodyPart=?";
-    private String sqlQueryExercisesByTypeAndBodyPart = "SELECT exerciseName, bodyPart, type, description FROM exercise WHERE bodyPart=? AND type=?";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

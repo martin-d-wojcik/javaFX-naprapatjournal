@@ -97,30 +97,6 @@ public class PatientAddController implements Initializable {
     @FXML
     private Button btnCancelUpdate;
 
-    private String xsqlAddPatient = "INSERT INTO customer(personNr, firstName, lastName, streetAdress, "
-            + "city, postalCode, email, phoneNumber) "
-            + " VALUES (?,?,?,?,?,?,?,?)";
-
-    private String sqlAddPatient = "INSERT INTO customer(personNr, firstName, lastName, streetAdress, "
-            + " city, postalCode, email, phoneNumber,"
-            + " registrationDate, occupation, illnessList, operationList, "
-            + " medicinUsed, attention, diagnosis, nextVisit) "
-            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-    private String sqlGetThePatient = "SELECT firstName, lastName, streetAdress, "
-            + " city, postalCode, email, phoneNumber,"
-            + " registrationDate, occupation, illnessList, operationList, "
-            + " medicinUsed, attention, diagnosis, nextVisit "
-            + " FROM customer "
-            + " WHERE personNr = ?";
-
-    private String sqlUpdatePatient = "UPDATE customer "
-            + " SET firstName = ?, lastName = ?, streetAdress = ?, "
-            + " city = ?, postalCode = ?, email = ?, phoneNumber = ?, "
-            + " registrationDate = ?, occupation = ?, illnessList = ?, operationList = ?, "
-            + " medicinUsed = ?, attention = ?, diagnosis = ?, nextVisit = ? "
-            + " WHERE personNr = ? ";
-
     private String personNr_savedInDB = "";
     private String firstName_savedInDB = "";
     private String lastName_savedInDB = "";
