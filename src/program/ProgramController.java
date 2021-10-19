@@ -122,15 +122,14 @@ public class ProgramController implements Initializable {
                 btnRestoreText.setVisible(false);
                 lblTemp.setText("");
             }
-            else{
+            else {
                 textAreaJournalNotes.setStyle("-fx-text-inner-color: #0000FF;");
                 btnSaveProgram.setVisible(true);
                 btnRestoreText.setVisible(true);
 
                 lblTemp.setText("textArea is changed !");
-	            // Warning: empty TextArea
-	            if(newText.trim().isEmpty()) { 
-	            	//lblTemp.visibleProperty().setValue(true);
+
+	            if(newText.trim().isEmpty()) {
 	            	lblTemp.setText("textArea has changed, BUT IS EMPTY !");
 	            }
             }

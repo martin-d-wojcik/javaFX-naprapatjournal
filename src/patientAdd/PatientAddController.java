@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 
 public class PatientAddController implements Initializable {
     Navigation navigation = new Navigation();
+    PatientAddModel patientAddModel = new PatientAddModel();
 
     @FXML
     private AnchorPane paneAddPatients;
@@ -120,10 +121,6 @@ public class PatientAddController implements Initializable {
             + " medicinUsed = ?, attention = ?, diagnosis = ?, nextVisit = ? "
             + " WHERE personNr = ? ";
 
-    /*
-     * Save loaded data in those variables
-     * for detecting later when TextFields changes
-     */
     private String personNr_savedInDB = "";
     private String firstName_savedInDB = "";
     private String lastName_savedInDB = "";
@@ -147,9 +144,6 @@ public class PatientAddController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        /*****************************************
-         * Add Change_Text_Listeners to TextFields
-         *****************************************/
         textFieldPersonNr.textProperty().addListener((obs, oldText, newText) -> {
             if(newText.equals(personNr_savedInDB)){
                 this.textFieldPersonNr.setStyle("-fx-text-inner-color: #000000;");
@@ -319,9 +313,6 @@ public class PatientAddController implements Initializable {
             }
         });
 
-        /*
-         * If PatientHolder.PersonNr isEmpty activate button AddNewPatient
-         */
         if (patients.PatientHolder.getPersonNr().trim().isEmpty()){
             currentDbOperation = DBoperation.ADD;
             lblAddPatientHeader.setText("Lägg till ny patient. Fyll uppgifter och klicka Lägg till");
@@ -353,7 +344,6 @@ public class PatientAddController implements Initializable {
             btnCancelUpdate.setVisible(true);
             btnArchive.setVisible(true);
 
-            // Run query, fill TextFields
             fillPatientTextFields(patients.PatientHolder.getPersonNr());
         }
 
@@ -394,11 +384,6 @@ public class PatientAddController implements Initializable {
         hideWarningLabels();
     }
 
-    /*
-     * Functions bellow
-     * Replace NULL with a default string for ex ""
-     * Call: getValueOrDefault(resultSet.getString(i), ""),
-     */
     public static <T> T getValueOrDefault(T value, T defaultValue) {
         return value == null ? defaultValue : value;
     }
@@ -408,24 +393,13 @@ public class PatientAddController implements Initializable {
     }
 
     private void fillPatientTextFields(String persNr) {
-
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            Connection conn = dbConnection.getConnection();
-
-            assert conn != null;
-            preparedStatement = conn.prepareStatement(sqlGetThePatient);
-            preparedStatement.setString(1, persNr);
-
-            resultSet = preparedStatement.executeQuery();
+            resultSet = this.patientAddModel.getPatientInfo(persNr);
 
             if (resultSet.next()) {
-                /*
-                 * Save origin text from database
-                 * for detecting changes later
-                 */
                 personNr_savedInDB = persNr;
                 firstName_savedInDB = getValueOrDefault(resultSet.getString(1), "");
                 lastName_savedInDB = getValueOrDefault(resultSet.getString(2), "");
@@ -466,16 +440,13 @@ public class PatientAddController implements Initializable {
                 alert.setHeaderText("Sökning misslyckad !");
                 alert.show();
             }
-
-            conn.close();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     public void AddPatientData(javafx.event.ActionEvent event) throws SQLException {
-        Connection conn = dbConnection.getConnection();
+        // Connection conn = dbConnection.getConnection();
 
         String personNr = textFieldPersonNr.getText();
         String firstName = textFieldFirstName.getText();
@@ -526,32 +497,18 @@ public class PatientAddController implements Initializable {
             }
         }
         else {
-            // Prepare query
-            assert conn != null;
-            PreparedStatement prepStmt = conn.prepareStatement(sqlAddPatient);
-            prepStmt.setString(1, personNr);
-            prepStmt.setString(2, firstName);
-            prepStmt.setString(3, lastName);
-            prepStmt.setString(4, streetAdress);
-            prepStmt.setString(5, city);
-            prepStmt.setString(6, postalCode);
-            prepStmt.setString(7, email);
-            prepStmt.setString(8, phoneNr);
-            prepStmt.setString(9, regDate);
-            prepStmt.setString(10, occupation);
-            prepStmt.setString(11, illnesses);
-            prepStmt.setString(12, operations);
-            prepStmt.setString(13, medicins);
-            prepStmt.setString(14, attention);
-            prepStmt.setString(15, diagnosis);
-            prepStmt.setString(16, nextVisit);
-
-            prepStmt.executeUpdate();
-            prepStmt.close();
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Patienten sparad.");
-            alert.setHeaderText("Det gick ju bra.");
-            alert.show();
+            if (this.patientAddModel.addNewPatient(personNr, firstName, lastName, streetAdress,city, postalCode,
+                    email, phoneNr, regDate, occupation, illnesses, operations, medicins,
+                    attention, diagnosis, nextVisit)) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Patienten lades till.");
+                alert.setHeaderText("Det gick ju bra.");
+                alert.show();
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Patienten sparades inte.");
+                alert.setHeaderText("Det gick inte så bra.");
+                alert.show();
+            }
 
             // Close Patient Add window
             navigation.navigateToPatients(btnCancel);
@@ -559,8 +516,6 @@ public class PatientAddController implements Initializable {
     }
 
     public void UpdatePatientData(javafx.event.ActionEvent event) {
-
-        /// xx String personNr = textFieldPersonNr.getText().trim();
         String firstName = textFieldFirstName.getText().trim();
         String lastName = textFieldLastName.getText().trim();
         String streetAdress = textFieldStreetAdress.getText().trim();
@@ -626,58 +581,30 @@ public class PatientAddController implements Initializable {
 
         }
         else {
-            Connection conn;
-
-            try {
-                conn = dbConnection.getConnection();
-
-                // Prepare query
-                assert conn != null;
-                PreparedStatement prepStmt = conn.prepareStatement(sqlUpdatePatient);
-                // SET
-                prepStmt.setString(1, firstName);
-                prepStmt.setString(2, lastName);
-                prepStmt.setString(3, streetAdress);
-                prepStmt.setString(4, city);
-                prepStmt.setString(5, postalCode);
-                prepStmt.setString(6, email);
-                prepStmt.setString(7, phoneNumber);
-                prepStmt.setString(8, registrationDate);
-                prepStmt.setString(9, occupation);
-                prepStmt.setString(10, illnessList);
-                prepStmt.setString(11, operationList);
-                prepStmt.setString(12, medicinUsed);
-                prepStmt.setString(13, attention);
-                prepStmt.setString(14, diagnosis);
-                prepStmt.setString(15, nextVisit);
-                // WHERE
-                prepStmt.setString(16, personNr_savedInDB);
-
-                prepStmt.executeUpdate();
-                prepStmt.close();
-
+            if (this.patientAddModel.updatePatient(firstName, lastName, streetAdress,city, postalCode,
+                    email, phoneNumber, registrationDate, occupation, illnessList, operationList, medicinUsed,
+                    attention, diagnosis, nextVisit, personNr_savedInDB)) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION,
                         "Personnummer: " + personNr_savedInDB + "\n" +
                                 "Förnamn: \t" + firstName + "\n" +
                                 "Efternamn: \t" + lastName + "\n\n" +
                                 "Nya uppgifter sparade.");
-                alert.setHeaderText("Uppdatering.");
+                alert.setHeaderText("Det gick att uppdatera.");
                 alert.show();
-
-                // Close Update window
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
-                    Stage window = (Stage) btnCancel.getScene().getWindow();
-                    window.setScene(new Scene(root));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR,
-                        "Patienten: " + personNr_savedInDB + "\nNya uppgifter sparades INTE.");
-                alert.setHeaderText("Uppdatering.");
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        "Det gick inte att uppdatera " + firstName + " " + lastName);
+                alert.setHeaderText("Det gick snett.");
                 alert.show();
+            }
+
+            // Close Update window
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/patients/patients.fxml"));
+                Stage window = (Stage) btnCancel.getScene().getWindow();
+                window.setScene(new Scene(root));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -704,7 +631,6 @@ public class PatientAddController implements Initializable {
     }
 
     public void ArchivePatient(javafx.event.ActionEvent event) throws SQLException {
-
         Alert al = new Alert(Alert.AlertType.WARNING, "ArchivePatient \n Not ready yet...");
         al.setHeaderText("NOT READY.");
         al.show();
