@@ -1,4 +1,4 @@
-package patientAdd;
+package patients;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

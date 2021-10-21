@@ -1,6 +1,5 @@
 package patients;
 
-import dbUtil.dbConnection;
 import helpers.Navigation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,12 +13,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import patientAdd.PatientsModel;
 import resources.StylingLayout;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -221,7 +217,6 @@ public class PatientsController implements Initializable {
 
     @FXML
     public void SelectPatientFromTable(MouseEvent e) {
-        // TODO: parse personNr, firstName, lastName to JournalController
         try {
             String patientPersonNr = tableViewPatients.getSelectionModel().getSelectedItem().getPatientPersonNr();
             String patientFirstName = tableViewPatients.getSelectionModel().getSelectedItem().getPatientFirstName();
