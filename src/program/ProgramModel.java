@@ -14,9 +14,19 @@ import java.util.Date;
 
 public class ProgramModel {
     Connection connection;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
 
-    // sql queries
     private String sqlQueryEmailProgramToPatient = "SELECT email FROM customer WHERE personNr=?";
+    private String sqlQueryDeleteProgram = "DELETE FROM program WHERE personNr=? AND programName=?";
+    private String sqlQueryGetProgramInfoByPersonNr = "SELECT programName, information, dateOfCreation " +
+            "FROM program " +
+            "WHERE personNr=?";
+    private String sqlQueryUpdateProgram = "UPDATE program " +
+            " SET information = ? " +
+            " WHERE personNr = ? AND programName = ? ";
+    private String sqlQueryNewProgram   = "INSERT INTO program (personNr, information, dateOfCreation, active, programName)\n" +
+            "VALUES (?, ?, ?, ?, ?);";
 
     public ProgramModel() {
         try {
@@ -25,23 +35,23 @@ public class ProgramModel {
             ex.printStackTrace();
         }
 
-        // check if db connection is ok
         if(this.connection == null) {
             System.exit(1);
         }
     }
 
-    public Boolean sendEmail(String personNr) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        Connection conn = null;
+    private void cleanupAfterSqlCall() throws SQLException {
+        assert preparedStatement != null;
+        preparedStatement.close();
+        assert resultSet != null;
+        resultSet.close();
+    }
+
+    public Boolean sendEmail(String personNr) throws SQLException {
         boolean emailSent = false;
 
         try {
-            conn = dbConnection.getConnection();
-            assert conn != null;
-
-                preparedStatement = conn.prepareStatement(sqlQueryEmailProgramToPatient);
+                preparedStatement = this.connection.prepareStatement(sqlQueryEmailProgramToPatient);
                 preparedStatement.setString(1, personNr);
 
                 resultSet = preparedStatement.executeQuery();
@@ -55,54 +65,47 @@ public class ProgramModel {
             ex.printStackTrace();
             return false;
         }
+        finally {
+            cleanupAfterSqlCall();
+        }
 
         return emailSent;
     }
 
     public int deleteProgramFromDb(String personNr, String programName) throws SQLException {
-        PreparedStatement pr = null;
-        ResultSet rs = null;
-
-        String sqlQueryDeleteProgram = "DELETE FROM program WHERE personNr=? AND programName=?";
-
         int rowsInserted = 0;
 
         try {
-            pr = this.connection.prepareStatement(sqlQueryDeleteProgram);
-            pr.setString(1, personNr);
-            pr.setString(2, programName);
+            preparedStatement = this.connection.prepareStatement(sqlQueryDeleteProgram);
+            preparedStatement.setString(1, personNr);
+            preparedStatement.setString(2, programName);
 
-            rowsInserted = pr.executeUpdate();
+            rowsInserted = preparedStatement.executeUpdate();
         }
         catch (SQLException ex) {
             ex.printStackTrace();
         }
         finally {
-            assert pr != null;
-            pr.close();
-
+            cleanupAfterSqlCall();
         }
+
         return rowsInserted;
     }
 
     public ArrayList<ProgramData> getPrograms(String personNr) throws SQLException {
         ArrayList<ProgramData> programList = new ArrayList<ProgramData>();
-        PreparedStatement pr = null;
-        ResultSet rs = null;
-        String sqlQueryPreparedStatement = "SELECT programName, information, dateOfCreation " +
-                "FROM program " +
-                "WHERE personNr=?";
 
         try {
-            pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
-            pr.setString(1, personNr);
+            preparedStatement = this.connection.prepareStatement(sqlQueryGetProgramInfoByPersonNr);
+            preparedStatement.setString(1, personNr);
 
             // the result of the query is returned in an tabular format
-            rs = pr.executeQuery();
+            resultSet = preparedStatement.executeQuery();
 
             // if (rs.next()) {
-            while (rs.next()) {
-                ProgramData programData = new ProgramData(rs.getString(1), rs.getString(2), rs.getString(3));
+            while (resultSet.next()) {
+                ProgramData programData = new ProgramData(resultSet.getString(1),
+                        resultSet.getString(2), resultSet.getString(3));
                 programList.add(programData);
             }
         }
@@ -110,17 +113,12 @@ public class ProgramModel {
             ex.printStackTrace();
         }
         finally {
-            assert pr != null;
-            pr.close();
-            assert rs != null;
-            rs.close();
+            cleanupAfterSqlCall();
         }
         return programList;
     }
 
     public int newProgram(String personNr, @NotNull ObservableList<ExerciseData> listOfExercises, String programName) throws SQLException {
-    	PreparedStatement pr = null;
-        ResultSet rs = null;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(new Date());
         String exercises = "";
         StringBuilder stringBuilder = new StringBuilder();
@@ -129,56 +127,45 @@ public class ProgramModel {
             exercises = (stringBuilder).append(exerciseName.getExerciseName()).append("; ").toString();
         }
 
-        String sqlQueryPreparedStatement = "INSERT INTO program (personNr, information, dateOfCreation, active, programName)\n" +
-                "VALUES (?, ?, ?, ?, ?);";
-
         int rowsInserted = 0;
 
         try {
-            pr = this.connection.prepareStatement(sqlQueryPreparedStatement);
-            pr.setString(1, personNr);
-            pr.setString(2, exercises);
-            pr.setString(3, timeStamp);
-            pr.setBoolean(4, true);
-            pr.setString(5, programName);
+            preparedStatement = this.connection.prepareStatement(sqlQueryNewProgram);
+            preparedStatement.setString(1, personNr);
+            preparedStatement.setString(2, exercises);
+            preparedStatement.setString(3, timeStamp);
+            preparedStatement.setBoolean(4, true);
+            preparedStatement.setString(5, programName);
 
-            rowsInserted = pr.executeUpdate();
+            rowsInserted = preparedStatement.executeUpdate();
         }
         catch (SQLException ex) {
             ex.printStackTrace();
         }
         finally {
-            assert pr != null;
-            pr.close();
-
+            cleanupAfterSqlCall();
         }
+
         return rowsInserted;
     }
 
     public int updateProgram(String personNr, String programName, String exercises) throws SQLException {
-    	PreparedStatement pr = null;
-        ResultSet rs = null;
-
-        String sqlQueryUpdateProgram = "UPDATE program " +
-        							" SET information = ? " +
-        							" WHERE personNr = ? AND programName = ? ";
-
         int rowsInserted = 0;
 
         try {
-            pr = this.connection.prepareStatement(sqlQueryUpdateProgram);
-            pr.setString(1, exercises);
-            pr.setString(2, personNr);
-            pr.setString(3, programName);
-            rowsInserted = pr.executeUpdate();
+            preparedStatement = this.connection.prepareStatement(sqlQueryUpdateProgram);
+            preparedStatement.setString(1, exercises);
+            preparedStatement.setString(2, personNr);
+            preparedStatement.setString(3, programName);
+            rowsInserted = preparedStatement.executeUpdate();
         }
         catch (SQLException ex) {
             ex.printStackTrace();
         }
         finally {
-            assert pr != null;
-            pr.close();
+            cleanupAfterSqlCall();
         }
+
         return rowsInserted;
     }
 

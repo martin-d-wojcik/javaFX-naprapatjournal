@@ -213,7 +213,7 @@ public class ProgramController implements Initializable {
         rootPane.getChildren().setAll(paneNewProgram);
     }
 
-    public void EmailProgramToPatient(javafx.event.ActionEvent event) {
+    public void EmailProgramToPatient(javafx.event.ActionEvent event) throws SQLException {
         if (this.programModel.sendEmail(PatientHolder.getPersonNr())) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Mejlet skickades.");
             alert.setHeaderText("Så där ja.");
