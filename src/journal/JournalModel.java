@@ -43,7 +43,7 @@ public class JournalModel {
             preparedStatement = this.connection.prepareStatement(sqlInfoDateFromNotes);
             preparedStatement.setString(1, personNr);
 
-            // the result of the query is returned in an tabular format
+            // return the result of the query in an tabular format
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
